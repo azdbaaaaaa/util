@@ -1,4 +1,4 @@
-package util
+package common
 
 type GrpcConfig struct {
 	Addr        string `json:"addr"`
