@@ -24,19 +24,15 @@ type MysqlConfig struct {
 	IdleTimeout time.Duration   `json:"idle_timeout" mapstructure:"idle_timeout"` // suggest less than 8 * 3600
 }
 
-func DefaultConfig() *MysqlConfig {
-	return &MysqlConfig{
-		Uri:         defaultUri,
-		LogLevel:    logger.Silent,
-		MaxIdle:     defaultMaxIdle,
-		MaxActive:   defaultMaxActive,
-		IdleTimeout: defaultIdleTimeout * time.Second,
-	}
-}
-
 func NewMysql(cfg *MysqlConfig) (db *gorm.DB, err error) {
+	var logLevel logger.LogLevel
+	if cfg.LogLevel > 0 {
+		logLevel = cfg.LogLevel
+	} else {
+		logLevel = logger.Silent
+	}
 	db, err = gorm.Open(mysql.Open(cfg.Uri), &gorm.Config{
-		Logger: logger.Default.LogMode(cfg.LogLevel),
+		Logger: logger.Default.LogMode(logLevel),
 	})
 	if err != nil {
 		Logger.Log.Errorf("failed to new mysql, %v", err)
@@ -49,12 +45,18 @@ func NewMysql(cfg *MysqlConfig) (db *gorm.DB, err error) {
 	}
 	if cfg.MaxActive > 0 {
 		sqlDB.SetMaxOpenConns(cfg.MaxActive)
+	} else {
+		sqlDB.SetMaxOpenConns(defaultMaxActive)
 	}
 	if cfg.MaxIdle > 0 {
 		sqlDB.SetMaxIdleConns(cfg.MaxIdle)
+	} else {
+		sqlDB.SetMaxIdleConns(defaultMaxIdle)
 	}
 	if cfg.IdleTimeout > 0 {
 		sqlDB.SetConnMaxIdleTime(cfg.IdleTimeout * time.Second)
+	} else {
+		sqlDB.SetConnMaxIdleTime(defaultIdleTimeout * time.Second)
 	}
 	return
 }
