@@ -1,38 +1,57 @@
 package util
 
 import (
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/jinzhu/gorm"
+	"gorm.io/driver/mysql"
+	_ "gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"time"
 )
 
-type mysqlLog struct{}
-
-func (l mysqlLog) Print(v ...interface{}) {
-	Logger.Info(v)
-}
+const (
+	defaultMaxIdle     = 2
+	defaultMaxActive   = 10
+	defaultIdleTimeout = 60 // max idle time for each conn in seconds
+)
 
 type MysqlConfig struct {
-	Uri         string        `json:"uri"` // etc. user:password@(localhost)/dbname?charset=utf8&parseTime=True&loc=Local
-	Log         bool          `json:"log"`
-	MaxIdle     int           `json:"max_idle" mapstructure:"max_idle"`         // current default: 2
-	MaxActive   int           `json:"max_active" mapstructure:"max_active"`     // larger than maxIdle
-	IdleTimeout time.Duration `json:"idle_timeout" mapstructure:"idle_timeout"` // suggest less than 8 * 3600
+	// etc. user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local
+	Uri         string          `json:"uri"`
+	LogLevel    logger.LogLevel `json:"log_level" mapstructure:"log_level"`
+	MaxIdle     int             `json:"max_idle" mapstructure:"max_idle"`         // current default: 2
+	MaxActive   int             `json:"max_active" mapstructure:"max_active"`     // larger than maxIdle
+	IdleTimeout time.Duration   `json:"idle_timeout" mapstructure:"idle_timeout"` // suggest less than 8 * 3600
+}
+
+func DefaultConfig() *MysqlConfig {
+	return &MysqlConfig{
+		MaxIdle:     defaultMaxIdle,
+		MaxActive:   defaultMaxActive,
+		IdleTimeout: defaultIdleTimeout * time.Second,
+	}
 }
 
 func NewMysql(cfg *MysqlConfig) (db *gorm.DB, err error) {
-	db, err = gorm.Open("mysql", cfg.Uri)
+	db, err = gorm.Open(mysql.Open(cfg.Uri), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Silent),
+	})
 	if err != nil {
-		Logger.Errorf("NewMysql error, %v", err)
+		Logger.Log.Errorf("failed to new mysql, %v", err)
 		return
 	}
-	db.DB().SetMaxIdleConns(cfg.MaxIdle)
-	db.DB().SetMaxOpenConns(cfg.MaxActive)
-	if cfg.IdleTimeout > 0 {
-		db.DB().SetConnMaxIdleTime(cfg.IdleTimeout * time.Second)
+	sqlDB, err := db.DB()
+	if err != nil {
+		Logger.Log.Errorf("failed to get mysql DB, %v", err)
+		return
 	}
-	//db.DB().SetConnMaxLifetime(time.Duration(cfg.MaxLifeTime) / time.Second)
-	db.SetLogger(mysqlLog{})
-	db.LogMode(cfg.Log)
+	if cfg.MaxActive > 0 {
+		sqlDB.SetMaxOpenConns(cfg.MaxActive)
+	}
+	if cfg.MaxIdle > 0 {
+		sqlDB.SetMaxIdleConns(cfg.MaxIdle)
+	}
+	if cfg.IdleTimeout > 0 {
+		sqlDB.SetConnMaxIdleTime(cfg.IdleTimeout * time.Second)
+	}
 	return
 }

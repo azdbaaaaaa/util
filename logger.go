@@ -1,28 +1,72 @@
 package util
 
 import (
+	"context"
 	"fmt"
-	"github.com/sirupsen/logrus"
-	"os"
-	"strings"
+	"go.uber.org/zap"
+	"gorm.io/gorm/logger"
 	"time"
 )
 
-var Logger *logrus.Logger
+var Logger *zapLog
 
-type MyFormatter struct{}
+type zapLog struct {
+	Log *zap.SugaredLogger
+	LoggerOption
+}
 
-func (s *MyFormatter) Format(entry *logrus.Entry) ([]byte, error) {
-	timestamp := time.Now().Local().Format("2006/01/02 - 15:04:05")
-	msg := fmt.Sprintf("[Logger] %s [%s] %s-%d: %s\n", timestamp, strings.ToUpper(entry.Level.String()), entry.Caller.Function, entry.Caller.Line, entry.Message)
-	return []byte(msg), nil
+type LoggerOption struct {
+	Development bool `json:"development" toml:"development" yaml:"development"`
+}
+
+func New(option LoggerOption) (err error) {
+	var zapLogger *zap.Logger
+	if option.Development {
+		zapLogger, err = zap.NewDevelopment()
+	} else {
+		zapLogger, err = zap.NewProduction()
+	}
+	if err != nil {
+		panic(fmt.Sprintf("failed to new zap log,%v", err))
+	}
+	Logger = &zapLog{Log: zapLogger.Sugar(), LoggerOption: option}
+	return
+}
+
+func (l *zapLog) LogMode(level logger.LogLevel) *zap.SugaredLogger {
+	return l.Log
+}
+
+func (l *zapLog) Info(ctx context.Context, template string, args ...interface{}) {
+	l.Log.Infof(template, args...)
+}
+
+func (l *zapLog) Warn(ctx context.Context, template string, args ...interface{}) {
+	l.Log.Warnf(template, args...)
+}
+
+func (l *zapLog) Error(ctx context.Context, template string, args ...interface{}) {
+	l.Log.Errorf(template, args...)
+}
+
+func (l *zapLog) Trace(ctx context.Context, begin time.Time, fc func() (string, int64), err error) {
+	//sql, rows := fc()
+	//if rows == -1 {
+	//	l.logger.Infof(template, args...)
+	//	l.Printf(l.traceStr, utils.FileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, "-", sql)
+	//} else {
+	//	l.Printf(l.traceStr, utils.FileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, rows, sql)
+	//}
+}
+
+func (l *zapLog) Panic(ctx context.Context, template string, args ...interface{}) {
+	l.Log.Panicf(template, args...)
 }
 
 func init() {
-	var logger = logrus.New()
-
-	logger.Out = os.Stdout
-	logger.SetReportCaller(true)
-	logger.Formatter = &MyFormatter{}
-	Logger = logger
+	var err error
+	err = New(LoggerOption{Development: true})
+	if err != nil {
+		panic(err)
+	}
 }
