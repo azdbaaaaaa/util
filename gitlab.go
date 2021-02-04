@@ -18,7 +18,7 @@ type GitlabClient struct {
 func NewGitlabClient(conf GitlabConfig) (gc *GitlabClient, err error) {
 	client, err := gitlab.NewClient(conf.Token, gitlab.WithBaseURL(conf.Uri))
 	if err != nil {
-		Logger.Errorf("初始化gitlab客户端错误：%v", err)
+		Logger.Log.Errorf("初始化gitlab客户端错误：%v", err)
 		return nil, err
 	}
 	return &GitlabClient{client: client}, nil

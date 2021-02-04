@@ -19,7 +19,7 @@ type LoggerOption struct {
 	Development bool `json:"development" toml:"development" yaml:"development"`
 }
 
-func New(option LoggerOption) (err error) {
+func NewLogger(option LoggerOption) (err error) {
 	var zapLogger *zap.Logger
 	if option.Development {
 		zapLogger, err = zap.NewDevelopment()
@@ -65,7 +65,7 @@ func (l *zapLog) Panic(ctx context.Context, template string, args ...interface{}
 
 func init() {
 	var err error
-	err = New(LoggerOption{Development: true})
+	err = NewLogger(LoggerOption{Development: true})
 	if err != nil {
 		panic(err)
 	}

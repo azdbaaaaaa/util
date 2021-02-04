@@ -9,6 +9,7 @@ import (
 )
 
 const (
+	defaultUri         = "127.0.0.1:3306"
 	defaultMaxIdle     = 2
 	defaultMaxActive   = 10
 	defaultIdleTimeout = 60 // max idle time for each conn in seconds
@@ -25,6 +26,8 @@ type MysqlConfig struct {
 
 func DefaultConfig() *MysqlConfig {
 	return &MysqlConfig{
+		Uri:         defaultUri,
+		LogLevel:    logger.Silent,
 		MaxIdle:     defaultMaxIdle,
 		MaxActive:   defaultMaxActive,
 		IdleTimeout: defaultIdleTimeout * time.Second,
@@ -33,7 +36,7 @@ func DefaultConfig() *MysqlConfig {
 
 func NewMysql(cfg *MysqlConfig) (db *gorm.DB, err error) {
 	db, err = gorm.Open(mysql.Open(cfg.Uri), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Silent),
+		Logger: logger.Default.LogMode(cfg.LogLevel),
 	})
 	if err != nil {
 		Logger.Log.Errorf("failed to new mysql, %v", err)
