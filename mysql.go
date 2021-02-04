@@ -29,7 +29,7 @@ func NewMysql(cfg *MysqlConfig) (db *gorm.DB, err error) {
 	db.DB().SetMaxIdleConns(cfg.MaxIdle)
 	db.DB().SetMaxOpenConns(cfg.MaxActive)
 	if cfg.IdleTimeout > 0 {
-		db.DB().SetConnMaxIdleTime(cfg.IdleTimeout)
+		db.DB().SetConnMaxIdleTime(cfg.IdleTimeout * time.Second)
 	}
 	//db.DB().SetConnMaxLifetime(time.Duration(cfg.MaxLifeTime) / time.Second)
 	db.SetLogger(mysqlLog{})
