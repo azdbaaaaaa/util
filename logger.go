@@ -30,7 +30,7 @@ func NewLogger(option LoggerOption) (Log *zap.SugaredLogger, err error) {
 		panic(fmt.Sprintf("failed to new zap log,%v", err))
 	}
 	Logger = &zapLog{Log: zapLogger.Sugar(), LoggerOption: option}
-	return Log, nil
+	return zapLogger.Sugar(), nil
 }
 
 func (l *zapLog) LogMode(level logger.LogLevel) *zap.SugaredLogger {
