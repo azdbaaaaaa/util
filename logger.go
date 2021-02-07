@@ -19,7 +19,7 @@ type LoggerOption struct {
 	Development bool `json:"development" toml:"development" yaml:"development"`
 }
 
-func NewLogger(option LoggerOption) (err error) {
+func NewLogger(option LoggerOption) (Log *zap.SugaredLogger, err error) {
 	var zapLogger *zap.Logger
 	if option.Development {
 		zapLogger, err = zap.NewDevelopment()
@@ -30,7 +30,7 @@ func NewLogger(option LoggerOption) (err error) {
 		panic(fmt.Sprintf("failed to new zap log,%v", err))
 	}
 	Logger = &zapLog{Log: zapLogger.Sugar(), LoggerOption: option}
-	return
+	return Log, nil
 }
 
 func (l *zapLog) LogMode(level logger.LogLevel) *zap.SugaredLogger {
@@ -65,7 +65,7 @@ func (l *zapLog) Panic(ctx context.Context, template string, args ...interface{}
 
 func init() {
 	var err error
-	err = NewLogger(LoggerOption{Development: true})
+	_, err = NewLogger(LoggerOption{Development: true})
 	if err != nil {
 		panic(err)
 	}
