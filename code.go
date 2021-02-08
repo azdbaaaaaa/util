@@ -9,6 +9,7 @@ var _codes = &sync.Map{} // 注册Code信息
 
 var (
 	CodeSuccess    = NewCode(8000, "成功")
+	CodeUnknown    = NewCode(8001, "未知错误")
 	CodeErrorParam = NewCode(8010, "参数不正确")
 	CodeErrorToken = NewCode(9001, "令牌已过期，请重新获取令牌")
 )
