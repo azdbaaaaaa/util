@@ -1,5 +1,10 @@
 package util
 
+import (
+	"github.com/gin-gonic/gin"
+	"net/http"
+)
+
 type CommonResponse struct {
 	Code    Code                   `json:"code"`
 	Msg     string                 `json:"msg"`
@@ -9,33 +14,24 @@ type CommonResponse struct {
 	Ext     map[string]interface{} `json:"ext,omitempty"`
 }
 
-//
-//type Response struct {
-//	Errno int         `json:"errno"`
-//	Msg   string      `json:"msg"`
-//	Data  interface{} `json:"data,omitempty"`
-//}
-//
-//func Send(c *gin.Context, code int, msg string, data interface{}) {
-//	c.JSON(http.StatusOK, Response{
-//		Errno: code,
-//		Msg:   msg,
-//		Data:  data,
-//	})
-//}
-//
-//func Failure(c *gin.Context, err error) {
-//	c.JSON(http.StatusOK, Response{
-//		Errno: -1,
-//		Msg:   "error",
-//		Data:  err.Error(),
-//	})
-//}
-//
-//func Success(c *gin.Context, data interface{}) {
-//	c.JSON(http.StatusOK, Response{
-//		Errno: 0,
-//		Msg:   "success",
-//		Data:  data,
-//	})
-//}
+func Success(c *gin.Context, data interface{}, ext map[string]interface{}) {
+	c.JSON(http.StatusOK, CommonResponse{
+		Code:    CodeSuccess,
+		Msg:     CodeSuccess.Message(),
+		Success: CodeSuccess.IsSuccess(),
+		Result:  data,
+		Tid:     "",
+		Ext:     ext,
+	})
+}
+
+func Failure(c *gin.Context, code Code, ext map[string]interface{}) {
+	c.JSON(http.StatusOK, CommonResponse{
+		Code:    code,
+		Msg:     code.Message(),
+		Success: code.IsSuccess(),
+		Result:  nil,
+		Tid:     "",
+		Ext:     ext,
+	})
+}

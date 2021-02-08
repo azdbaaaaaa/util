@@ -35,3 +35,7 @@ func (c Code) Message() string {
 	}
 	return c.Error()
 }
+
+func (c Code) IsSuccess() bool {
+	return c == CodeSuccess
+}
