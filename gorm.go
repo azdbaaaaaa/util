@@ -27,18 +27,17 @@ type PaginationReq struct {
 type PaginationRes struct {
 	PageSize int         `form:"page_size" json:"page_size"`
 	Page     int         `form:"page" json:"page"`
-	Data     interface{} `json:"data"`
-	Total    int64       `json:"total"`
+	Data     interface{} `form:"data" json:"data"`
+	Total    int64       `form:"total" json:"total"`
 }
 
 func (p *PaginationReq) check() {
-	if p.PageSize <= 0 {
-		if p.PageSize == -1 {
-			p.PageSize = maxSize
-		} else {
-			p.PageSize = defaultSize
-		}
+	if p.PageSize < 0 || p.PageSize > maxSize {
+		p.PageSize = maxSize
+	} else if p.PageSize == 0 {
+		p.PageSize = defaultSize
 	}
+
 	if p.Page <= 0 {
 		p.Page = defaultPage
 	}
