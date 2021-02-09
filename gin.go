@@ -25,7 +25,13 @@ func Success(c *gin.Context, data interface{}, ext map[string]interface{}) {
 	})
 }
 
-func Failure(c *gin.Context, code Code, ext map[string]interface{}) {
+func Failure(c *gin.Context, err error, ext map[string]interface{}) {
+	var code Code
+	if c, ok := err.(Code); ok {
+		code = c
+	} else {
+		code = CodeUnknown
+	}
 	c.JSON(http.StatusOK, CommonResponse{
 		Code:    code,
 		Msg:     code.Message(),
