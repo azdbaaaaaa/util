@@ -46,12 +46,12 @@ func (c *GitlabClient) GetBranchList(gitUrl string, search string) ([]*gitlab.Br
 	return branches, nil
 }
 
-func (c *GitlabClient) CreateMergeRequest(gitUrl, title, sourceBranch, targetBranch string) (mr *gitlab.MergeRequest, err error) {
+func (c *GitlabClient) CreateMergeRequest(gitUrl, title, sourceBranch, targetBranch string) (mr *gitlab.MergeRequest, resp *gitlab.Response, err error) {
 	project, err := c.getFullProject(gitUrl)
 	if err != nil {
-		return nil, err
+		return
 	}
-	mr, _, err = c.client.MergeRequests.CreateMergeRequest(project, &gitlab.CreateMergeRequestOptions{
+	mr, resp, err = c.client.MergeRequests.CreateMergeRequest(project, &gitlab.CreateMergeRequestOptions{
 		Title:        &title,
 		SourceBranch: &sourceBranch,
 		TargetBranch: &targetBranch,
