@@ -58,7 +58,6 @@ func ParseToken() gin.HandlerFunc {
 			ctx.Next()
 			return
 		}
-		//ctx = context.WithValue(ctx, ContextKeyUser, user)
 		ctx.Set(ContextKeyUser, user)
 		ctx.Next()
 		return

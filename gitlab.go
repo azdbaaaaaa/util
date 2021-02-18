@@ -97,3 +97,15 @@ func (c *GitlabClient) CreateMergeRequestNote(gitUrl string, mrIID int, body *st
 	}
 	return
 }
+
+func (c *GitlabClient) ListMergeRequestNote(gitUrl string, mrIID int) (notes []*gitlab.Note, resp *gitlab.Response, err error){
+	project, err := c.getFullProject(gitUrl)
+	if err != nil {
+		return
+	}
+	notes, resp, err = c.client.Notes.ListMergeRequestNotes(project, mrIID, &gitlab.ListMergeRequestNotesOptions{})
+	if err != nil {
+		return
+	}
+	return
+}
