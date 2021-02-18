@@ -86,12 +86,12 @@ func (c *GitlabClient) GetMergeRequestChange(gitUrl string, mrIID int) (mr *gitl
 	return
 }
 
-func (c *GitlabClient) CreateMergeRequestNote(gitUrl string, mrIID int) (note *gitlab.Note, resp *gitlab.Response, err error){
+func (c *GitlabClient) CreateMergeRequestNote(gitUrl string, mrIID int, body *string) (note *gitlab.Note, resp *gitlab.Response, err error){
 	project, err := c.getFullProject(gitUrl)
 	if err != nil {
 		return
 	}
-	note, resp, err = c.client.Notes.CreateMergeRequestNote(project, mrIID, &gitlab.CreateMergeRequestNoteOptions{})
+	note, resp, err = c.client.Notes.CreateMergeRequestNote(project, mrIID, &gitlab.CreateMergeRequestNoteOptions{Body: body})
 	if err != nil {
 		return
 	}
