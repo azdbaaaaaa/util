@@ -5,7 +5,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	"net/http"
 	"strings"
 )
 
@@ -46,38 +45,17 @@ func ParseToken() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		authorization := strings.Split(ctx.GetHeader("Authorization"), "Bearer ")
 		if len(authorization) != 2 {
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, CommonResponse{
-				Code:    CodeTokenError,
-				Msg:     CodeTokenError.Message(),
-				Success: CodeTokenError.IsSuccess(),
-				Result:  nil,
-				Tid:     "",
-				Ext:     nil,
-			})
+			ctx.Next()
 			return
 		}
 		token := authorization[1]
 		if token == "" {
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, CommonResponse{
-				Code:    CodeTokenError,
-				Msg:     CodeTokenError.Message(),
-				Success: CodeTokenError.IsSuccess(),
-				Result:  nil,
-				Tid:     "",
-				Ext:     nil,
-			})
+			ctx.Next()
 			return
 		}
 		user, err := getValues(token, []string{"name", "_user"})
 		if err != nil {
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, CommonResponse{
-				Code:    CodeTokenError,
-				Msg:     CodeTokenError.Message(),
-				Success: CodeTokenError.IsSuccess(),
-				Result:  nil,
-				Tid:     "",
-				Ext:     nil,
-			})
+			ctx.Next()
 			return
 		}
 		//ctx = context.WithValue(ctx, ContextKeyUser, user)
