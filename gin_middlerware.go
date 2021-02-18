@@ -46,17 +46,38 @@ func SetUsername() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		authorization := strings.Split(ctx.GetHeader("Authorization"), "Bearer ")
 		if len(authorization) != 2 {
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, nil)
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, CommonResponse{
+				Code:    CodeTokenError,
+				Msg:     CodeTokenError.Message(),
+				Success: CodeTokenError.IsSuccess(),
+				Result:  nil,
+				Tid:     "",
+				Ext:     nil,
+			})
 			return
 		}
 		token := authorization[1]
 		if token == "" {
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, nil)
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, CommonResponse{
+				Code:    CodeTokenError,
+				Msg:     CodeTokenError.Message(),
+				Success: CodeTokenError.IsSuccess(),
+				Result:  nil,
+				Tid:     "",
+				Ext:     nil,
+			})
 			return
 		}
 		user, err := ParseJWT(token, "_user")
 		if err != nil {
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, nil)
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, CommonResponse{
+				Code:    CodeTokenError,
+				Msg:     CodeTokenError.Message(),
+				Success: CodeTokenError.IsSuccess(),
+				Result:  nil,
+				Tid:     "",
+				Ext:     nil,
+			})
 			return
 		}
 		//ctx = context.WithValue(ctx, ContextKeyUser, user)
