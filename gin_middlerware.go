@@ -42,7 +42,7 @@ import (
 const ContextKeyUser = "user"
 
 // 用户名注入到ctx中
-func SetUsername() gin.HandlerFunc {
+func ParseToken() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		authorization := strings.Split(ctx.GetHeader("Authorization"), "Bearer ")
 		if len(authorization) != 2 {
@@ -68,7 +68,7 @@ func SetUsername() gin.HandlerFunc {
 			})
 			return
 		}
-		user, err := ParseJWT(token, []string{"name", "_user"})
+		user, err := getValues(token, []string{"name", "_user"})
 		if err != nil {
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, CommonResponse{
 				Code:    CodeTokenError,
@@ -97,7 +97,7 @@ func GetUsername(ctx context.Context) (string, error) {
 	return username, nil
 }
 
-func parseJWT(token string, key string) (interface{}, error) {
+func getValue(token string, key string) (interface{}, error) {
 	parts := strings.Split(token, ".")
 	if len(parts) != 3 {
 		return nil, CodeTokenError
@@ -116,9 +116,9 @@ func parseJWT(token string, key string) (interface{}, error) {
 	return nil, CodeTokenError
 }
 
-func ParseJWT(token string, keys []string) (interface{}, error) {
+func getValues(token string, keys []string) (interface{}, error) {
 	for _, key := range keys {
-		v, err := parseJWT(token, key)
+		v, err := getValue(token, key)
 		if err != nil {
 			continue
 		}
