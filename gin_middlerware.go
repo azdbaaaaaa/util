@@ -1,6 +1,7 @@
 package util
 
 import (
+	"context"
 	"encoding/base64"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
@@ -58,6 +59,7 @@ func SetUsername() gin.HandlerFunc {
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, nil)
 			return
 		}
+		//ctx = context.WithValue(ctx, ContextKeyUser, user)
 		ctx.Set(ContextKeyUser, user)
 		ctx.Next()
 		return
@@ -65,11 +67,8 @@ func SetUsername() gin.HandlerFunc {
 }
 
 // 从ctx中获取用户名
-func GetUsername(ctx *gin.Context) (string, error) {
-	user, exists := ctx.Get(ContextKeyUser)
-	if !exists {
-		return "", CodeCtxKeyNotFound
-	}
+func GetUsername(ctx context.Context) (string, error) {
+	user := ctx.Value(ContextKeyUser)
 	username, ok := user.(string)
 	if !ok {
 		return "", CodeCtxKeyInvalid
