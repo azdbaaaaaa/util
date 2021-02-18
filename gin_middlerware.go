@@ -68,7 +68,7 @@ func SetUsername() gin.HandlerFunc {
 			})
 			return
 		}
-		user, err := ParseJWT(token, "_user")
+		user, err := ParseJWT(token, []string{"name", "_user"})
 		if err != nil {
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, CommonResponse{
 				Code:    CodeTokenError,
@@ -97,7 +97,7 @@ func GetUsername(ctx context.Context) (string, error) {
 	return username, nil
 }
 
-func ParseJWT(token string, key string) (interface{}, error) {
+func parseJWT(token string, key string) (interface{}, error) {
 	parts := strings.Split(token, ".")
 	if len(parts) != 3 {
 		return nil, CodeTokenError
@@ -111,6 +111,17 @@ func ParseJWT(token string, key string) (interface{}, error) {
 		return nil, CodeTokenError
 	}
 	if v, ok := m[key]; ok {
+		return v, nil
+	}
+	return nil, CodeTokenError
+}
+
+func ParseJWT(token string, keys []string) (interface{}, error) {
+	for _, key := range keys {
+		v, err := parseJWT(token, key)
+		if err != nil {
+			continue
+		}
 		return v, nil
 	}
 	return nil, CodeTokenError
