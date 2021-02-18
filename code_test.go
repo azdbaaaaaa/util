@@ -12,8 +12,8 @@ func TestDefaultCode(t *testing.T) {
 	assert.Equal(t, CodeErrorParam.Code(), 8010)
 	assert.Equal(t, CodeErrorParam.Message(), "参数不正确")
 
-	assert.Equal(t, CodeErrorToken.Code(), 9001)
-	assert.Equal(t, CodeErrorToken.Message(), "令牌已过期，请重新获取令牌")
+	assert.Equal(t, CodeTokenExpired.Code(), 9001)
+	assert.Equal(t, CodeTokenExpired.Message(), "令牌已过期，请重新获取令牌")
 }
 
 func TestNewCode(t *testing.T) {
