@@ -73,3 +73,15 @@ func (c *GitlabClient) GetMergeRequest(gitUrl string, mrIID int) (mr *gitlab.Mer
 	}
 	return
 }
+
+func (c *GitlabClient) GetMergeRequestChange(gitUrl string, mrIID int) (mr *gitlab.MergeRequest, resp *gitlab.Response, err error) {
+	project, err := c.getFullProject(gitUrl)
+	if err != nil {
+		return
+	}
+	mr, resp, err = c.client.MergeRequests.GetMergeRequestChanges(project, mrIID, &gitlab.GetMergeRequestChangesOptions{})
+	if err != nil {
+		return
+	}
+	return
+}
