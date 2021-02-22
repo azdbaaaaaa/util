@@ -17,7 +17,7 @@ type CommonResponse struct {
 func Success(c *gin.Context, data interface{}, ext map[string]interface{}) {
 	c.JSON(http.StatusOK, CommonResponse{
 		Code:    CodeSuccess,
-		Msg:     CodeSuccess.Message(),
+		Msg:     CodeSuccess.Error(),
 		Success: CodeSuccess.IsSuccess(),
 		Result:  data,
 		Tid:     "",
@@ -34,7 +34,7 @@ func Failure(c *gin.Context, err error, ext map[string]interface{}) {
 	}
 	c.JSON(http.StatusOK, CommonResponse{
 		Code:    code,
-		Msg:     code.Message(),
+		Msg:     code.Error(),
 		Success: code.IsSuccess(),
 		Result:  nil,
 		Tid:     "",
