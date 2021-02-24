@@ -6,6 +6,14 @@ import (
 	"strings"
 )
 
+const (
+	MRStateAll    = "all"
+	MRStateOpened = "opened"
+	MRStateClosed = "closed"
+	MRStateLocked = "locked"
+	MRStateMerged = "merged"
+)
+
 type GitlabConfig struct {
 	Uri   string `json:"uri"`
 	Token string `json:"token"`
