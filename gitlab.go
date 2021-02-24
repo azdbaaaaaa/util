@@ -86,6 +86,18 @@ func (c *GitlabClient) DeleteMergeRequest(gitUrl string, mrIID int) (resp *gitla
 	return
 }
 
+func (c *GitlabClient) UpdateMergeRequest(gitUrl string, mrIID int, options *gitlab.UpdateMergeRequestOptions) (mr *gitlab.MergeRequest, resp *gitlab.Response, err error) {
+	project, err := c.getFullProject(gitUrl)
+	if err != nil {
+		return
+	}
+	mr, resp, err = c.client.MergeRequests.UpdateMergeRequest(project, mrIID, options)
+	if err != nil {
+		return
+	}
+	return
+}
+
 func (c *GitlabClient) AcceptMergeRequest(gitUrl string, mrIID int, options *gitlab.AcceptMergeRequestOptions) (mr *gitlab.MergeRequest, resp *gitlab.Response, err error) {
 	project, err := c.getFullProject(gitUrl)
 	if err != nil {
