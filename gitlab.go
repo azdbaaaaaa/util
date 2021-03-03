@@ -14,6 +14,11 @@ const (
 	MRStateMerged = "merged"
 )
 
+const (
+	MREventOpen  = "open"
+	MREventClose = "close"
+)
+
 type GitlabConfig struct {
 	Uri   string `json:"uri"`
 	Token string `json:"token"`
