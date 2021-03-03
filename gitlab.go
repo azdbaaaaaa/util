@@ -6,17 +6,17 @@ import (
 	"strings"
 )
 
-const (
-	MRStateAll    = "all"
-	MRStateOpened = "opened"
-	MRStateClosed = "closed"
-	MRStateLocked = "locked"
-	MRStateMerged = "merged"
+var (
+	MrStateAll    = "all"
+	MrStateOpened = "opened"
+	MrStateClosed = "closed"
+	MrStateLocked = "locked"
+	MrStateMerged = "merged"
 )
 
-const (
-	MREventOpen  = "open"
-	MREventClose = "close"
+var (
+	MrEventReopen = "reopen"
+	MrEventClose  = "close"
 )
 
 type GitlabConfig struct {
@@ -105,6 +105,30 @@ func (c *GitlabClient) UpdateMergeRequest(gitUrl string, mrIID int, options *git
 		return
 	}
 	mr, resp, err = c.client.MergeRequests.UpdateMergeRequest(project, mrIID, options)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (c *GitlabClient) CloseMergeRequest(gitUrl string, mrIID int) (mr *gitlab.MergeRequest, resp *gitlab.Response, err error) {
+	project, err := c.getFullProject(gitUrl)
+	if err != nil {
+		return
+	}
+	mr, resp, err = c.client.MergeRequests.UpdateMergeRequest(project, mrIID, &gitlab.UpdateMergeRequestOptions{StateEvent: &MrEventClose})
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (c *GitlabClient) ReopenMergeRequest(gitUrl string, mrIID int) (mr *gitlab.MergeRequest, resp *gitlab.Response, err error) {
+	project, err := c.getFullProject(gitUrl)
+	if err != nil {
+		return
+	}
+	mr, resp, err = c.client.MergeRequests.UpdateMergeRequest(project, mrIID, &gitlab.UpdateMergeRequestOptions{StateEvent: &MrEventReopen})
 	if err != nil {
 		return
 	}
