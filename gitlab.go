@@ -19,6 +19,11 @@ var (
 	MrEventClose  = "close"
 )
 
+var (
+	MrStatusCannotBeMerged = "cannot_be_merged"
+	MrStatusCanBeMerged    = "can_be_merged"
+)
+
 type GitlabConfig struct {
 	Uri   string `json:"uri"`
 	Token string `json:"token"`
