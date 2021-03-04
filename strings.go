@@ -1,6 +1,6 @@
 package util
 
-func removeDuplicateString(input []string) (output []string) {
+func RemoveDuplicateStrings(input []string) (output []string) {
 	output = make([]string, 0, len(input))
 	temp := map[string]struct{}{}
 	for _, item := range input {
