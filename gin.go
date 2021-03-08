@@ -1,7 +1,9 @@
 package util
 
 import (
+	"bytes"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"net/http"
 )
 
@@ -26,12 +28,20 @@ func Success(c *gin.Context, data interface{}, ext map[string]interface{}) {
 }
 
 func Failure(c *gin.Context, err error, ext map[string]interface{}) {
-	var code Code
+	code := CodeUnknown
+
 	if c, ok := err.(Code); ok {
 		code = c
-	} else {
-		code = CodeUnknown
 	}
+
+	if c, ok := err.(validator.ValidationErrors); ok {
+		var buffer bytes.Buffer
+		for i := range c {
+			buffer.WriteString(c[i].Error() + ";")
+		}
+		code = ValidateErrorCode(buffer.String())
+	}
+
 	c.JSON(http.StatusOK, CommonResponse{
 		Code:    code,
 		Msg:     code.Error(),

@@ -16,6 +16,10 @@ var (
 	CodeCtxKeyInvalid  = NewCode("9101", "请求上下文中键不合法")
 )
 
+func ValidateErrorCode(msg string) Code {
+	return NewCode("8011", "参数错误: "+msg)
+}
+
 type Code string
 
 func NewCode(code Code, msg string) Code {
