@@ -53,7 +53,7 @@ func ParseToken() gin.HandlerFunc {
 			ctx.Next()
 			return
 		}
-		user, err := getValues(token, []string{"name", "_user"})
+		user, err := getValues(token, []string{"name", "_user", "sub"})
 		if err != nil {
 			ctx.Next()
 			return
