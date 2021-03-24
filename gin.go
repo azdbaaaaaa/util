@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"net/http"
+	"net/rpc"
 )
 
 type CommonResponse struct {
@@ -40,6 +41,10 @@ func Failure(c *gin.Context, err error, ext map[string]interface{}) {
 			buffer.WriteString(c[i].Error() + ";")
 		}
 		code = ValidateErrorCode(buffer.String())
+	}
+
+	if c, ok := err.(rpc.ServerError); ok {
+		code = RpcErrorCode(c.Error())
 	}
 
 	c.JSON(http.StatusOK, CommonResponse{
