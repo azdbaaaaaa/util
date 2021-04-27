@@ -3,27 +3,43 @@ package log
 import (
 	"fmt"
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 var Sugar *zap.SugaredLogger
 var Logger *zap.Logger
 
 type LoggerOption struct {
-	Development bool `json:"development" toml:"development" yaml:"development"`
+	Level     zapcore.Level `json:"level" toml:"level" yaml:"level"`
+	Output    string        `json:"output" toml:"output" yaml:"output" mapstructure:"output"`
+	ErrOutput string        `json:"err_output" toml:"err_output" yaml:"err_output" mapstructure:"err_outputx"`
 }
 
 func NewLogger(option LoggerOption) (logger *zap.Logger, sugar *zap.SugaredLogger, err error) {
 	var zapLogger *zap.Logger
-	if option.Development {
-		zapLogger, err = zap.NewDevelopment()
-	} else {
-		zapLogger, err = zap.NewProduction()
+	output := []string{"stdout"}
+	errOutput := []string{"stderr"}
+	if option.Output != "" {
+		output = append(output, option.Output)
 	}
+	if option.ErrOutput != "" {
+		errOutput = append(errOutput, option.ErrOutput)
+	}
+	config := zap.Config{
+		Level:             zap.NewAtomicLevelAt(option.Level),
+		Encoding:          "json",
+		EncoderConfig:     zap.NewProductionEncoderConfig(),
+		OutputPaths:       output,
+		ErrorOutputPaths:  errOutput,
+		Development:       false,
+	}
+	zapLogger, err = config.Build()
+	//zapLogger, err = zap.NewProduction()
 	if err != nil {
 		panic(fmt.Sprintf("failed to new zap log,%v", err))
 	}
-	Sugar = zapLogger.Sugar()
 	Logger = zapLogger
+	Sugar = zapLogger.Sugar()
 	return zapLogger, zapLogger.Sugar(), nil
 }
 
@@ -57,7 +73,7 @@ func Panicf(template string, args ...interface{}) {
 
 func init() {
 	var err error
-	_, _, err = NewLogger(LoggerOption{Development: true})
+	_, _, err = NewLogger(LoggerOption{Level: zapcore.DebugLevel})
 	if err != nil {
 		panic(err)
 	}
