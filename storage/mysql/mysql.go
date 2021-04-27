@@ -36,12 +36,12 @@ func New(cfg *Config) (db *gorm.DB, err error) {
 		Logger: logger.Default.LogMode(logLevel),
 	})
 	if err != nil {
-		log.Logger.Log.Errorf("failed to new mysql, %v", err)
+		log.Errorf("failed to new mysql, %v", err)
 		return
 	}
 	sqlDB, err := db.DB()
 	if err != nil {
-		log.Logger.Log.Errorf("failed to get mysql DB, %v", err)
+		log.Errorf("failed to get mysql DB, %v", err)
 		return
 	}
 	if cfg.MaxActive > 0 {
