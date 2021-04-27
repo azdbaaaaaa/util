@@ -1,4 +1,4 @@
-module github.com/azdbaaaaaa/util
+module gitlab.inner.yuewen.local/light-house/util
 
 go 1.15
 
