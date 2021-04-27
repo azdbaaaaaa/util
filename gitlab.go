@@ -2,6 +2,7 @@ package util
 
 import (
 	"errors"
+	"github.com/azdbaaaaaa/util/log"
 	"github.com/xanzy/go-gitlab"
 	"strings"
 )
@@ -36,7 +37,7 @@ type GitlabClient struct {
 func NewGitlabClient(conf GitlabConfig) (gc *GitlabClient, err error) {
 	client, err := gitlab.NewClient(conf.Token, gitlab.WithBaseURL(conf.Uri))
 	if err != nil {
-		Logger.Log.Errorf("初始化gitlab客户端错误：%v", err)
+		log.Logger.Log.Errorf("初始化gitlab客户端错误：%v", err)
 		return nil, err
 	}
 	return &GitlabClient{client: client}, nil

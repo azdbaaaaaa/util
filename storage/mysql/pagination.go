@@ -1,4 +1,4 @@
-package util
+package mysql
 
 import (
 	"gorm.io/gorm"
@@ -31,7 +31,7 @@ type PaginationRes struct {
 	Total    int64       `form:"total" json:"total"`
 }
 
-func (p *PaginationReq) check() {
+func (p *PaginationReq) valid() {
 	if p.PageSize < 0 || p.PageSize > maxSize {
 		p.PageSize = maxSize
 	} else if p.PageSize == 0 {
@@ -44,11 +44,11 @@ func (p *PaginationReq) check() {
 }
 
 func (p *PaginationReq) Offset() int {
-	p.check()
+	p.valid()
 	return (p.Page - 1) * p.PageSize
 }
 
 func (p *PaginationReq) Limit() int {
-	p.check()
+	p.valid()
 	return p.PageSize
 }

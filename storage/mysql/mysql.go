@@ -1,6 +1,7 @@
-package util
+package mysql
 
 import (
+	"github.com/azdbaaaaaa/util/log"
 	"gorm.io/driver/mysql"
 	_ "gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -15,7 +16,7 @@ const (
 	defaultIdleTimeout = 60 // max idle time for each conn in seconds
 )
 
-type MysqlConfig struct {
+type Config struct {
 	// etc. user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local
 	Uri         string          `json:"uri"`
 	LogLevel    logger.LogLevel `json:"log_level" mapstructure:"log_level"`
@@ -24,7 +25,7 @@ type MysqlConfig struct {
 	IdleTimeout time.Duration   `json:"idle_timeout" mapstructure:"idle_timeout"` // suggest less than 8 * 3600
 }
 
-func NewMysql(cfg *MysqlConfig) (db *gorm.DB, err error) {
+func New(cfg *Config) (db *gorm.DB, err error) {
 	var logLevel logger.LogLevel
 	if cfg.LogLevel > 0 {
 		logLevel = cfg.LogLevel
@@ -35,12 +36,12 @@ func NewMysql(cfg *MysqlConfig) (db *gorm.DB, err error) {
 		Logger: logger.Default.LogMode(logLevel),
 	})
 	if err != nil {
-		Logger.Log.Errorf("failed to new mysql, %v", err)
+		log.Logger.Log.Errorf("failed to new mysql, %v", err)
 		return
 	}
 	sqlDB, err := db.DB()
 	if err != nil {
-		Logger.Log.Errorf("failed to get mysql DB, %v", err)
+		log.Logger.Log.Errorf("failed to get mysql DB, %v", err)
 		return
 	}
 	if cfg.MaxActive > 0 {
