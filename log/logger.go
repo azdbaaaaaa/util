@@ -10,13 +10,15 @@ var Sugar *zap.SugaredLogger
 var Logger *zap.Logger
 
 type LoggerOption struct {
-	Level     zapcore.Level `json:"level" toml:"level" yaml:"level"`
-	Output    string        `json:"output" toml:"output" yaml:"output" mapstructure:"output"`
-	ErrOutput string        `json:"err_output" toml:"err_output" yaml:"err_output" mapstructure:"err_outputx"`
+	Development bool          `json:"development" toml:"development" yaml:"development"`
+	Level       zapcore.Level `json:"level" toml:"level" yaml:"level"`
+	Output      string        `json:"output" toml:"output" yaml:"output" mapstructure:"output"`
+	ErrOutput   string        `json:"err_output" toml:"err_output" yaml:"err_output" mapstructure:"err_output"`
 }
 
 func NewLogger(option LoggerOption) (logger *zap.Logger, sugar *zap.SugaredLogger, err error) {
 	var zapLogger *zap.Logger
+	var development bool
 	output := []string{"stdout"}
 	errOutput := []string{"stderr"}
 	if option.Output != "" {
@@ -25,13 +27,18 @@ func NewLogger(option LoggerOption) (logger *zap.Logger, sugar *zap.SugaredLogge
 	if option.ErrOutput != "" {
 		errOutput = append(errOutput, option.ErrOutput)
 	}
+	if option.Development {
+		development = true
+	}
 	config := zap.Config{
+		DisableCaller:     true,
+		DisableStacktrace: true,
 		Level:             zap.NewAtomicLevelAt(option.Level),
 		Encoding:          "json",
 		EncoderConfig:     zap.NewProductionEncoderConfig(),
 		OutputPaths:       output,
 		ErrorOutputPaths:  errOutput,
-		Development:       false,
+		Development:       development,
 	}
 	zapLogger, err = config.Build()
 	//zapLogger, err = zap.NewProduction()
