@@ -12,24 +12,20 @@ var Logger *zap.Logger
 type LoggerOption struct {
 	Development bool          `json:"development" toml:"development" yaml:"development"`
 	Level       zapcore.Level `json:"level" toml:"level" yaml:"level"`
-	StdoutPaths []string      `json:"stdout_paths" toml:"stdout_paths" yaml:"stdout_paths" mapstructure:"stdout_paths"`
-	StderrPaths []string      `json:"stderr_paths" toml:"stderr_paths" yaml:"stderr_paths" mapstructure:"stderr_paths"`
+	StdoutPath  string        `json:"stdout_path" toml:"stdout_path" yaml:"stdout_path" mapstructure:"stdout_path"`
+	StderrPath  string        `json:"stderr_path" toml:"stderr_path" yaml:"stderr_path" mapstructure:"stderr_path"`
 }
 
 func NewLogger(option LoggerOption) {
 	var development bool
 	stdoutPaths := []string{"stdout"}
-	if len(option.StdoutPaths) > 0 {
-		for _, stdout := range option.StdoutPaths {
-			stdoutPaths = append(stdoutPaths, stdout)
-		}
+	if option.StdoutPath != "" {
+		stdoutPaths = append(stdoutPaths, option.StdoutPath)
 	}
 
 	stderrPaths := []string{"stderr"}
-	if len(option.StderrPaths) > 0 {
-		for _, stderr := range option.StderrPaths {
-			stderrPaths = append(stderrPaths, stderr)
-		}
+	if option.StderrPath != "" {
+		stderrPaths = append(stderrPaths, option.StderrPath)
 	}
 
 	if option.Development {
