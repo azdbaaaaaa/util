@@ -12,21 +12,26 @@ var Logger *zap.Logger
 type LoggerOption struct {
 	Development bool          `json:"development" toml:"development" yaml:"development"`
 	Level       zapcore.Level `json:"level" toml:"level" yaml:"level"`
-	Output      string        `json:"output" toml:"output" yaml:"output" mapstructure:"output"`
-	ErrOutput   string        `json:"err_output" toml:"err_output" yaml:"err_output" mapstructure:"err_output"`
+	StdoutPaths []string      `json:"stdout_paths" toml:"stdout_paths" yaml:"stdout_paths" mapstructure:"stdout_paths"`
+	StderrPaths []string      `json:"stderr_paths" toml:"stderr_paths" yaml:"stderr_paths" mapstructure:"stderr_paths"`
 }
 
-func NewLogger(option LoggerOption) (logger *zap.Logger, sugar *zap.SugaredLogger, err error) {
-	var zapLogger *zap.Logger
+func NewLogger(option LoggerOption) {
 	var development bool
-	output := []string{"stdout"}
-	errOutput := []string{"stderr"}
-	if option.Output != "" {
-		output = append(output, option.Output)
+	stdoutPaths := []string{"stdout"}
+	if len(option.StdoutPaths) > 0 {
+		for _, stdout := range option.StdoutPaths {
+			stdoutPaths = append(stdoutPaths, stdout)
+		}
 	}
-	if option.ErrOutput != "" {
-		errOutput = append(errOutput, option.ErrOutput)
+
+	stderrPaths := []string{"stderr"}
+	if len(option.StderrPaths) > 0 {
+		for _, stderr := range option.StderrPaths {
+			stderrPaths = append(stderrPaths, stderr)
+		}
 	}
+
 	if option.Development {
 		development = true
 	}
@@ -36,18 +41,17 @@ func NewLogger(option LoggerOption) (logger *zap.Logger, sugar *zap.SugaredLogge
 		Level:             zap.NewAtomicLevelAt(option.Level),
 		Encoding:          "json",
 		EncoderConfig:     zap.NewProductionEncoderConfig(),
-		OutputPaths:       output,
-		ErrorOutputPaths:  errOutput,
+		OutputPaths:       stdoutPaths,
+		ErrorOutputPaths:  stderrPaths,
 		Development:       development,
 	}
-	zapLogger, err = config.Build()
-	//zapLogger, err = zap.NewProduction()
+	zapLogger, err := config.Build()
 	if err != nil {
 		panic(fmt.Sprintf("failed to new zap log,%v", err))
 	}
 	Logger = zapLogger
 	Sugar = zapLogger.Sugar()
-	return zapLogger, zapLogger.Sugar(), nil
+	return
 }
 
 func Infof(template string, args ...interface{}) {
@@ -79,9 +83,5 @@ func Panicf(template string, args ...interface{}) {
 }
 
 func init() {
-	var err error
-	_, _, err = NewLogger(LoggerOption{Level: zapcore.DebugLevel})
-	if err != nil {
-		panic(err)
-	}
+	NewLogger(LoggerOption{Development: true, Level: zapcore.DebugLevel})
 }
