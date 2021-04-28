@@ -16,7 +16,7 @@ type LoggerOption struct {
 	StderrPath  string        `json:"stderr_path" toml:"stderr_path" yaml:"stderr_path" mapstructure:"stderr_path"`
 }
 
-func NewLogger(option LoggerOption) {
+func New(option LoggerOption) {
 	var development bool
 	stdoutPaths := []string{"stdout"}
 	if option.StdoutPath != "" {
@@ -79,5 +79,5 @@ func Panicf(template string, args ...interface{}) {
 }
 
 func init() {
-	NewLogger(LoggerOption{Development: true, Level: zapcore.DebugLevel})
+	New(LoggerOption{Development: true, Level: zapcore.DebugLevel})
 }
