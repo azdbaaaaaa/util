@@ -54,6 +54,9 @@ func New(cfg *Config) (db *gorm.DB, err error) {
 		err = db.Use(prometheus.New(prometheus.Config{
 			DBName:          cfg.PrometheusDBName,
 			RefreshInterval: defaultRefreshInterval,
+			MetricsCollector: []prometheus.MetricsCollector {
+				&prometheus.MySQL{VariableNames: []string{"Threads_running"}},
+			},
 		}))
 		if err != nil {
 			log.Errorw("mysql use prometheus", "err", err)
