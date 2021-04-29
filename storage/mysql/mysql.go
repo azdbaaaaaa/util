@@ -6,23 +6,30 @@ import (
 	_ "gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"gorm.io/plugin/prometheus"
 	"time"
 )
 
 const (
-	defaultUri         = "127.0.0.1:3306"
+	defaultUri         = "root:123456@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
 	defaultMaxIdle     = 2
 	defaultMaxActive   = 10
 	defaultIdleTimeout = 60 // max idle time for each conn in seconds
+
+	defaultRefreshInterval = 15 // in seconds
+
+	defaultDBName = "default"
 )
 
 type Config struct {
 	// etc. user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local
-	Uri         string          `json:"uri"`
-	LogLevel    logger.LogLevel `json:"log_level" mapstructure:"log_level"`
-	MaxIdle     int             `json:"max_idle" mapstructure:"max_idle"`         // current default: 2
-	MaxActive   int             `json:"max_active" mapstructure:"max_active"`     // larger than maxIdle
-	IdleTimeout time.Duration   `json:"idle_timeout" mapstructure:"idle_timeout"` // suggest less than 8 * 3600
+	Uri              string          `json:"uri" mapstructure:"uri"`
+	LogLevel         logger.LogLevel `json:"log_level" mapstructure:"log_level"`
+	MaxIdle          int             `json:"max_idle" mapstructure:"max_idle"`         // current default: 2
+	MaxActive        int             `json:"max_active" mapstructure:"max_active"`     // larger than maxIdle
+	IdleTimeout      time.Duration   `json:"idle_timeout" mapstructure:"idle_timeout"` // suggest less than 8 * 3600
+	Prometheus       bool            `json:"prometheus" mapstructure:"prometheus"`
+	PrometheusDBName string          `json:"prometheus_db_name" mapstructure:"prometheus_db_name"`
 }
 
 func New(cfg *Config) (db *gorm.DB, err error) {
@@ -36,12 +43,26 @@ func New(cfg *Config) (db *gorm.DB, err error) {
 		Logger: logger.Default.LogMode(logLevel),
 	})
 	if err != nil {
-		log.Errorf("failed to new mysql, %v", err)
+		log.Errorw("mysql open", "err", err)
 		return
+	}
+
+	if cfg.Prometheus {
+		if cfg.PrometheusDBName == "" {
+			cfg.PrometheusDBName = defaultDBName
+		}
+		err = db.Use(prometheus.New(prometheus.Config{
+			DBName:          cfg.PrometheusDBName,
+			RefreshInterval: defaultRefreshInterval,
+		}))
+		if err != nil {
+			log.Errorw("mysql use prometheus", "err", err)
+			return
+		}
 	}
 	sqlDB, err := db.DB()
 	if err != nil {
-		log.Errorf("failed to get mysql DB, %v", err)
+		log.Errorw("mysql get db", "err", err)
 		return
 	}
 	if cfg.MaxActive > 0 {
