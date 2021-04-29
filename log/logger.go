@@ -52,6 +52,14 @@ func New(option LoggerOption) {
 	return
 }
 
+func Debugf(template string, args ...interface{}) {
+	Sugar.Debugf(template, args...)
+}
+
+func Debugw(msg string, kws ...interface{}) {
+	Sugar.Debugw(msg, kws...)
+}
+
 func Infof(template string, args ...interface{}) {
 	Sugar.Infof(template, args...)
 }
