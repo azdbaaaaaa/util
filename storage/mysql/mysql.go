@@ -14,7 +14,7 @@ const (
 	defaultUri         = "root:123456@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
 	defaultMaxIdle     = 2
 	defaultMaxActive   = 10
-	defaultIdleTimeout = 60 // max idle time for each conn in seconds
+	defaultIdleTimeout = 60 // max idle xtime for each conn in seconds
 
 	defaultRefreshInterval = 15 // in seconds
 
