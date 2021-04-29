@@ -8,6 +8,7 @@ import (
 
 var Sugar *zap.SugaredLogger
 var Logger *zap.Logger
+var level zap.AtomicLevel
 
 type LoggerOption struct {
 	Development bool          `json:"development" toml:"development" yaml:"development"`
@@ -31,10 +32,11 @@ func New(option LoggerOption) {
 	if option.Development {
 		development = true
 	}
+	level = zap.NewAtomicLevelAt(option.Level)
 	config := zap.Config{
 		DisableCaller:     true,
 		DisableStacktrace: true,
-		Level:             zap.NewAtomicLevelAt(option.Level),
+		Level:             level,
 		Encoding:          "json",
 		EncoderConfig:     zap.NewProductionEncoderConfig(),
 		OutputPaths:       stdoutPaths,
@@ -76,6 +78,10 @@ func Errorw(msg string, kws ...interface{}) {
 
 func Panicf(template string, args ...interface{}) {
 	Sugar.Panicf(template, args...)
+}
+
+func SetLevel(lvl zapcore.Level) {
+	level.SetLevel(lvl)
 }
 
 func init() {
