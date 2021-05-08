@@ -19,6 +19,7 @@ var (
 func ValidateErrorCode(msg string) Code {
 	return NewCode("8011", "参数错误: "+msg)
 }
+
 func RpcErrorCode(msg string) Code {
 	return NewCode("9010", "转发到服务错误: "+msg)
 }
