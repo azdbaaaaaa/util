@@ -13,9 +13,10 @@ type Config struct {
 	SecretKey string `json:"secret_key" mapstructure:"secret_key"`
 	Region    string `json:"region" mapstructure:"region"`
 	Force     bool   `json:"force" mapstructure:"force"`
+	Bucket    string `json:"bucket" mapstructure:"bucket"`
 }
 
-// NewS3Client new aws xs3 and retry connection when has error.
+// NewS3Client new aws s3 and retry connection when has error.
 func NewS3Client(c *Config) (cli *s3.S3) {
 	creds := credentials.NewStaticCredentials(c.AccessKey, c.SecretKey, "")
 	conf := &aws.Config{
