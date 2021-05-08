@@ -7,7 +7,7 @@ type XlsxData struct {
 	Data    [][]string
 }
 
-func CreateXlsxFile(path, filename string, xData XlsxData) error {
+func CreateXlsxFile(fullPath string, xData XlsxData) error {
 	wb := xlsx.NewFile()
 	sh, err := wb.AddSheet("Sheet1")
 	if err != nil {
@@ -35,7 +35,7 @@ func CreateXlsxFile(path, filename string, xData XlsxData) error {
 			cell.SetString(c)
 		}
 	}
-	err = wb.Save(path + filename + ".xlsx")
+	err = wb.Save(fullPath)
 	if err != nil {
 		return err
 	}
