@@ -9,10 +9,10 @@ import (
 
 // Config s3 config.
 type Config struct {
-	AccessKey string
-	SecretKey string
-	Region    string
-	Force     bool
+	AccessKey string `json:"access_key" mapstructure:"access_key"`
+	SecretKey string `json:"secret_key" mapstructure:"secret_key"`
+	Region    string `json:"region" mapstructure:"region"`
+	Force     bool   `json:"force" mapstructure:"force"`
 }
 
 // NewS3Client new aws s3 and retry connection when has error.
