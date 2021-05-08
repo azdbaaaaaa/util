@@ -1,4 +1,4 @@
-package s3
+package xs3
 
 import (
 	"github.com/aws/aws-sdk-go/aws"
@@ -7,7 +7,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
-// Config s3 config.
+// Config xs3 config.
 type Config struct {
 	AccessKey string `json:"access_key" mapstructure:"access_key"`
 	SecretKey string `json:"secret_key" mapstructure:"secret_key"`
@@ -15,7 +15,7 @@ type Config struct {
 	Force     bool   `json:"force" mapstructure:"force"`
 }
 
-// NewS3Client new aws s3 and retry connection when has error.
+// NewS3Client new aws xs3 and retry connection when has error.
 func NewS3Client(c *Config) (cli *s3.S3) {
 	creds := credentials.NewStaticCredentials(c.AccessKey, c.SecretKey, "")
 	conf := &aws.Config{
