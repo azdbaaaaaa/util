@@ -3,6 +3,7 @@ package http
 type ServerConfig struct {
 	Addr            string `json:"addr"`
 	ShutdownTimeout int    `json:"shutdown_timeout" mapstructure:"shutdown_timeout"`
+	Pprof           bool   `json:"pprof" mapstructure:"pprof"`
 }
 
 type ClientConfig struct {
