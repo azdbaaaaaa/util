@@ -6,7 +6,11 @@ import (
 
 func GenToken(algorithm jwt.SigningMethod, secret string, claims jwt.MapClaims) (token string, err error) {
 	at := jwt.NewWithClaims(algorithm, claims)
-	token, err = at.SignedString([]byte(secret))
+	pb, err := jwt.ParseRSAPrivateKeyFromPEM([]byte(secret)) //解析公钥
+	if err != nil {
+		return
+	}
+	token, err = at.SignedString(pb)
 	if err != nil {
 		return "", err
 	}
