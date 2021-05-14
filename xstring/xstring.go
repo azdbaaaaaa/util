@@ -19,3 +19,12 @@ func Join(in []string, sep string) string {
 	}
 	return buffer.String()
 }
+
+func Contains(l []string, t string) bool {
+	for _, e := range l {
+		if e == t {
+			return true
+		}
+	}
+	return false
+}
