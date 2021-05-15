@@ -15,3 +15,15 @@ func TimeInUTC(t time.Time, format string) (string, error) {
 	}
 	return t.In(loc).Format(format), nil
 }
+
+func ParseTimeInUTC(t, format string) (time.Time, error) {
+	tt, err := time.Parse(format, t)
+	if err != nil {
+		return time.Time{}, err
+	}
+	loc, err := time.LoadLocation("UTC")
+	if err != nil {
+		return time.Time{}, err
+	}
+	return tt.In(loc), nil
+}
