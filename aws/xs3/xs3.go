@@ -14,6 +14,7 @@ type Config struct {
 	Region    string `json:"region" mapstructure:"region"`
 	Force     bool   `json:"force" mapstructure:"force"`
 	Bucket    string `json:"bucket" mapstructure:"bucket"`
+	Host      string `json:"host" mapstructure:"host"`
 }
 
 // NewS3Client new aws s3 and retry connection when has error.
