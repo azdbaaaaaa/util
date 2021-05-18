@@ -27,3 +27,15 @@ func ParseTimeInUTC(t, format string) (time.Time, error) {
 	}
 	return tt.In(loc), nil
 }
+
+func IsInOneDay(ts1, ts2 int64) (equal bool, err error) {
+	t1, err := TimeInUTC(time.Unix(ts1, 0), DateFormat)
+	if err != nil {
+		return
+	}
+	t2, err := TimeInUTC(time.Unix(ts2, 0), DateFormat)
+	if err != nil {
+		return
+	}
+	return t1 == t2, nil
+}
