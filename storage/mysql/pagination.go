@@ -1,7 +1,7 @@
 package mysql
 
 const (
-	maxSize     = 1000
+	maxSize     = 5000
 	defaultSize = 20
 	defaultPage = 1
 )
