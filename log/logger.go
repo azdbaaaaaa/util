@@ -18,7 +18,11 @@ type LoggerOption struct {
 }
 
 func New(option LoggerOption) {
-	var development bool
+	var development, disableCaller, disableStacktrace bool
+	disableCaller = true
+	disableStacktrace = true
+	var encoding = "json"
+
 	stdoutPaths := []string{"stdout"}
 	if option.StdoutPath != "" {
 		stdoutPaths = append(stdoutPaths, option.StdoutPath)
@@ -31,13 +35,16 @@ func New(option LoggerOption) {
 
 	if option.Development {
 		development = true
+		disableCaller = false
+		disableStacktrace = false
+		encoding = "console"
 	}
 	level = zap.NewAtomicLevelAt(option.Level)
 	config := zap.Config{
-		DisableCaller:     false,
-		DisableStacktrace: false,
+		DisableCaller:     disableCaller,
+		DisableStacktrace: disableStacktrace,
 		Level:             level,
-		Encoding:          "json",
+		Encoding:          encoding,
 		EncoderConfig:     zap.NewProductionEncoderConfig(),
 		OutputPaths:       stdoutPaths,
 		ErrorOutputPaths:  stderrPaths,
