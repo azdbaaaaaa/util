@@ -34,8 +34,8 @@ func New(option LoggerOption) {
 	}
 	level = zap.NewAtomicLevelAt(option.Level)
 	config := zap.Config{
-		DisableCaller:     true,
-		DisableStacktrace: true,
+		DisableCaller:     false,
+		DisableStacktrace: false,
 		Level:             level,
 		Encoding:          "json",
 		EncoderConfig:     zap.NewProductionEncoderConfig(),
