@@ -29,11 +29,11 @@ func ParseTimeInUTC(t, format string) (time.Time, error) {
 }
 
 func IsInOneDay(ts1, ts2 int64) (equal bool, err error) {
-	t1, err := TimeInUTC(time.Unix(ts1, 0), DateFormat)
+	t1, err := TimeInUTC(time.Unix(ts1/1000, 0), DateFormat)
 	if err != nil {
 		return
 	}
-	t2, err := TimeInUTC(time.Unix(ts2, 0), DateFormat)
+	t2, err := TimeInUTC(time.Unix(ts2/1000, 0), DateFormat)
 	if err != nil {
 		return
 	}

@@ -7,8 +7,8 @@ import (
 var _codes = &sync.Map{} // 注册Code信息
 
 var (
-	CodeSuccess        = NewCode("8000", "成功")
-	CodeUnknown        = NewCode("8001", "未知错误")
+	CodeSuccess        = NewCode(0, "成功")
+	CodeUnknown        = NewCode(8001", "未知错误")
 	CodeErrorParam     = NewCode("8010", "参数不正确")
 	CodeTokenError     = NewCode("9000", "无效令牌，请重新获取令牌")
 	CodeTokenExpired   = NewCode("9001", "令牌已过期，请重新获取令牌")
@@ -24,7 +24,7 @@ func RpcErrorCode(msg string) Code {
 	return NewCode("9010", "转发到服务错误: "+msg)
 }
 
-type Code string
+type Code int
 
 func NewCode(code Code, msg string) Code {
 	_codes.Store(code, msg)
