@@ -1,11 +1,15 @@
 package xtime
 
-import "time"
+import (
+	"time"
+)
 
 const (
 	DateFormat     = "2006-01-02"
 	DateTimeFormat = "2006-01-02 15:04:05"
 )
+
+
 
 func TimeInUTC(t time.Time, format string) (string, error) {
 	// https:/golang.org/pkg/xtime/#LoadLocation loads location on
@@ -14,6 +18,21 @@ func TimeInUTC(t time.Time, format string) (string, error) {
 		return "", err
 	}
 	return t.In(loc).Format(format), nil
+}
+
+func ParseTimeInLoc(value, format, locName string) (t time.Time, err error) {
+	if locName == "" {
+		locName = "Europe/London"
+	}
+	loc, err := time.LoadLocation(locName)
+	if err != nil {
+		return time.Time{}, err
+	}
+	t, err = time.ParseInLocation(format, value, loc)
+	if err != nil {
+		return time.Time{}, err
+	}
+	return
 }
 
 func ParseTimeInUTC(t, format string) (time.Time, error) {

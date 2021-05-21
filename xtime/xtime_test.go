@@ -1,7 +1,6 @@
 package xtime
 
 import (
-	"fmt"
 	"github.com/go-playground/assert/v2"
 	"log"
 	"testing"
@@ -19,19 +18,18 @@ func TestTimeInUTC(t *testing.T) {
 	//test = test.Add( dur )
 	//fmt.Println( test , test.UTC())
 
-	const timeFormat = "2 Jan, 2006 3:04pm (MST)"
-	test , err := time.Parse( timeFormat, "25 Oct, 2015 1:59am (BST)" )
-	fmt.Println( test , test.UTC() , err)
-	dur , _ := time.ParseDuration( "1m" )
-	test = test.Add( dur )
-	fmt.Println( test , test.UTC())
-
-
-	t1, err := time.Parse("Jan _2, 2006 | 15:04:05 MST", "May 20, 2021 | 03:08:40 BST")
-
+	loc, err := time.LoadLocation("Europe/London")
 	assert.Equal(t, err, nil)
-	log.Println(t1.Unix())
-	assert.Equal(t, t1.Unix(), 0)
+	//const timeFormat = "Jan _2, 2006 | 15:04:05 MST"
+	test, _ := time.ParseInLocation("Jan _2, 2006 | 15:04:05 MST", "May 20, 2021 | 03:08:40 BST", loc)
+
+	log.Println(test.Unix(), test.In(loc).UTC().Unix())
+
+	//t1, err := time.Parse("Jan _2, 2006 | 15:04:05 MST", "May 20, 2021 | 03:08:40 BST")
+
+	//assert.Equal(t, err, nil)
+	//log.Println(t1.Unix())
+	//assert.Equal(t, t1.Unix(), 0)
 }
 
 func TestParseTimeInUTC(t *testing.T) {
@@ -41,7 +39,7 @@ func TestParseTimeInUTC(t *testing.T) {
 }
 
 func TestIsInOneDay(t *testing.T) {
-	is, err := IsInOneDay(1621566534670,1621567090732)
+	is, err := IsInOneDay(1621566534670, 1621567090732)
 	assert.Equal(t, err, nil)
 	log.Println(is)
 }
