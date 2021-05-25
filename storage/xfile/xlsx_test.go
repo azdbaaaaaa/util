@@ -7,5 +7,5 @@ func TestCreateXlsxFile(t *testing.T) {
 		Headers: []string{"姓名", "年龄", "分数"},
 		Data:    [][]string{{"jimmy", "20", "100"}, {"jack", "23", "99"}},
 	}
-	CreateXlsxFile("/tmp/", "test01", xData)
+	CreateXlsxFile("/tmp/test01", xData)
 }

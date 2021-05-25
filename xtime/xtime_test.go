@@ -1,6 +1,7 @@
 package xtime
 
 import (
+	"fmt"
 	"github.com/go-playground/assert/v2"
 	"log"
 	"testing"
@@ -18,12 +19,21 @@ func TestTimeInUTC(t *testing.T) {
 	//test = test.Add( dur )
 	//fmt.Println( test , test.UTC())
 
-	loc, err := time.LoadLocation("Europe/London")
-	assert.Equal(t, err, nil)
-	//const timeFormat = "Jan _2, 2006 | 15:04:05 MST"
-	test, _ := time.ParseInLocation("Jan _2, 2006 | 15:04:05 MST", "May 20, 2021 | 03:08:40 BST", loc)
+	const timeFormat = "2 Jan, 2006 3:04pm (MST)"
+	test , err := time.Parse( timeFormat, "25 Oct, 2015 1:59am (BST)" )
+	fmt.Println( test , test.UTC() , err)
+	dur , _ := time.ParseDuration( "1m" )
+	test = test.Add( dur )
+	fmt.Println( test , test.UTC())
 
-	log.Println(test.Unix(), test.In(loc).UTC().Unix())
+	fmt.Println( "--------------------"  )
+
+	test , err = time.Parse( timeFormat, "25 Oct, 2015 2:01am (BST)" )
+	fmt.Println( test , test.UTC() , err)
+	test = test.Add( dur )
+	fmt.Println( test , test.UTC())
+
+
 
 	//t1, err := time.Parse("Jan _2, 2006 | 15:04:05 MST", "May 20, 2021 | 03:08:40 BST")
 
