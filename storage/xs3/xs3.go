@@ -10,10 +10,10 @@ import (
 
 // Config xs3 config.
 type Config struct {
-	xaws.Config
-	Force  bool   `json:"force" mapstructure:"force"`
-	Bucket string `json:"bucket" mapstructure:"bucket"`
-	Host   string `json:"host" mapstructure:"host"`
+	xaws.Config `json:"config"`
+	Force       bool   `json:"force" mapstructure:"force"`
+	Bucket      string `json:"bucket" mapstructure:"bucket"`
+	Host        string `json:"host" mapstructure:"host"`
 }
 
 // NewS3Client new aws s3 and retry connection when has error.
