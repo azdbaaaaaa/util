@@ -11,6 +11,7 @@ import (
 type Config struct {
 	xaws.Config
 	TopicArn string `json:"topic_arn" mapstructure:"topic_arn"`
+	Subject  string `json:"subject" mapstructure:"subject"`
 }
 
 // NewSnsClient new aws sns and retry connection when has error.
