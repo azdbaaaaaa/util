@@ -5,12 +5,12 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sns"
+	"github.com/azdbaaaaaa/util/xaws"
 )
 
 type Config struct {
-	AccessKey string `json:"access_key" mapstructure:"access_key"`
-	SecretKey string `json:"secret_key" mapstructure:"secret_key"`
-	Region    string `json:"region" mapstructure:"region"`
+	xaws.Config
+	TopicArn string `json:"topic_arn" mapstructure:"topic_arn"`
 }
 
 // NewSnsClient new aws sns and retry connection when has error.

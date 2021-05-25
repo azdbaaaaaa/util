@@ -5,16 +5,15 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/azdbaaaaaa/util/xaws"
 )
 
 // Config xs3 config.
 type Config struct {
-	AccessKey string `json:"access_key" mapstructure:"access_key"`
-	SecretKey string `json:"secret_key" mapstructure:"secret_key"`
-	Region    string `json:"region" mapstructure:"region"`
-	Force     bool   `json:"force" mapstructure:"force"`
-	Bucket    string `json:"bucket" mapstructure:"bucket"`
-	Host      string `json:"host" mapstructure:"host"`
+	xaws.Config
+	Force  bool   `json:"force" mapstructure:"force"`
+	Bucket string `json:"bucket" mapstructure:"bucket"`
+	Host   string `json:"host" mapstructure:"host"`
 }
 
 // NewS3Client new aws s3 and retry connection when has error.
