@@ -20,20 +20,18 @@ func TestTimeInUTC(t *testing.T) {
 	//fmt.Println( test , test.UTC())
 
 	const timeFormat = "2 Jan, 2006 3:04pm (MST)"
-	test , err := time.Parse( timeFormat, "25 Oct, 2015 1:59am (BST)" )
-	fmt.Println( test , test.UTC() , err)
-	dur , _ := time.ParseDuration( "1m" )
-	test = test.Add( dur )
-	fmt.Println( test , test.UTC())
+	test, err := time.Parse(timeFormat, "25 Oct, 2015 1:59am (BST)")
+	fmt.Println(test, test.UTC(), err)
+	dur, _ := time.ParseDuration("1m")
+	test = test.Add(dur)
+	fmt.Println(test, test.UTC())
 
-	fmt.Println( "--------------------"  )
+	fmt.Println("--------------------")
 
-	test , err = time.Parse( timeFormat, "25 Oct, 2015 2:01am (BST)" )
-	fmt.Println( test , test.UTC() , err)
-	test = test.Add( dur )
-	fmt.Println( test , test.UTC())
-
-
+	test, err = time.Parse(timeFormat, "25 Oct, 2015 2:01am (BST)")
+	fmt.Println(test, test.UTC(), err)
+	test = test.Add(dur)
+	fmt.Println(test, test.UTC())
 
 	//t1, err := time.Parse("Jan _2, 2006 | 15:04:05 MST", "May 20, 2021 | 03:08:40 BST")
 
@@ -52,4 +50,11 @@ func TestIsInOneDay(t *testing.T) {
 	is, err := IsInOneDay(1621566534670, 1621567090732)
 	assert.Equal(t, err, nil)
 	log.Println(is)
+}
+
+func TestFirstAndLastTimestampOfMonth(t *testing.T) {
+	now := time.Now()
+	f, l, err := FirstAndLastTimestampOfMonth(now)
+	assert.Equal(t, err, nil)
+	log.Println(f.Unix(), l.Unix())
 }

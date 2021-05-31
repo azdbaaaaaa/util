@@ -9,7 +9,18 @@ const (
 	DateTimeFormat = "2006-01-02 15:04:05"
 )
 
-
+// FirstAndLastTimestampOfMonth 获取t时间所在月的开始和结束时间
+func FirstAndLastTimestampOfMonth(t time.Time) (first, last time.Time, err error) {
+	currentYear, currentMonth, _ := t.Date()
+	loc, err := time.LoadLocation("UTC")
+	if err != nil {
+		return
+	}
+	//time.Time格式
+	first = time.Date(currentYear, currentMonth, 1, 0, 0, 0, 0, loc)
+	last = first.AddDate(0, 1, 0).Add(-1 * time.Second)
+	return
+}
 
 func TimeInUTC(t time.Time, format string) (string, error) {
 	// https:/golang.org/pkg/xtime/#LoadLocation loads location on
