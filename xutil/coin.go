@@ -1,6 +1,6 @@
-package xcoin
+package xutil
 
-const CoinBase int64 = 10000
+const CoinBase int64 = 1000000
 
 type Coin int64
 

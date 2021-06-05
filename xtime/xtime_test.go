@@ -58,3 +58,8 @@ func TestFirstAndLastTimestampOfMonth(t *testing.T) {
 	assert.Equal(t, err, nil)
 	log.Println(f.Unix(), l.Unix())
 }
+
+func TestParseTimeInLoc(t *testing.T) {
+	_, err := ParseTimeInLoc("6 8, 2021 | 08:58:16 BST", "Jan _2, 2006 | 15:04:05 MST", "Europe/London")
+	assert.Equal(t, err, nil)
+}
