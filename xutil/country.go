@@ -14,7 +14,7 @@ type CountryDetail struct {
 	Currency    string
 }
 
-var CountryMap = map[string]CountryDetail{
+var CountryMap = map[Country]CountryDetail{
 	CountryNG: {
 		Country:     CountryNG,
 		FullCountry: "Nigeria",
@@ -32,8 +32,8 @@ var CountryMap = map[string]CountryDetail{
 	},
 }
 
-func (c Country) Get(country string) CountryDetail {
-	if v, ok := CountryMap[country]; ok {
+func (c Country) Get() CountryDetail {
+	if v, ok := CountryMap[c]; ok {
 		return v
 	}
 	return CountryMap[CountryOther]
