@@ -18,6 +18,7 @@ func Convert(src, dst string) (err error) {
 	err = cmd.Run()
 	if err != nil {
 		log.Errorw("Convert.Run", "err", err, "src", src, "dst", dst)
+		return
 	}
 	return
 }
