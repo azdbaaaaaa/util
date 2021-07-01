@@ -27,8 +27,8 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 			}
 		}
 		if reqID == "" {
-			logger.Debug("not found req_id generate one", zap.String("uuid", reqID))
 			reqID = uuid.NewV4().String()
+			logger.Debug("not found req_id generate one", zap.String("uuid", reqID))
 		}
 		ctx = context.WithValue(ctx, ContextKeyReqID, reqID)
 		resp, err := handler(ctx, req)
@@ -47,8 +47,8 @@ func StreamServerInterceptor(logger *zap.Logger) grpc.StreamServerInterceptor {
 			}
 		}
 		if reqID == "" {
-			logger.Debug("not found req_id generate one", zap.String("uuid", reqID))
 			reqID = uuid.NewV4().String()
+			logger.Debug("not found req_id generate one", zap.String("uuid", reqID))
 		}
 		ctx = context.WithValue(ctx, ContextKeyReqID, reqID)
 
