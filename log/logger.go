@@ -1,6 +1,7 @@
 package log
 
 import (
+	"context"
 	"fmt"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -9,17 +10,19 @@ import (
 var Sugar *zap.SugaredLogger
 var Logger *zap.Logger
 var level zap.AtomicLevel
+var ContextKeys = make([]string, 0)
 
 type LoggerOption struct {
 	Development bool          `json:"development" toml:"development" yaml:"development"`
 	Level       zapcore.Level `json:"level" toml:"level" yaml:"level"`
 	StdoutPath  string        `json:"stdout_path" toml:"stdout_path" yaml:"stdout_path" mapstructure:"stdout_path"`
 	StderrPath  string        `json:"stderr_path" toml:"stderr_path" yaml:"stderr_path" mapstructure:"stderr_path"`
+	ContextKeys []string      `json:"context_keys" toml:"context_keys" yaml:"context_keys" mapstructure:"context_keys"`
 }
 
 func New(option LoggerOption) {
 	var development, disableCaller, disableStacktrace bool
-	disableCaller = true
+	disableCaller = false
 	disableStacktrace = true
 	var encoding = "json"
 
@@ -38,6 +41,9 @@ func New(option LoggerOption) {
 		disableCaller = false
 		disableStacktrace = false
 		encoding = "console"
+	}
+	if option.ContextKeys != nil {
+		ContextKeys = option.ContextKeys
 	}
 	level = zap.NewAtomicLevelAt(option.Level)
 	config := zap.Config{
@@ -97,6 +103,17 @@ func Panicf(template string, args ...interface{}) {
 
 func SetLevel(lvl zapcore.Level) {
 	level.SetLevel(lvl)
+}
+
+func WithContext(ctx context.Context) *zap.SugaredLogger {
+	for _, key := range ContextKeys {
+		v := ctx.Value(key)
+		if v == nil {
+			continue
+		}
+		Sugar.With(key, v)
+	}
+	return Sugar
 }
 
 func init() {
