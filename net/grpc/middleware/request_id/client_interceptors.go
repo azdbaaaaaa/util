@@ -16,14 +16,17 @@ var (
 // UnaryClientInterceptor returns a new unary client interceptor that optionally logs the execution of external gRPC calls.
 func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
+		reqID := ""
 		v := ctx.Value(ContextKeyReqID)
 		if v == nil {
-			u := uuid.NewV4().String()
-			logger.Debug("not found req_id generate one", zap.String("uuid", u))
-			ctx = context.WithValue(ctx, ContextKeyReqID, u)
+			reqID = uuid.NewV4().String()
+			logger.Debug("not found req_id generate one", zap.String("uuid", reqID))
+			ctx = context.WithValue(ctx, ContextKeyReqID, reqID)
+		} else {
+			reqID = v.(string)
 		}
 		md := metadata.New(map[string]string{
-			ContextKeyReqID: v.(string),
+			ContextKeyReqID: reqID,
 		})
 		ctx = metadata.NewOutgoingContext(ctx, md)
 		err := invoker(ctx, method, req, reply, cc, opts...)
@@ -34,14 +37,17 @@ func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 // StreamClientInterceptor returns a new streaming client interceptor that optionally logs the execution of external gRPC calls.
 func StreamClientInterceptor(logger *zap.Logger) grpc.StreamClientInterceptor {
 	return func(ctx context.Context, desc *grpc.StreamDesc, cc *grpc.ClientConn, method string, streamer grpc.Streamer, opts ...grpc.CallOption) (grpc.ClientStream, error) {
+		reqID := ""
 		v := ctx.Value(ContextKeyReqID)
 		if v == nil {
-			u := uuid.NewV4().String()
-			logger.Debug("not found req_id generate one", zap.String("uuid", u))
-			ctx = context.WithValue(ctx, ContextKeyReqID, u)
+			reqID = uuid.NewV4().String()
+			logger.Debug("not found req_id generate one", zap.String("uuid", reqID))
+			ctx = context.WithValue(ctx, ContextKeyReqID, reqID)
+		} else {
+			reqID = v.(string)
 		}
 		md := metadata.New(map[string]string{
-			ContextKeyReqID: v.(string),
+			ContextKeyReqID: reqID,
 		})
 		ctx = metadata.NewOutgoingContext(ctx, md)
 		clientStream, err := streamer(ctx, desc, cc, method, opts...)
