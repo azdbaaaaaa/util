@@ -111,7 +111,7 @@ func WithContext(ctx context.Context) *zap.SugaredLogger {
 		if v == nil {
 			continue
 		}
-		Sugar.With(key, v)
+		Sugar = Sugar.With(key, v)
 	}
 	return Sugar
 }
