@@ -5,8 +5,8 @@ import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
 
 //指定包名
-package util.common.v1;
-option go_package = "github.com/azdbaaaaaa/util;util.common.v1";
+package common.v1;
+option go_package = "github.com/azdbaaaaaa/util;common.v1";
 
 message CommonResp {
   // 错误码 ex:999999
@@ -14,7 +14,51 @@ message CommonResp {
   // 错误消息
   string Message = 2 [(gogoproto.jsontag) = "message"];
   // error debug信息
-  string Err = 1 [(gogoproto.jsontag) = "err,omitempty"];
+  string Err = 3 [(gogoproto.jsontag) = "err,omitempty"];
   // request id
-  string Rid = 1 [(gogoproto.jsontag) = "rid"];
+  string Rid = 4 [(gogoproto.jsontag) = "rid"];
 }
+
+message InParam {
+  int32 appId = 1; //  see AppIdEnum
+  int32 areaId = 2; // see AreaIdEnum
+  int32 version = 3;
+  int64 userId = 4;
+  string deviceId = 5;
+  string clientIp = 6;
+  string channel = 7;
+  string source = 8;
+  string userIp = 9;
+  string language = 10; // see LanguageEnum
+  string country = 11;
+  int64 authorId = 12;
+}
+
+message OutParam {
+  int32 code = 1;
+  int32 subCode = 2;
+  string message = 3;
+}
+
+enum AppIdEnum {
+  AppIdDefault = 0;
+  Lighthouse = 100;
+}
+
+enum AreaIdEnum {
+  AreaIdDefault = 0;
+  Android = 30;
+  Ios = 40;
+  Web = 99;
+  H5 = 98;
+}
+
+enum LanguageEnum {
+  ZH = 0; // 中文
+  EN = 1; // 英文
+  ES = 2; // 西班牙语
+  IN = 3; // 印尼语
+  TL = 4; // 菲律宾语（他加禄语)
+  MS = 5; // 马来语
+  KO = 6; // 韩语
+};
