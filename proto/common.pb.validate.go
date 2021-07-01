@@ -44,7 +44,7 @@ func (m *CommonResp) Validate() error {
 
 	// no validation rules for Message
 
-	// no validation rules for Err
+	// no validation rules for Reason
 
 	// no validation rules for Rid
 

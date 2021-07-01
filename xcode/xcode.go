@@ -1,37 +1,58 @@
 package xcode
 
-import "sync"
+import (
+	"fmt"
+	"sync"
+)
 
 var _codes = &sync.Map{} // 注册Code信息
 
-func ValidateErrorCode() Code {
-	return NewCode(100000, "参数错误")
+//func ValidateErrorCode() Code {
+//	return NewCode(100000, "params error")
+//}
+//
+//func RpcErrorCode() Code {
+//	return NewCode(110000, "internal service error")
+//}
+
+type ErrorCode struct {
+	Code   int    `json:"code"`
+	Msg    string `json:"msg"`
+	Reason string `json:"reason"`
 }
 
-func RpcErrorCode() Code {
-	return NewCode(110000, "转发到服务错误")
+func NewCodeError(code int, msg string) ErrorCode {
+	//_codes.Store(code, msg)
+	ec := ErrorCode{Code: code, Msg: msg}
+	_, loaded := _codes.LoadOrStore(code, ec)
+	if loaded {
+		panic(fmt.Sprintf("code already exists:%d", code))
+	}
+	return ec
 }
 
-type Code int
-
-func NewCode(code Code, msg string) Code {
-	_codes.Store(code, msg)
-	return code
+// GetCode return error code
+func (ec ErrorCode) GetCode() int {
+	return ec.Code
 }
 
-// Code return error code
-func (c Code) Code() int {
-	return int(c)
-}
-
-func (c Code) Error(kvs ...interface{}) string {
-	v, ok := _codes.Load(c)
+func (ec ErrorCode) Error() string {
+	v, ok := _codes.Load(ec)
 	if ok {
-		return v.(string)
+		return v.(ErrorCode).Msg
 	}
 	return ""
 }
 
-func (c Code) IsSuccess() bool {
-	return c == Success
+func (ec ErrorCode) IsSuccess() bool {
+	return ec == ErrCodeSuccess
+}
+
+func (ec ErrorCode) Equals(ce2 ErrorCode) bool {
+	return ec.Code == ce2.Code
+}
+
+func (ec ErrorCode) WithReason(reason string) {
+	ec.Reason = reason
+	return
 }

@@ -1,6 +1,6 @@
 package xcode
 
 var (
-	Success      = NewCode(0, "成功")
-	ErrorUnknown = NewCode(999999, "未知错误")
+	ErrCodeSuccess = NewCodeError(0, "成功")
+	ErrCodeUnknown = NewCodeError(999999, "未知错误")
 )

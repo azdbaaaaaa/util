@@ -14,7 +14,7 @@ type ApiError struct {
 	Data string `json:"data"`
 
 	// error debug信息
-	Err string `json:"err,omitempty"`
+	Reason string `json:"reason,omitempty"`
 	// request id
 	Rid string `json:"rid"`
 }
