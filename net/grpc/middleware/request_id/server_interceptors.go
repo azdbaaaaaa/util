@@ -21,7 +21,7 @@ var (
 func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		reqID := ""
-		if md, ok := metadata.FromOutgoingContext(ctx); ok {
+		if md, ok := metadata.FromIncomingContext(ctx); ok {
 			if md[ContextKeyReqID] != nil && len(md[ContextKeyReqID]) > 0 {
 				reqID = md[ContextKeyReqID][0]
 			}
@@ -41,7 +41,7 @@ func StreamServerInterceptor(logger *zap.Logger) grpc.StreamServerInterceptor {
 	return func(srv interface{}, stream grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
 		ctx := stream.Context()
 		reqID := ""
-		if md, ok := metadata.FromOutgoingContext(ctx); ok {
+		if md, ok := metadata.FromIncomingContext(ctx); ok {
 			if md[ContextKeyReqID] != nil && len(md[ContextKeyReqID]) > 0 {
 				reqID = md[ContextKeyReqID][0]
 			}
