@@ -1,23 +1,12 @@
 //版本号
 syntax = "proto3";
 
-import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+//import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 //import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
 
 //指定包名
 package common.v1;
 option go_package = "github.com/azdbaaaaaa/util/proto;common.v1";
-
-message CommonResp {
-  // 错误码 ex:999999
-  int32 result = 1 [(gogoproto.jsontag) = "result"];
-  // 错误消息
-  string message = 2 [(gogoproto.jsontag) = "message"];
-  // reason debug信息
-  string reason = 3 [(gogoproto.jsontag) = "reason,omitempty"];
-  // request id
-  string rid = 4 [(gogoproto.jsontag) = "rid"];
-}
 
 message InParam {
   int32 app_id = 1; //  see AppIdEnum
@@ -36,8 +25,9 @@ message InParam {
 
 message OutParam {
   int32 code = 1;
-  int32 subCode = 2;
+  int32 sub_code = 2;
   string message = 3;
+  string reason = 4;
 }
 
 enum AppIdEnum {

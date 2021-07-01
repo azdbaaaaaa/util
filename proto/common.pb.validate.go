@@ -33,78 +33,6 @@ var (
 	_ = anypb.Any{}
 )
 
-// Validate checks the field values on CommonResp with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *CommonResp) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	// no validation rules for Result
-
-	// no validation rules for Message
-
-	// no validation rules for Reason
-
-	// no validation rules for Rid
-
-	return nil
-}
-
-// CommonRespValidationError is the validation error returned by
-// CommonResp.Validate if the designated constraints aren't met.
-type CommonRespValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e CommonRespValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e CommonRespValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e CommonRespValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e CommonRespValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e CommonRespValidationError) ErrorName() string { return "CommonRespValidationError" }
-
-// Error satisfies the builtin error interface
-func (e CommonRespValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sCommonResp.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = CommonRespValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = CommonRespValidationError{}
-
 // Validate checks the field values on InParam with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
 func (m *InParam) Validate() error {
@@ -205,6 +133,8 @@ func (m *OutParam) Validate() error {
 	// no validation rules for SubCode
 
 	// no validation rules for Message
+
+	// no validation rules for Reason
 
 	return nil
 }
