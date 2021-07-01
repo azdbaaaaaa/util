@@ -6,7 +6,7 @@ import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
 
 //指定包名
 package common.v1;
-option go_package = "github.com/azdbaaaaaa/util/proto;common.v1";
+option go_package = ".;common.v1";
 
 message CommonResp {
   // 错误码 ex:999999
