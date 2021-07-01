@@ -18,8 +18,3 @@ message CommonResp {
   // request id
   string Rid = 1 [(gogoproto.jsontag) = "rid"];
 }
-
-message PaginationReq {
-  int32 Page = 1 [(validate.rules).int32.gt = 0, (gogoproto.jsontag) = "page"];
-  int32 PageSize = 2 [(validate.rules).int32 = {gt:0, lte: 100}, (gogoproto.jsontag) = "page_size"];
-}
