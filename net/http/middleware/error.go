@@ -2,11 +2,11 @@ package middleware
 
 type ApiError struct {
 	// 错误码 ex:999999
-	Result int `json:"result"`
+	Result int32 `json:"result"`
 	// 错误消息
 	Message string `json:"message"`
 	// 数据
-	Data string `json:"data"`
+	Data interface{} `json:"data"`
 
 	// error debug信息
 	Reason string `json:"reason,omitempty"`
@@ -17,6 +17,7 @@ type ApiError struct {
 func (err ApiError) Error() string {
 	return err.Message
 }
+
 //
 //type WrapperHandle func(c *gin.Context) (interface{}, error)
 //
