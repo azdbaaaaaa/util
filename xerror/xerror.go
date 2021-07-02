@@ -14,9 +14,6 @@ type Error struct {
 
 // New returns an error object for the code, message.
 func New(code int, message, reason string) *Error {
-	if code == 0 {
-		return nil
-	}
 	return &Error{
 		Code:    int32(code),
 		Message: message,
