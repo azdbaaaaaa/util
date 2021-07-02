@@ -10,9 +10,7 @@ import (
 var Sugar *zap.SugaredLogger
 var Logger *zap.Logger
 var level zap.AtomicLevel
-var ContextKeys = make([]string, 0)
-
-var DefaultContextKeys = []string{"req_id", "trace_id"}
+var ContextKeys = []string{"req_id", "trace_id"}
 
 type LoggerOption struct {
 	Development bool          `json:"development" toml:"development" yaml:"development"`
@@ -27,7 +25,6 @@ func New(option LoggerOption) {
 	disableCaller = false
 	disableStacktrace = true
 	var encoding = "json"
-	ContextKeys = DefaultContextKeys
 
 	stdoutPaths := []string{"stdout"}
 	if option.StdoutPath != "" {
@@ -109,7 +106,7 @@ func SetLevel(lvl zapcore.Level) {
 }
 
 func WithContext(ctx context.Context) *zap.SugaredLogger {
-	kvs := make([]interface{}, 0)
+	kvs := make([]interface{}, len(ContextKeys)*2, len(ContextKeys)*2)
 	for _, k := range ContextKeys {
 		v := ctx.Value(k)
 		if v == nil {
