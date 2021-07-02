@@ -16,7 +16,7 @@ var _codes = &sync.Map{} // 注册Code信息
 //}
 
 type ErrorCode struct {
-	Code   int32    `json:"code"`
+	Code   int32  `json:"code"`
 	Msg    string `json:"msg"`
 	Reason string `json:"reason"`
 }
@@ -52,7 +52,7 @@ func (ec ErrorCode) Equals(code int32) bool {
 	return ec.Code == code
 }
 
-func (ec ErrorCode) WithReason(reason string) {
+func (ec ErrorCode) WithReason(reason string) ErrorCode {
 	ec.Reason = reason
-	return
+	return ec
 }
