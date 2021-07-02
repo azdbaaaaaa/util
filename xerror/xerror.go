@@ -13,9 +13,9 @@ type Error struct {
 }
 
 // New returns an error object for the code, message.
-func New(code int, message, reason string) *Error {
+func New(code int32, message, reason string) *Error {
 	return &Error{
-		Code:    int32(code),
+		Code:    code,
 		Message: message,
 		Reason:  reason,
 	}

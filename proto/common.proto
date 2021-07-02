@@ -25,9 +25,9 @@ message InParam {
 
 message OutParam {
   int32 code = 1;
-  int32 sub_code = 2;
-  string message = 3;
-  string reason = 4;
+  string message = 2;
+  string reason = 3;
+  map<string, string> metadata = 4;
 }
 
 enum AppIdEnum {

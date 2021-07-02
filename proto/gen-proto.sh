@@ -10,7 +10,7 @@ cd "$home"
 proto_path=.:${GOPATH}/src/
 proto_path=${proto_path}:${GOPATH}/src/github.com/gogo/protobuf/protobuf/
 proto_path=${proto_path}:${GOPATH}/src/github.com/envoyproxy/protoc-gen-validate/
-proto_path=${proto_path}:${GOPATH}/src/github.com/azdnaaaaaa/util/
+proto_path=${proto_path}:${GOPATH}/src/github.com/azdbaaaaaa/util/
 
 
 cd "${home}"/proto

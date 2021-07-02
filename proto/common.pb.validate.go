@@ -130,11 +130,11 @@ func (m *OutParam) Validate() error {
 
 	// no validation rules for Code
 
-	// no validation rules for SubCode
-
 	// no validation rules for Message
 
 	// no validation rules for Reason
+
+	// no validation rules for Metadata
 
 	return nil
 }
