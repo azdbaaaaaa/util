@@ -45,7 +45,8 @@ func (e *Error) Is(err error) bool {
 //	return ec.Code == code
 //}
 //
-//func (ec ErrorCode) WithReason(reason string) ErrorCode {
-//	ec.Reason = reason
-//	return ec
-//}
+
+func (e *Error) WithReason(reason string) *Error {
+	e.Reason = reason
+	return e
+}
