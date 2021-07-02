@@ -3,7 +3,7 @@ module github.com/azdbaaaaaa/util
 go 1.15
 
 require (
-	github.com/aws/aws-sdk-go v1.27.0
+	github.com/aws/aws-sdk-go v1.34.28
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/envoyproxy/protoc-gen-validate v0.1.0
 	github.com/gin-gonic/gin v1.6.3
@@ -16,6 +16,7 @@ require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/tealeg/xlsx/v3 v3.2.3
 	github.com/ugorji/go v1.2.3 // indirect
+	go.mongodb.org/mongo-driver v1.5.3
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.16.0
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad // indirect
