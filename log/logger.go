@@ -106,7 +106,7 @@ func SetLevel(lvl zapcore.Level) {
 }
 
 func WithContext(ctx context.Context) *zap.SugaredLogger {
-	kvs := make([]interface{}, len(ContextKeys)*2, len(ContextKeys)*2)
+	kvs := make([]interface{}, 0, len(ContextKeys)*2)
 	for _, k := range ContextKeys {
 		v := ctx.Value(k)
 		if v == nil {
