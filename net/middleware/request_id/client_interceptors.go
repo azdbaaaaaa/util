@@ -25,9 +25,8 @@ func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 		} else {
 			reqID = v.(string)
 		}
-		md := metadata.New(map[string]string{
-			ContextKeyReqID: reqID,
-		})
+		md := metadata.New(map[string]string{})
+		md.Set(ContextKeyReqID, reqID)
 		ctx = metadata.NewOutgoingContext(ctx, md)
 		err := invoker(ctx, method, req, reply, cc, opts...)
 		return err
@@ -46,9 +45,8 @@ func StreamClientInterceptor(logger *zap.Logger) grpc.StreamClientInterceptor {
 		} else {
 			reqID = v.(string)
 		}
-		md := metadata.New(map[string]string{
-			ContextKeyReqID: reqID,
-		})
+		md := metadata.New(map[string]string{})
+		md.Set(ContextKeyReqID, reqID)
 		ctx = metadata.NewOutgoingContext(ctx, md)
 		clientStream, err := streamer(ctx, desc, cc, method, opts...)
 		//newCtx := ctxzap.ToContext(ctx, logger.With(fields...))

@@ -22,9 +22,8 @@ func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 				if err != nil {
 					logger.Error("in_param marshal error", ClientField, zap.String("key", ContextKeyInParam))
 				} else {
-					md := metadata.New(map[string]string{
-						ContextKeyInParam: string(data),
-					})
+					md := metadata.New(map[string]string{})
+					md.Set(ContextKeyInParam, string(data))
 					ctx = metadata.NewOutgoingContext(ctx, md)
 				}
 			}
@@ -44,9 +43,8 @@ func StreamClientInterceptor(logger *zap.Logger) grpc.StreamClientInterceptor {
 				if err != nil {
 					logger.Error("in_param marshal error", ClientField, zap.String("key", ContextKeyInParam))
 				} else {
-					md := metadata.New(map[string]string{
-						ContextKeyInParam: string(data),
-					})
+					md := metadata.New(map[string]string{})
+					md.Set(ContextKeyInParam, string(data))
 					ctx = metadata.NewOutgoingContext(ctx, md)
 				}
 			}
