@@ -78,13 +78,13 @@ func (d *Device) ValueFromIdx(i int, v string) (err error) {
 	case 2:
 		sw, err := strconv.Atoi(v)
 		if err != nil {
-			return
+			return err
 		}
 		d.ScreenWidth = sw
 	case 3:
 		sh, err := strconv.Atoi(v)
 		if err != nil {
-			return
+			return err
 		}
 		d.ScreenHeight = sh
 	case 4:
@@ -94,7 +94,7 @@ func (d *Device) ValueFromIdx(i int, v string) (err error) {
 	case 6:
 		ct, err := strconv.Atoi(v)
 		if err != nil {
-			return
+			return err
 		}
 		d.ClientType = ClientType(ct)
 	case 7:
@@ -102,7 +102,7 @@ func (d *Device) ValueFromIdx(i int, v string) (err error) {
 	case 8:
 		vc, err := strconv.Atoi(v)
 		if err != nil {
-			return
+			return err
 		}
 		d.VersionCode = vc
 	case 9:
@@ -110,13 +110,13 @@ func (d *Device) ValueFromIdx(i int, v string) (err error) {
 	case 10:
 		ct, err := strconv.ParseInt(v, 64, 10)
 		if err != nil {
-			return
+			return err
 		}
 		d.ClientTime = ct
 	case 11:
 		ie, err := strconv.Atoi(v)
 		if err != nil {
-			return
+			return err
 		}
 		d.IsEmulator = ie
 	case 12:
@@ -142,7 +142,7 @@ func (d *Device) ValueFromIdx(i int, v string) (err error) {
 	case 20:
 		ts, err := strconv.ParseInt(v, 64, 10)
 		if err != nil {
-			return
+			return err
 		}
 		d.Timestamp = ts
 	}

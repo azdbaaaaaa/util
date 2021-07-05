@@ -2,6 +2,7 @@ package grpc
 
 import (
 	"context"
+	"github.com/azdbaaaaaa/util/net/middleware/device"
 	"github.com/azdbaaaaaa/util/net/middleware/in_param"
 	"github.com/azdbaaaaaa/util/net/middleware/request_id"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
@@ -29,18 +30,20 @@ type ClientConfig struct {
 	DialTimeout int    `json:"dial_timeout" mapstructure:"dial_timeout"`
 }
 
-func NewClientConn(c ClientConfig, logger *zap.Logger) (conn *grpc.ClientConn, err error) {
-	if c.DialTimeout == 0 {
-		c.DialTimeout = DefailtClientDialTimeoutInSec
+func NewClientConn(conf ClientConfig, logger *zap.Logger) (conn *grpc.ClientConn, err error) {
+	if conf.DialTimeout == 0 {
+		conf.DialTimeout = DefailtClientDialTimeoutInSec
 	}
-	ctx, cancel := context.WithTimeout(context.TODO(), time.Duration(c.DialTimeout)*time.Second)
+	ctx, cancel := context.WithTimeout(context.TODO(), time.Duration(conf.DialTimeout)*time.Second)
 	defer cancel()
-	conn, err = grpc.DialContext(ctx, c.Addr,
+	conn, err = grpc.DialContext(ctx, conf.Addr,
 		grpc.WithInsecure(),
 		grpc.WithBlock(),
 		grpc.WithUnaryInterceptor(request_id.UnaryClientInterceptor(logger)),
-		grpc.WithUnaryInterceptor(in_param.UnaryClientInterceptor(logger)),
 		grpc.WithStreamInterceptor(request_id.StreamClientInterceptor(logger)),
+		grpc.WithUnaryInterceptor(device.UnaryClientInterceptor(logger)),
+		grpc.WithStreamInterceptor(device.StreamClientInterceptor(logger)),
+		grpc.WithUnaryInterceptor(in_param.UnaryClientInterceptor(logger)),
 		grpc.WithStreamInterceptor(in_param.StreamClientInterceptor(logger)),
 	)
 	if err != nil {
@@ -49,14 +52,15 @@ func NewClientConn(c ClientConfig, logger *zap.Logger) (conn *grpc.ClientConn, e
 	return
 }
 
-func NewServer(c ServerConfig, logger *zap.Logger) {
-	s := grpc.NewServer(
+func NewServer(conf ServerConfig, logger *zap.Logger) (s *grpc.Server) {
+	s = grpc.NewServer(
 		grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
 			grpc_recovery.StreamServerInterceptor(),
 			grpc_prometheus.StreamServerInterceptor,
 			grpc_zap.StreamServerInterceptor(logger),
 			grpc_validator.StreamServerInterceptor(),
 			request_id.StreamServerInterceptor(logger),
+			device.StreamServerInterceptor(logger),
 			in_param.StreamServerInterceptor(logger),
 		)),
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
@@ -65,10 +69,12 @@ func NewServer(c ServerConfig, logger *zap.Logger) {
 			grpc_zap.UnaryServerInterceptor(logger),
 			grpc_validator.UnaryServerInterceptor(),
 			request_id.UnaryServerInterceptor(logger),
+			device.UnaryServerInterceptor(logger),
 			in_param.UnaryServerInterceptor(logger),
 		)),
 	)
 	grpc_health_v1.RegisterHealthServer(s, health.NewServer())
 	grpc_prometheus.EnableHandlingTimeHistogram()
 	grpc_prometheus.Register(s)
+	return s
 }
