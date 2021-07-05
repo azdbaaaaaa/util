@@ -26,12 +26,14 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 				deviceStr = md[ContextKeyDevice][0]
 			}
 		}
-		device := &Device{}
-		err := json.Unmarshal([]byte(deviceStr), device)
-		if err != nil {
-			logger.Error("device unmarshal", zap.String("key", ContextKeyDevice), SystemField, ServerField)
-		} else {
-			ctx = context.WithValue(ctx, ContextKeyDevice, device)
+		if deviceStr != "" {
+			device := &Device{}
+			err := json.Unmarshal([]byte(deviceStr), device)
+			if err != nil {
+				logger.Error("device unmarshal", zap.String("key", ContextKeyDevice), SystemField, ServerField)
+			} else {
+				ctx = context.WithValue(ctx, ContextKeyDevice, device)
+			}
 		}
 		resp, err := handler(ctx, req)
 		return resp, err
@@ -49,17 +51,18 @@ func StreamServerInterceptor(logger *zap.Logger) grpc.StreamServerInterceptor {
 				deviceStr = md[ContextKeyDevice][0]
 			}
 		}
-		device := &Device{}
-		err := json.Unmarshal([]byte(deviceStr), device)
-		if err != nil {
-			logger.Error("device unmarshal", zap.String("key", ContextKeyDevice), SystemField, ServerField)
-		} else {
-			ctx = context.WithValue(ctx, ContextKeyDevice, device)
+		if deviceStr != "" {
+			device := &Device{}
+			err := json.Unmarshal([]byte(deviceStr), device)
+			if err != nil {
+				logger.Error("device unmarshal", zap.String("key", ContextKeyDevice), SystemField, ServerField)
+			} else {
+				ctx = context.WithValue(ctx, ContextKeyDevice, device)
+			}
 		}
-
 		wrapped := grpc_middleware.WrapServerStream(stream)
 		wrapped.WrappedContext = ctx
-		err = handler(srv, wrapped)
+		err := handler(srv, wrapped)
 		return err
 	}
 }

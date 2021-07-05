@@ -27,12 +27,14 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 				inParamStr = md[ContextKeyInParam][0]
 			}
 		}
-		inParam := &proto.InParam{}
-		err := json.Unmarshal([]byte(inParamStr), inParam)
-		if err != nil {
-			logger.Error("in_param unmarshal", zap.String("key", ContextKeyInParam), SystemField, ServerField)
-		} else {
-			ctx = context.WithValue(ctx, ContextKeyInParam, inParam)
+		if inParamStr != "" {
+			inParam := &proto.InParam{}
+			err := json.Unmarshal([]byte(inParamStr), inParam)
+			if err != nil {
+				logger.Error("in_param unmarshal", zap.String("key", ContextKeyInParam), SystemField, ServerField)
+			} else {
+				ctx = context.WithValue(ctx, ContextKeyInParam, inParam)
+			}
 		}
 		resp, err := handler(ctx, req)
 		return resp, err
@@ -50,17 +52,18 @@ func StreamServerInterceptor(logger *zap.Logger) grpc.StreamServerInterceptor {
 				inParamStr = md[ContextKeyInParam][0]
 			}
 		}
-		inParam := &proto.InParam{}
-		err := json.Unmarshal([]byte(inParamStr), inParam)
-		if err != nil {
-			logger.Error("in_param unmarshal", zap.String("key", ContextKeyInParam), SystemField, ServerField)
-		} else {
-			ctx = context.WithValue(ctx, ContextKeyInParam, inParam)
+		if inParamStr != "" {
+			inParam := &proto.InParam{}
+			err := json.Unmarshal([]byte(inParamStr), inParam)
+			if err != nil {
+				logger.Error("in_param unmarshal", zap.String("key", ContextKeyInParam), SystemField, ServerField)
+			} else {
+				ctx = context.WithValue(ctx, ContextKeyInParam, inParam)
+			}
 		}
-
 		wrapped := grpc_middleware.WrapServerStream(stream)
 		wrapped.WrappedContext = ctx
-		err = handler(srv, wrapped)
+		err := handler(srv, wrapped)
 		return err
 	}
 }

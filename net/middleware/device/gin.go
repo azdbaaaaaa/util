@@ -20,22 +20,23 @@ const (
 func SetDevice(c *gin.Context) {
 	// 获取设备信息的header
 	hd := c.GetHeader(HeaderDevice)
-
-	sDec, err := base64.StdEncoding.DecodeString(hd)
-	if err != nil {
-		log.Errorw("base64 decode error", "err", err)
-		c.Next()
-		return
+	if len(hd) > 0 {
+		sDec, err := base64.StdEncoding.DecodeString(hd)
+		if err != nil {
+			log.Errorw("base64 decode error", "err", err)
+			c.Next()
+			return
+		}
+		text, err := AesDecrypt(sDec, []byte(KEY_BASE64), []byte(ENCRYPT_IV))
+		if err != nil {
+			log.Errorw("AesDecrypt error", "err", err)
+			c.Next()
+			return
+		}
+		// 获取userAgent的header
+		hua := c.GetHeader(HeaderUserAgent)
+		c.Set(ContextKeyDevice, New(string(text), hua))
 	}
-	text, err := AesDecrypt(sDec, []byte(KEY_BASE64), []byte(ENCRYPT_IV))
-	if err != nil {
-		log.Errorw("AesDecrypt error", "err", err)
-		c.Next()
-		return
-	}
-	// 获取userAgent的header
-	hua := c.GetHeader(HeaderUserAgent)
-	c.Set(ContextKeyDevice, New(string(text), hua))
 	c.Next()
 	return
 }
