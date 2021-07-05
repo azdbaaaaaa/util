@@ -31,12 +31,12 @@ message OutParam {
 }
 
 enum AppIdEnum {
-  APP_ID_DEFAULT = 0;
+  APP_ID_UNKNOWN = 0;
   LIGHTHOUSE = 100;
 }
 
 enum AreaIdEnum {
-  AREA_ID_DEFAULT = 0;
+  AREA_ID_UNKNOWN = 0;
   ANDROID = 30;
   IOS = 40;
   WEB = 99;
