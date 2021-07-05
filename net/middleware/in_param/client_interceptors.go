@@ -2,6 +2,7 @@ package in_param
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/azdbaaaaaa/util/proto"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
@@ -18,7 +19,7 @@ func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
 		if v := ctx.Value(ContextKeyInParam); v != nil {
 			if inParam, ok := v.(proto.InParam); ok {
-				data, err := inParam.Marshal()
+				data, err := json.Marshal(inParam)
 				if err != nil {
 					logger.Error("in_param marshal error", ClientField, zap.String("key", ContextKeyInParam))
 				} else {
@@ -39,7 +40,7 @@ func StreamClientInterceptor(logger *zap.Logger) grpc.StreamClientInterceptor {
 	return func(ctx context.Context, desc *grpc.StreamDesc, cc *grpc.ClientConn, method string, streamer grpc.Streamer, opts ...grpc.CallOption) (grpc.ClientStream, error) {
 		if v := ctx.Value(ContextKeyInParam); v != nil {
 			if inParam, ok := v.(proto.InParam); ok {
-				data, err := inParam.Marshal()
+				data, err := json.Marshal(inParam)
 				if err != nil {
 					logger.Error("in_param marshal error", ClientField, zap.String("key", ContextKeyInParam))
 				} else {

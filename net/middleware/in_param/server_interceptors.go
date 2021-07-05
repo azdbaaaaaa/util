@@ -2,6 +2,7 @@ package in_param
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/azdbaaaaaa/util/proto"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"go.uber.org/zap"
@@ -27,7 +28,7 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 			}
 		}
 		inParam := &proto.InParam{}
-		err := inParam.Unmarshal([]byte(inParamStr))
+		err := json.Unmarshal([]byte(inParamStr), inParam)
 		if err != nil {
 			logger.Error("in_param unmarshal", zap.String("key", ContextKeyInParam), SystemField, ServerField)
 		} else {
@@ -50,7 +51,7 @@ func StreamServerInterceptor(logger *zap.Logger) grpc.StreamServerInterceptor {
 			}
 		}
 		inParam := &proto.InParam{}
-		err := inParam.Unmarshal([]byte(inParamStr))
+		err := json.Unmarshal([]byte(inParamStr), inParam)
 		if err != nil {
 			logger.Error("in_param unmarshal", zap.String("key", ContextKeyInParam), SystemField, ServerField)
 		} else {
