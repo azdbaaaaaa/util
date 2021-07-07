@@ -8,11 +8,30 @@ syntax = "proto3";
 package proto;
 option go_package = "github.com/azdbaaaaaa/util/proto;proto";
 
+enum ErrCode {
+  success = 0;
+  err_server_fail = -100001; // 不重要的失败，建议重试
+  err_server_param_invalid = -100002; // 请求参数不合法
+  err_server_exception = -100003; // 服务本身异常
+  err_server_rejuct = -100004; // 服务忙，请求队列已满
+  err_server_busy = -100005; // 服务忙，被调限流
+
+  err_client_timeout = -100006; // 服务调用超时
+  err_client_exception = -100007; // 服务调用异常
+  err_client_broken = -100008; // 服务熔断
+}
+
+enum ErrSubCode {
+  err_sub_code_default = 0;
+  err_sub_code_book_service = -101000; // 内容库服务
+}
+
 message OutParam {
   int32 code = 1;
-  string message = 2;
-  string reason = 3;
-  map<string, string> metadata = 4;
+  int32 sub_code = 2;
+  string message = 3;
+  string reason = 4;
+  map<string, string> metadata = 5;
 }
 
 enum AppIdType {
