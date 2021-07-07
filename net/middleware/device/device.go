@@ -14,16 +14,16 @@ const (
 type Device struct {
 	IMEI         string           `json:"imei"`
 	VersionName  string           `json:"version_name"`
-	ScreenWidth  int              `json:"screen_width"`
-	ScreenHeight int              `json:"screen_height"`
+	ScreenWidth  int32            `json:"screen_width"`
+	ScreenHeight int32            `json:"screen_height"`
 	Source       string           `json:"source"`
 	SDK          string           `json:"sdk"`
 	ClientType   proto.ClientType `json:"client_type"`
 	PhoneModel   string           `json:"phone_model"`
-	VersionCode  int              `json:"version_code"`
+	VersionCode  int32            `json:"version_code"`
 	Channel      string           `json:"channel"`
 	ClientTime   int64            `json:"client_time"`
-	IsEmulator   int              `json:"is_emulator"`
+	IsEmulator   int32            `json:"is_emulator"`
 	Longitude    string           `json:"longitude"`
 	Latitude     string           `json:"latitude"`
 	CountryCode  string           `json:"country_code"`
@@ -60,17 +60,17 @@ func (d *Device) ValueFromIdx(i int, v string) (err error) {
 	case 1:
 		d.VersionName = v
 	case 2:
-		sw, err := strconv.Atoi(v)
+		sw, err := strconv.ParseInt(v, 32, 10)
 		if err != nil {
 			return err
 		}
-		d.ScreenWidth = sw
+		d.ScreenWidth = int32(sw)
 	case 3:
-		sh, err := strconv.Atoi(v)
+		sh, err := strconv.ParseInt(v, 32, 10)
 		if err != nil {
 			return err
 		}
-		d.ScreenHeight = sh
+		d.ScreenHeight = int32(sh)
 	case 4:
 		d.Source = v
 	case 5:
@@ -84,11 +84,11 @@ func (d *Device) ValueFromIdx(i int, v string) (err error) {
 	case 7:
 		d.PhoneModel = v
 	case 8:
-		vc, err := strconv.Atoi(v)
+		vc, err := strconv.ParseInt(v, 32, 10)
 		if err != nil {
 			return err
 		}
-		d.VersionCode = vc
+		d.VersionCode = int32(vc)
 	case 9:
 		d.Channel = v
 	case 10:
@@ -98,11 +98,11 @@ func (d *Device) ValueFromIdx(i int, v string) (err error) {
 		}
 		d.ClientTime = ct
 	case 11:
-		ie, err := strconv.Atoi(v)
+		ie, err := strconv.ParseInt(v, 32, 10)
 		if err != nil {
 			return err
 		}
-		d.IsEmulator = ie
+		d.IsEmulator = int32(ie)
 	case 12:
 		d.Longitude = v
 	case 13:
