@@ -5,23 +5,8 @@ syntax = "proto3";
 //import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
 
 //指定包名
-package common.v1;
-option go_package = "github.com/azdbaaaaaa/util/proto;common.v1";
-
-message InParam {
-  int32 app_id = 1; //  see AppIdEnum
-  int32 area_id = 2; // see AreaIdEnum
-  int32 version = 3;
-  int64 user_id = 4;
-  string device_id = 5;
-  string client_ip = 6;
-  string channel = 7;
-  string source = 8;
-  string user_ip = 9;
-  string language = 10; // see LanguageEnum
-  string country = 11;
-  int64 author_id = 12;
-}
+package proto;
+option go_package = "github.com/azdbaaaaaa/util/proto;proto";
 
 message OutParam {
   int32 code = 1;
@@ -30,25 +15,31 @@ message OutParam {
   map<string, string> metadata = 4;
 }
 
-enum AppIdEnum {
+enum AppIdType {
   APP_ID_UNKNOWN = 0;
-  LIGHTHOUSE = 100;
+  APP_ID_LIGHTHOUSE = 100;
 }
 
-enum AreaIdEnum {
+enum AreaIdType {
   AREA_ID_UNKNOWN = 0;
-  ANDROID = 30;
-  IOS = 40;
-  WEB = 99;
-  H5 = 98;
+  AREA_ID_ANDROID = 30;
+  AREA_ID_IOS = 40;
+  AREA_ID_WEB = 99;
+  AREA_ID_H5 = 98;
 }
 
-enum LanguageEnum {
-  ZH = 0; // 中文
-  EN = 1; // 英文
-  ES = 2; // 西班牙语
-  IN = 3; // 印尼语
-  TL = 4; // 菲律宾语（他加禄语)
-  MS = 5; // 马来语
-  KO = 6; // 韩语
+enum LanguageType {
+  LAN_ZH = 0; // 中文
+  LAN_EN = 1; // 英文
+  LAN_ES = 2; // 西班牙语
+  LAN_IN = 3; // 印尼语
+  LAN_TL = 4; // 菲律宾语（他加禄语)
+  LAN_MS = 5; // 马来语
+  LAN_KO = 6; // 韩语
 };
+
+enum ClientType {
+  CLIENT_TYPE_UNKNOWN = 0;
+  CLIENT_TYPE_ANDROID = 1;
+  CLIENT_TYPE_IOS = 5;
+}

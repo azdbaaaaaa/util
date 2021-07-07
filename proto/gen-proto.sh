@@ -17,3 +17,5 @@ cd "${home}"/proto
 protoc --gofast_out=plugins=grpc:. --proto_path=${proto_path} --validate_out="lang=go:." common.proto
 protoc --gofast_out=plugins=grpc:. --proto_path=${proto_path} --validate_out="lang=go:." pagination.proto
 
+mv "${home}"/proto/github.com/azdbaaaaaa/util/proto/* "${home}"/proto/
+rm -r "${home}"/proto/github.com/

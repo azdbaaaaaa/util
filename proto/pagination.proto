@@ -5,8 +5,8 @@ import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
 
 //指定包名
-package common.v1;
-option go_package = "github.com/azdbaaaaaa/util/proto;common.v1";
+package proto;
+option go_package = "github.com/azdbaaaaaa/util/proto;proto";
 
 message PaginationReq {
   int32 page = 1 [(validate.rules).int32.gt = 0, (gogoproto.jsontag) = "page"];

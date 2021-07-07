@@ -2,6 +2,7 @@ package device
 
 import (
 	"github.com/azdbaaaaaa/util/log"
+	"github.com/azdbaaaaaa/util/proto"
 	"strconv"
 	"strings"
 )
@@ -10,45 +11,28 @@ const (
 	ContextKeyDevice = "device"
 )
 
-type (
-	ClientType int
-	AreaID     int
-)
-
-const (
-	ClientType_ANDROID ClientType = 1
-	ClientType_IOS     ClientType = 5
-)
-
-const (
-	AreaID_ANDROID AreaID = 30
-	AreaID_IOS     AreaID = 40
-	AreaID_WEB     AreaID = 99
-	AreaID_H5      AreaID = 98
-)
-
 type Device struct {
-	IMEI         string     `json:"imei"`
-	VersionName  string     `json:"version_name"`
-	ScreenWidth  int        `json:"screen_width"`
-	ScreenHeight int        `json:"screen_height"`
-	Source       string     `json:"source"`
-	SDK          string     `json:"sdk"`
-	ClientType   ClientType `json:"client_type"`
-	PhoneModel   string     `json:"phone_model"`
-	VersionCode  int        `json:"version_code"`
-	Channel      string     `json:"channel"`
-	ClientTime   int64      `json:"client_time"`
-	IsEmulator   int        `json:"is_emulator"`
-	Longitude    string     `json:"longitude"`
-	Latitude     string     `json:"latitude"`
-	CountryCode  string     `json:"country_code"`
-	City         string     `json:"city"`
-	MCC          string     `json:"mcc"`
-	TimeZone     string     `json:"time_zone"`
-	ZoneId       string     `json:"zone_id"`
-	GAID         string     `json:"gaid"`
-	Timestamp    int64      `json:"timestamp"`
+	IMEI         string           `json:"imei"`
+	VersionName  string           `json:"version_name"`
+	ScreenWidth  int              `json:"screen_width"`
+	ScreenHeight int              `json:"screen_height"`
+	Source       string           `json:"source"`
+	SDK          string           `json:"sdk"`
+	ClientType   proto.ClientType `json:"client_type"`
+	PhoneModel   string           `json:"phone_model"`
+	VersionCode  int              `json:"version_code"`
+	Channel      string           `json:"channel"`
+	ClientTime   int64            `json:"client_time"`
+	IsEmulator   int              `json:"is_emulator"`
+	Longitude    string           `json:"longitude"`
+	Latitude     string           `json:"latitude"`
+	CountryCode  string           `json:"country_code"`
+	City         string           `json:"city"`
+	MCC          string           `json:"mcc"`
+	TimeZone     string           `json:"time_zone"`
+	ZoneId       string           `json:"zone_id"`
+	GAID         string           `json:"gaid"`
+	Timestamp    int64            `json:"timestamp"`
 
 	UserAgent string `json:"user_agent"`
 }
@@ -96,7 +80,7 @@ func (d *Device) ValueFromIdx(i int, v string) (err error) {
 		if err != nil {
 			return err
 		}
-		d.ClientType = ClientType(ct)
+		d.ClientType = proto.ClientType(ct)
 	case 7:
 		d.PhoneModel = v
 	case 8:
@@ -149,13 +133,13 @@ func (d *Device) ValueFromIdx(i int, v string) (err error) {
 	return
 }
 
-func (d *Device) GetAreaID() AreaID {
+func (d *Device) GetAreaID() proto.AreaIdType {
 	switch d.ClientType {
-	case ClientType_ANDROID:
-		return AreaID_ANDROID
-	case ClientType_IOS:
-		return AreaID_IOS
+	case proto.ClientType_CLIENT_TYPE_IOS:
+		return proto.AreaIdType_AREA_ID_IOS
+	case proto.ClientType_CLIENT_TYPE_ANDROID:
+		return proto.AreaIdType_AREA_ID_ANDROID
 	default:
-		return AreaID_ANDROID
+		return proto.AreaIdType_AREA_ID_ANDROID
 	}
 }
