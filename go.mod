@@ -6,6 +6,7 @@ require (
 	github.com/aws/aws-sdk-go v1.34.28
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/envoyproxy/protoc-gen-validate v0.1.0
+	github.com/forgoer/openssl v0.0.0-20201023062029-c3112b0c8700 // indirect
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/assert/v2 v2.0.1
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
