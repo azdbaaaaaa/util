@@ -1,7 +1,9 @@
 package xerror
 
+import "github.com/azdbaaaaaa/util/proto"
+
 var (
-	Success         = New(0, "success", "")
-	ErrUnknown      = New(999999, "unknown", "")
-	ErrParamInvalid = New(100100, "param invalid", "")
+	Success         = New(int32(proto.ErrCode_success), int32(proto.ErrCode_unknown_error), "success", "")
+	ErrUnknown      = New(int32(proto.ErrCode_unknown_error), int32(proto.ErrCode_unknown_error), proto.ErrCode_unknown_error.String(), "")
+	ErrParamInvalid = New(int32(proto.ErrCode_server_param_invalid), int32(proto.ErrCode_unknown_error), proto.ErrCode_server_param_invalid.String(), "")
 )
