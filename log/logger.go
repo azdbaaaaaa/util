@@ -43,7 +43,7 @@ func New(option LoggerOption) {
 		encoding = "console"
 	}
 	if option.ContextKeys != nil {
-		ContextKeys = option.ContextKeys
+		ContextKeys = append(ContextKeys, option.ContextKeys...)
 	}
 	level = zap.NewAtomicLevelAt(option.Level)
 	config := zap.Config{
