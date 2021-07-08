@@ -2,7 +2,7 @@ package wrapper
 
 import (
 	request_id2 "github.com/azdbaaaaaa/util/net/middleware/request_id"
-	"github.com/azdbaaaaaa/util/xerror"
+	xerror2 "github.com/azdbaaaaaa/util/xutil/xerror"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -25,17 +25,17 @@ type WrapperHandle func(c *gin.Context) (interface{}, error)
 
 func ErrorWrapper(handle WrapperHandle) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var code *xerror.Error
+		var code *xerror2.Error
 		var rid string
 		data, err := handle(c)
 		if err != nil {
-			if ec, ok := err.(*xerror.Error); ok {
+			if ec, ok := err.(*xerror2.Error); ok {
 				code = ec
 			} else {
-				code = xerror.ErrUnknown
+				code = xerror2.ErrUnknown
 			}
 		} else {
-			code = xerror.Success
+			code = xerror2.Success
 		}
 		reqId, exists := c.Get(request_id2.ContextKeyReqID)
 		if exists {
