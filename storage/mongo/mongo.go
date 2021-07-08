@@ -13,10 +13,10 @@ type Config struct {
 	UserName       string `json:"username" toml:"username" yaml:"username"`
 	Password       string `json:"password" toml:"password" yaml:"password"`
 	DB             string `json:"db" toml:"db" yaml:"db"`
-	CollectionName string `json:"collection_name" toml:"collection_name" yaml:"collection_name"`
+	CollectionName string `json:"collection_name" toml:"collection_name" yaml:"collection_name" mapstructure:"collection_name"`
 	Timeout        int    `json:"timeout" toml:"timeout" yaml:"timeout"`
-	ReadTimeout    int    `json:"read_timeout" toml:"read_timeout" yaml:"read_timeout"`
-	WriteTimeout   int    `json:"write_timeout" toml:"write_timeout" yaml:"write_timeout"`
+	ReadTimeout    int    `json:"read_timeout" toml:"read_timeout" yaml:"read_timeout" mapstructure:"read_timeout"`
+	WriteTimeout   int    `json:"write_timeout" toml:"write_timeout" yaml:"read_timeout" mapstructure:"read_timeout"`
 }
 
 func New(cfg *Config) (*mongo.Database, error) {
@@ -24,7 +24,8 @@ func New(cfg *Config) (*mongo.Database, error) {
 		cfg.Timeout = 10
 	}
 	// 建立mongodb连接
-	ctx, _ := context.WithTimeout(context.Background(), time.Duration(cfg.Timeout)*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(cfg.Timeout)*time.Second)
+	defer cancel()
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(cfg.URI))
 	if err != nil {
 		return nil, err
