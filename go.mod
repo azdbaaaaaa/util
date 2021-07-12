@@ -8,18 +8,22 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/envoyproxy/protoc-gen-validate v0.1.0
 	github.com/forgoer/openssl v0.0.0-20201023062029-c3112b0c8700
+	github.com/gin-contrib/pprof v1.3.0
+	github.com/gin-gonic/contrib v0.0.0-20201101042839-6a891bf89f19
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/assert/v2 v2.0.1
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
 	github.com/go-redis/redis/v8 v8.11.0
 	github.com/gogo/protobuf v1.2.1
 	github.com/golang/protobuf v1.4.3
+	github.com/gorilla/websocket v0.0.0-20170926233335-4201258b820c
 	github.com/grpc-ecosystem/go-grpc-middleware v1.0.1-0.20190118093823-f849b5445de4
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/satori/go.uuid v1.2.0
 	github.com/tealeg/xlsx/v3 v3.2.3
 	github.com/ugorji/go v1.2.3 // indirect
+	github.com/zsais/go-gin-prometheus v0.1.0
 	go.mongodb.org/mongo-driver v1.5.3
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.16.0
