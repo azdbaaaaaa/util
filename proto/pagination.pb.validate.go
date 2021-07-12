@@ -48,12 +48,14 @@ func (m *PaginationReq) Validate() error {
 		}
 	}
 
-	if val := m.GetPageSize(); val <= 0 || val > 100 {
+	if val := m.GetPageSize(); val <= 0 || val > 2000 {
 		return PaginationReqValidationError{
 			field:  "PageSize",
-			reason: "value must be inside range (0, 100]",
+			reason: "value must be inside range (0, 2000]",
 		}
 	}
+
+	// no validation rules for Sort
 
 	return nil
 }

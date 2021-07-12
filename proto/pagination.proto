@@ -8,7 +8,14 @@ import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
 package proto;
 option go_package = "github.com/azdbaaaaaa/util/proto;proto";
 
+enum SortOrder {
+  SortDefault = 0;
+  SortDesc = 1;
+  SortAsc = 2;
+}
+
 message PaginationReq {
-  int32 page = 1 [(validate.rules).int32.gt = 0, (gogoproto.jsontag) = "page"];
-  int32 page_size = 2 [(validate.rules).int32 = {gt:0, lte: 100}, (gogoproto.jsontag) = "page_size"];
+  int32 page = 1 [(validate.rules).int32.gt = 0];
+  int32 page_size = 2 [(validate.rules).int32 = {gt:0, lte: 2000}];
+  map<string, SortOrder> sort = 3 [(gogoproto.nullable) = false];
 }
