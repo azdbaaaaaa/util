@@ -25,6 +25,7 @@ enum ErrCode {
 enum ErrSubCode {
   err_sub_code_unknown = 0;
   err_sub_code_book_service = -101000; // 内容库服务
+  err_sub_code_go_book_service = -101001; // golang版本内容库服务
 }
 
 message OutParam {
