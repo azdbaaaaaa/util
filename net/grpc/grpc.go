@@ -2,9 +2,9 @@ package grpc
 
 import (
 	"context"
-	device2 "github.com/azdbaaaaaa/util/net/grpc/middleware/device"
-	in_param2 "github.com/azdbaaaaaa/util/net/grpc/middleware/in_param"
-	request_id2 "github.com/azdbaaaaaa/util/net/grpc/middleware/request_id"
+	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_device"
+	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_in_param"
+	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_request_id"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"time"
@@ -32,12 +32,12 @@ func NewClientConn(conf ClientConfig, logger *zap.Logger) (conn *grpc.ClientConn
 	conn, err = grpc.DialContext(ctx, conf.Addr,
 		grpc.WithInsecure(),
 		grpc.WithBlock(),
-		grpc.WithUnaryInterceptor(request_id2.UnaryClientInterceptor(logger)),
-		grpc.WithStreamInterceptor(request_id2.StreamClientInterceptor(logger)),
-		grpc.WithUnaryInterceptor(device2.UnaryClientInterceptor(logger)),
-		grpc.WithStreamInterceptor(device2.StreamClientInterceptor(logger)),
-		grpc.WithUnaryInterceptor(in_param2.UnaryClientInterceptor(logger)),
-		grpc.WithStreamInterceptor(in_param2.StreamClientInterceptor(logger)),
+		grpc.WithUnaryInterceptor(grpc_request_id.UnaryClientInterceptor(logger)),
+		grpc.WithStreamInterceptor(grpc_request_id.StreamClientInterceptor(logger)),
+		grpc.WithUnaryInterceptor(grpc_device.UnaryClientInterceptor(logger)),
+		grpc.WithStreamInterceptor(grpc_device.StreamClientInterceptor(logger)),
+		grpc.WithUnaryInterceptor(grpc_in_param.UnaryClientInterceptor(logger)),
+		grpc.WithStreamInterceptor(grpc_in_param.StreamClientInterceptor(logger)),
 	)
 	if err != nil {
 		logger.Error("did not connect", zap.Error(err))
