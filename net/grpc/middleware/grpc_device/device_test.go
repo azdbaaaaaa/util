@@ -1,4 +1,4 @@
-package device
+package grpc_device
 
 import (
 	"encoding/base64"

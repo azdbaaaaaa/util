@@ -1,9 +1,10 @@
-package in_param
+package grpc_request_id
 
 import (
 	"context"
-	"encoding/json"
+	metadata2 "github.com/azdbaaaaaa/util/net/metadata"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	uuid "github.com/satori/go.uuid"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
@@ -20,21 +21,17 @@ var (
 // UnaryServerInterceptor returns a new unary server interceptors that adds zap.Logger to the context.
 func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
-		inParamStr := ""
+		reqID := ""
 		if md, ok := metadata.FromIncomingContext(ctx); ok {
-			if md[ContextKeyInParam] != nil && len(md[ContextKeyInParam]) > 0 {
-				inParamStr = md[ContextKeyInParam][0]
+			if md[metadata2.ContextKeyReqID] != nil && len(md[metadata2.ContextKeyReqID]) > 0 {
+				reqID = md[metadata2.ContextKeyReqID][0]
 			}
 		}
-		if inParamStr != "" {
-			inParam := &InParam{}
-			err := json.Unmarshal([]byte(inParamStr), inParam)
-			if err != nil {
-				logger.Error("in_param unmarshal", zap.String("key", ContextKeyInParam), SystemField, ServerField)
-			} else {
-				ctx = context.WithValue(ctx, ContextKeyInParam, inParam)
-			}
+		if reqID == "" {
+			reqID = uuid.NewV4().String()
+			logger.Debug("not found req_id generate one", SystemField, ServerField, zap.String("uuid", reqID))
 		}
+		ctx = context.WithValue(ctx, metadata2.ContextKeyReqID, reqID)
 		resp, err := handler(ctx, req)
 		return resp, err
 	}
@@ -44,22 +41,18 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 func StreamServerInterceptor(logger *zap.Logger) grpc.StreamServerInterceptor {
 	return func(srv interface{}, stream grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
 		ctx := stream.Context()
-
-		inParamStr := ""
+		reqID := ""
 		if md, ok := metadata.FromIncomingContext(ctx); ok {
-			if md[ContextKeyInParam] != nil && len(md[ContextKeyInParam]) > 0 {
-				inParamStr = md[ContextKeyInParam][0]
+			if md[metadata2.ContextKeyReqID] != nil && len(md[metadata2.ContextKeyReqID]) > 0 {
+				reqID = md[metadata2.ContextKeyReqID][0]
 			}
 		}
-		if inParamStr != "" {
-			inParam := &InParam{}
-			err := json.Unmarshal([]byte(inParamStr), inParam)
-			if err != nil {
-				logger.Error("in_param unmarshal", zap.String("key", ContextKeyInParam), SystemField, ServerField)
-			} else {
-				ctx = context.WithValue(ctx, ContextKeyInParam, inParam)
-			}
+		if reqID == "" {
+			reqID = uuid.NewV4().String()
+			logger.Debug("not found req_id generate one", SystemField, ServerField, zap.String("uuid", reqID))
 		}
+		ctx = context.WithValue(ctx, metadata2.ContextKeyReqID, reqID)
+
 		wrapped := grpc_middleware.WrapServerStream(stream)
 		wrapped.WrappedContext = ctx
 		err := handler(srv, wrapped)

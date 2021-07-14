@@ -1,6 +1,7 @@
-package in_param
+package grpc_in_param
 
 import (
+	metadata2 "github.com/azdbaaaaaa/util/net/metadata"
 	"github.com/azdbaaaaaa/util/proto"
 	"github.com/gin-gonic/gin"
 )
@@ -29,6 +30,6 @@ func SetInParam(c *gin.Context) {
 	//		inParam.Source = d.Source
 	//	}
 	//}
-	c.Set(ContextKeyInParam, inParam)
+	c.Set(metadata2.ContextKeyInParam, inParam)
 	c.Next()
 }

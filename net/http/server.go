@@ -1,11 +1,11 @@
 package http
 
 import (
+	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_device"
+	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_in_param"
+	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_request_id"
 	"github.com/azdbaaaaaa/util/net/http/gin/middleware/health"
 	"github.com/azdbaaaaaa/util/net/http/gin/middleware/pprof"
-	"github.com/azdbaaaaaa/util/net/middleware/device"
-	"github.com/azdbaaaaaa/util/net/middleware/in_param"
-	"github.com/azdbaaaaaa/util/net/middleware/request_id"
 	"github.com/gin-gonic/gin"
 	ginprometheus "github.com/zsais/go-gin-prometheus"
 	"go.uber.org/zap"
@@ -17,7 +17,7 @@ func NewServer(conf ServerConfig, logger *zap.Logger) {
 	p.Use(r)
 	health.Register(r)
 	pprof.Register(conf.Pprof, r)
-	r.Use(request_id.RequestID, device.SetDevice, in_param.SetInParam)
+	r.Use(grpc_request_id.RequestID, grpc_device.SetDevice, grpc_in_param.SetInParam)
 
 	//api.WithHandler(r, svc)
 	//server := &http.Server{

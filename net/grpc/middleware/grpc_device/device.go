@@ -1,14 +1,10 @@
-package device
+package grpc_device
 
 import (
 	"github.com/azdbaaaaaa/util/log"
 	"github.com/azdbaaaaaa/util/proto"
 	"strconv"
 	"strings"
-)
-
-const (
-	ContextKeyDevice = "device"
 )
 
 type Device struct {

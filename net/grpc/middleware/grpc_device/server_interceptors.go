@@ -1,8 +1,9 @@
-package device
+package grpc_device
 
 import (
 	"context"
 	"encoding/json"
+	metadata2 "github.com/azdbaaaaaa/util/net/metadata"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
@@ -22,17 +23,17 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		deviceStr := ""
 		if md, ok := metadata.FromIncomingContext(ctx); ok {
-			if md[ContextKeyDevice] != nil && len(md[ContextKeyDevice]) > 0 {
-				deviceStr = md[ContextKeyDevice][0]
+			if md[metadata2.ContextKeyDevice] != nil && len(md[metadata2.ContextKeyDevice]) > 0 {
+				deviceStr = md[metadata2.ContextKeyDevice][0]
 			}
 		}
 		if deviceStr != "" {
 			device := &Device{}
 			err := json.Unmarshal([]byte(deviceStr), device)
 			if err != nil {
-				logger.Error("device unmarshal", zap.String("key", ContextKeyDevice), SystemField, ServerField)
+				logger.Error("device unmarshal", zap.String("key", metadata2.ContextKeyDevice), SystemField, ServerField)
 			} else {
-				ctx = context.WithValue(ctx, ContextKeyDevice, device)
+				ctx = context.WithValue(ctx, metadata2.ContextKeyDevice, device)
 			}
 		}
 		resp, err := handler(ctx, req)
@@ -47,17 +48,17 @@ func StreamServerInterceptor(logger *zap.Logger) grpc.StreamServerInterceptor {
 
 		deviceStr := ""
 		if md, ok := metadata.FromIncomingContext(ctx); ok {
-			if md[ContextKeyDevice] != nil && len(md[ContextKeyDevice]) > 0 {
-				deviceStr = md[ContextKeyDevice][0]
+			if md[metadata2.ContextKeyDevice] != nil && len(md[metadata2.ContextKeyDevice]) > 0 {
+				deviceStr = md[metadata2.ContextKeyDevice][0]
 			}
 		}
 		if deviceStr != "" {
 			device := &Device{}
 			err := json.Unmarshal([]byte(deviceStr), device)
 			if err != nil {
-				logger.Error("device unmarshal", zap.String("key", ContextKeyDevice), SystemField, ServerField)
+				logger.Error("device unmarshal", zap.String("key", metadata2.ContextKeyDevice), SystemField, ServerField)
 			} else {
-				ctx = context.WithValue(ctx, ContextKeyDevice, device)
+				ctx = context.WithValue(ctx, metadata2.ContextKeyDevice, device)
 			}
 		}
 		wrapped := grpc_middleware.WrapServerStream(stream)
