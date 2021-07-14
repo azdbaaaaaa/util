@@ -18,7 +18,7 @@ var (
 func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
 		if v := ctx.Value(metadata2.ContextKeyDevice); v != nil {
-			if d, ok := v.(Device); ok {
+			if d, ok := v.(metadata2.Device); ok {
 				data, err := json.Marshal(d)
 				if err != nil {
 					logger.Error("device marshal error", ClientField, zap.String("key", metadata2.ContextKeyDevice))
@@ -39,7 +39,7 @@ func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 func StreamClientInterceptor(logger *zap.Logger) grpc.StreamClientInterceptor {
 	return func(ctx context.Context, desc *grpc.StreamDesc, cc *grpc.ClientConn, method string, streamer grpc.Streamer, opts ...grpc.CallOption) (grpc.ClientStream, error) {
 		if v := ctx.Value(metadata2.ContextKeyDevice); v != nil {
-			if d, ok := v.(Device); ok {
+			if d, ok := v.(metadata2.Device); ok {
 				data, err := json.Marshal(d)
 				if err != nil {
 					logger.Error("device marshal error", ClientField, zap.String("key", metadata2.ContextKeyDevice))

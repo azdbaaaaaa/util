@@ -28,7 +28,7 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 			}
 		}
 		if deviceStr != "" {
-			device := &Device{}
+			device := &metadata2.Device{}
 			err := json.Unmarshal([]byte(deviceStr), device)
 			if err != nil {
 				logger.Error("device unmarshal", zap.String("key", metadata2.ContextKeyDevice), SystemField, ServerField)
@@ -53,7 +53,7 @@ func StreamServerInterceptor(logger *zap.Logger) grpc.StreamServerInterceptor {
 			}
 		}
 		if deviceStr != "" {
-			device := &Device{}
+			device := &metadata2.Device{}
 			err := json.Unmarshal([]byte(deviceStr), device)
 			if err != nil {
 				logger.Error("device unmarshal", zap.String("key", metadata2.ContextKeyDevice), SystemField, ServerField)

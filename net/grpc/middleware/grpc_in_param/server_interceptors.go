@@ -28,7 +28,7 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 			}
 		}
 		if inParamStr != "" {
-			inParam := &InParam{}
+			inParam := &metadata2.InParam{}
 			err := json.Unmarshal([]byte(inParamStr), inParam)
 			if err != nil {
 				logger.Error("in_param unmarshal", zap.String("key", metadata2.ContextKeyInParam), SystemField, ServerField)
@@ -53,7 +53,7 @@ func StreamServerInterceptor(logger *zap.Logger) grpc.StreamServerInterceptor {
 			}
 		}
 		if inParamStr != "" {
-			inParam := &InParam{}
+			inParam := &metadata2.InParam{}
 			err := json.Unmarshal([]byte(inParamStr), inParam)
 			if err != nil {
 				logger.Error("in_param unmarshal", zap.String("key", metadata2.ContextKeyInParam), SystemField, ServerField)
