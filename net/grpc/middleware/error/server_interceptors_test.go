@@ -1,4 +1,4 @@
-package request_id
+package error
 
 import (
 	"errors"
@@ -9,7 +9,7 @@ import (
 
 func TestName(t *testing.T) {
 	err2 := errors.New("xxx")
-	err2 := xerror.New(1, 1, "", "")
+	//err2 := xerror.New(1, 1, "", "")
 	switch err2.(type) {
 	case xerror.Error:
 		fmt.Println("Interface")

@@ -1,4 +1,4 @@
-package request_id
+package error
 
 import (
 	"context"
@@ -22,7 +22,6 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 		if err != nil {
 			switch err.(type) {
 			case xerror.Error:
-				fmt.Println("Interface")
 				err = nil
 			default:
 				//fmt.Println(err2.Kind())

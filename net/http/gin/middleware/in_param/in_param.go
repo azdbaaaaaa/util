@@ -1,4 +1,4 @@
-package grpc_in_param
+package in_param
 
 import (
 	metadata2 "github.com/azdbaaaaaa/util/net/metadata"
@@ -12,7 +12,7 @@ const (
 )
 
 func SetInParam(c *gin.Context) {
-	inParam := InParam{
+	inParam := metadata2.InParam{
 		AppId:    proto.AppIdType_APP_ID_LIGHTHOUSE,
 		UserIp:   c.ClientIP(),
 		ClientIp: c.Request.RemoteAddr,
