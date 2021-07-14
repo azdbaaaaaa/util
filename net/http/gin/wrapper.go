@@ -2,7 +2,7 @@ package gin
 
 import (
 	"github.com/azdbaaaaaa/util/net/metadata"
-	xerror2 "github.com/azdbaaaaaa/util/xutil/xerror"
+	 "github.com/azdbaaaaaa/util/xutil/xerror"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -25,17 +25,17 @@ type WrapperHandle func(c *gin.Context) (interface{}, error)
 
 func ErrorWrapper(handle WrapperHandle) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var code *xerror2.Error
+		var code xerror.Error
 		var rid string
 		data, err := handle(c)
 		if err != nil {
-			if ec, ok := err.(*xerror2.Error); ok {
+			if ec, ok := err.(xerror.Error); ok {
 				code = ec
 			} else {
-				code = xerror2.ErrUnknown
+				code = xerror.ErrUnknown
 			}
 		} else {
-			code = xerror2.Success
+			code = xerror.Success
 		}
 		reqId, exists := c.Get(metadata.ContextKeyReqID)
 		if exists {
@@ -44,10 +44,10 @@ func ErrorWrapper(handle WrapperHandle) gin.HandlerFunc {
 			}
 		}
 		c.JSON(http.StatusOK, ApiError{
-			Result:  code.Code,
-			Message: code.Message,
+			Result:  code.GetCode(),
+			Message: code.GetMessage(),
 			Data:    data,
-			Reason:  code.Reason,
+			Reason:  code.GetReason(),
 			Rid:     rid,
 		})
 	}

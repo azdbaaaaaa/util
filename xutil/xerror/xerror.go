@@ -8,6 +8,8 @@ type Error interface {
 	Error() string
 	GetCode() int32
 	GetSubCode() int32
+	GetMessage() string
+	GetReason() string
 }
 
 type err struct {
@@ -48,14 +50,13 @@ func (e *err) GetSubCode() int32 {
 //	return false
 //}
 
-//func (ec ErrorCode) IsSuccess() bool {
-//	return ec == ErrCodeSuccess
-//}
-//
-//func (ec ErrorCode) Equals(code int32) bool {
-//	return ec.Code == code
-//}
-//
+func (e *err) GetMessage() string {
+	return e.Message
+}
+
+func (e *err) GetReason() string {
+	return e.Reason
+}
 
 func (e *err) WithReason(reason string) Error {
 	e.Reason = reason
