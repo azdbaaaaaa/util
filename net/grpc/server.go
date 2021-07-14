@@ -1,9 +1,9 @@
 package grpc
 
 import (
-	"github.com/azdbaaaaaa/util/net/middleware/device"
-	"github.com/azdbaaaaaa/util/net/middleware/in_param"
-	"github.com/azdbaaaaaa/util/net/middleware/request_id"
+	device2 "github.com/azdbaaaaaa/util/net/grpc/middleware/device"
+	in_param2 "github.com/azdbaaaaaa/util/net/grpc/middleware/in_param"
+	request_id2 "github.com/azdbaaaaaa/util/net/grpc/middleware/request_id"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
@@ -22,18 +22,18 @@ func NewServer(conf ServerConfig, logger *zap.Logger) (s *grpc.Server) {
 			grpc_prometheus.StreamServerInterceptor,
 			grpc_zap.StreamServerInterceptor(logger),
 			grpc_validator.StreamServerInterceptor(),
-			request_id.StreamServerInterceptor(logger),
-			device.StreamServerInterceptor(logger),
-			in_param.StreamServerInterceptor(logger),
+			request_id2.StreamServerInterceptor(logger),
+			device2.StreamServerInterceptor(logger),
+			in_param2.StreamServerInterceptor(logger),
 		)),
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
 			grpc_recovery.UnaryServerInterceptor(),
 			grpc_prometheus.UnaryServerInterceptor,
 			grpc_zap.UnaryServerInterceptor(logger),
 			grpc_validator.UnaryServerInterceptor(),
-			request_id.UnaryServerInterceptor(logger),
-			device.UnaryServerInterceptor(logger),
-			in_param.UnaryServerInterceptor(logger),
+			request_id2.UnaryServerInterceptor(logger),
+			device2.UnaryServerInterceptor(logger),
+			in_param2.UnaryServerInterceptor(logger),
 		)),
 	)
 	grpc_health_v1.RegisterHealthServer(s, health.NewServer())

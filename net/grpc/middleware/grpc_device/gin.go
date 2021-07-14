@@ -1,8 +1,9 @@
-package device
+package grpc_device
 
 import (
 	"encoding/base64"
 	"github.com/azdbaaaaaa/util/log"
+	metadata2 "github.com/azdbaaaaaa/util/net/metadata"
 	"github.com/forgoer/openssl"
 	"github.com/gin-gonic/gin"
 )
@@ -45,7 +46,7 @@ func SetDevice(c *gin.Context) {
 		}
 		// 获取userAgent的header
 		hua := c.GetHeader(HeaderUserAgent)
-		c.Set(ContextKeyDevice, New(string(decrypted), hua))
+		c.Set(metadata2.ContextKeyDevice, New(string(decrypted), hua))
 	}
 	c.Next()
 	return

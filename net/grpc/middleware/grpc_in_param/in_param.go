@@ -1,10 +1,6 @@
-package in_param
+package grpc_in_param
 
 import "github.com/azdbaaaaaa/util/proto"
-
-const (
-	ContextKeyInParam = "in_param"
-)
 
 type InParam struct {
 	AppId proto.AppIdType `json:"app_id,omitempty"`

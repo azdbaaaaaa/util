@@ -1,4 +1,4 @@
-package request_id
+package grpc_request_id
 
 import (
 	"github.com/gin-gonic/gin"

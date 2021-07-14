@@ -1,7 +1,7 @@
 package gin
 
 import (
-	request_id2 "github.com/azdbaaaaaa/util/net/middleware/request_id"
+	"github.com/azdbaaaaaa/util/net/metadata"
 	xerror2 "github.com/azdbaaaaaa/util/xutil/xerror"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -37,7 +37,7 @@ func ErrorWrapper(handle WrapperHandle) gin.HandlerFunc {
 		} else {
 			code = xerror2.Success
 		}
-		reqId, exists := c.Get(request_id2.ContextKeyReqID)
+		reqId, exists := c.Get(metadata.ContextKeyReqID)
 		if exists {
 			if v, ok := reqId.(string); ok {
 				rid = v

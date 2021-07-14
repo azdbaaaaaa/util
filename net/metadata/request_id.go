@@ -1,4 +1,4 @@
-package request_id
+package metadata
 
 const (
 	ContextKeyReqID = "req_id"
