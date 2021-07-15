@@ -2,7 +2,7 @@ package in_param
 
 import (
 	metadata2 "github.com/azdbaaaaaa/util/net/metadata"
-	"github.com/azdbaaaaaa/util/proto"
+	"github.com/azdbaaaaaa/util/proto/common"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,7 +13,7 @@ const (
 
 func SetInParam(c *gin.Context) {
 	inParam := metadata2.InParam{
-		AppId:    proto.AppIdType_APP_ID_LIGHTHOUSE,
+		AppId:    common.AppIdType_APP_ID_LIGHTHOUSE,
 		UserIp:   c.ClientIP(),
 		ClientIp: c.Request.RemoteAddr,
 		//Language: "EN",

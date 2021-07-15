@@ -2,7 +2,7 @@ package user
 
 import (
 	"github.com/azdbaaaaaa/util/log"
-	"github.com/azdbaaaaaa/util/proto"
+	"github.com/azdbaaaaaa/util/proto/common"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
@@ -15,7 +15,7 @@ const (
 
 func SetUser(c *gin.Context) {
 	user := User{
-		AppId:   proto.AppIdType_APP_ID_LIGHTHOUSE,
+		AppId:   common.AppIdType_APP_ID_LIGHTHOUSE,
 		UserKey: c.GetHeader(HeaderUserKey),
 	}
 

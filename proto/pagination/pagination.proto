@@ -5,8 +5,8 @@ import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
 
 //指定包名
-package proto;
-option go_package = "github.com/azdbaaaaaa/util/proto;proto";
+package pagination;
+option go_package = "github.com/azdbaaaaaa/util/proto/pagination;pagination";
 
 enum SortOrder {
   SortDefault = 0;

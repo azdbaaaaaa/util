@@ -1,13 +1,15 @@
 package metadata
 
-import "github.com/azdbaaaaaa/util/proto"
+import (
+	"github.com/azdbaaaaaa/util/proto/common"
+)
 
 const (
 	ContextKeyInParam = "in_param"
 )
 
 type InParam struct {
-	AppId proto.AppIdType `json:"app_id,omitempty"`
+	AppId common.AppIdType `json:"app_id,omitempty"`
 	//AreaId   proto.AreaIdType `json:"area_id,omitempty"`
 	//Version  int32            `json:"version,omitempty"`
 	//UserId   int64            `json:"user_id,omitempty"`

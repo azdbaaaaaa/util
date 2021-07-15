@@ -5,8 +5,8 @@ syntax = "proto3";
 //import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
 
 //指定包名
-package proto;
-option go_package = "github.com/azdbaaaaaa/util/proto;proto";
+package common;
+option go_package = "github.com/azdbaaaaaa/util/proto/common;common";
 
 enum ErrCode {
   success = 0;
