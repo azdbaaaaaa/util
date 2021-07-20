@@ -2,6 +2,7 @@ package redis
 
 import (
 	"context"
+	"crypto/tls"
 	"github.com/azdbaaaaaa/util/log"
 	"github.com/go-redis/redis/v8"
 )
@@ -15,13 +16,15 @@ type Config struct {
 	Addr string `json:"addr"`
 	Auth string `json:"auth"`
 	DB   int    `json:"db"`
+	TLS  bool   `json:"tls"`
 }
 
 func New(cfg *Config) (rdb *redis.Client, err error) {
 	option := &redis.Options{
-		Addr:     cfg.Addr,
-		Password: cfg.Auth, // no password set
-		DB:       cfg.DB,   // use default DB
+		Addr:      cfg.Addr,
+		Password:  cfg.Auth, // no password set
+		DB:        cfg.DB,   // use default DB
+		TLSConfig: &tls.Config{InsecureSkipVerify: cfg.TLS},
 	}
 	rdb = redis.NewClient(option)
 
