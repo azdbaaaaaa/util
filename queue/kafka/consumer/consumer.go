@@ -12,8 +12,8 @@ type Config struct {
 	Broker     string `json:"broker"` // 以,分割的列表
 	Topic      string `json:"topic"`
 	Group      string `json:"group"`
-	Offset     string `json:"offset"` // one of `latest` and `earliest`
-	AutoCommit int32 `json:"auto_commit"`	//是否自动提交偏移量, 0:true, 1:false
+	Offset     string `json:"offset"`                                 // one of `latest` and `earliest`
+	AutoCommit int32  `json:"auto_commit" mapstructure:"auto_commit"` //是否自动提交偏移量, 0:true, 1:false
 }
 
 type ConsumerGroup struct {
@@ -84,7 +84,7 @@ type ConsumerGroupHandler interface {
 
 func Run(ctx context.Context, conf *Config, handler ConsumerGroupHandler) {
 	var (
-		offset int64
+		offset     int64
 		autoCommit bool
 	)
 	brokers := strings.Split(conf.Broker, ",")
