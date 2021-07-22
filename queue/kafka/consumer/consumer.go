@@ -63,15 +63,13 @@ func (CGH *ConsumerGroupHandler) Cleanup(sarama.ConsumerGroupSession) error {
 
 func (CGH *ConsumerGroupHandler) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
 	log.Infof("Message claimed:  topic = %s, partitions = %d", claim.Topic(), claim.Partition())
-	lastLagTime := time.Now().Unix()
 	for message := range claim.Messages() {
-
-		nowTs := time.Now().Unix()
-		if nowTs-lastLagTime > 15 {
-			lastLagTime = nowTs
+		err := CGH.cs.ReceiveMessages(message)
+		if err != nil {
+			log.Errorf("ConsumerGroupHandler.ReceiveMessages: %s, error: %v", string(message.Value), err)
+		} else {
+			session.MarkMessage(message, "")
 		}
-		_ = CGH.cs.ReceiveMessages(message)
-		session.MarkMessage(message, "")
 	}
 
 	return nil
