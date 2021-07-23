@@ -24,7 +24,9 @@ func New(cfg *Config) (rdb *redis.Client, err error) {
 		Addr:      cfg.Addr,
 		Password:  cfg.Auth, // no password set
 		DB:        cfg.DB,   // use default DB
-		TLSConfig: &tls.Config{InsecureSkipVerify: cfg.TLS},
+	}
+	if cfg.TLS {
+		option.TLSConfig = &tls.Config{InsecureSkipVerify: cfg.TLS}
 	}
 	rdb = redis.NewClient(option)
 
