@@ -5,8 +5,9 @@ import (
 )
 
 const (
-	DateFormat     = "2006-01-02"
-	DateTimeFormat = "2006-01-02 15:04:05"
+	DateFormat              = "2006-01-02"
+	DateTimeFormat          = "2006-01-02 15:04:05"
+	DateTimeFormat_YYYYMMDD = "20060102"
 )
 
 // FirstAndLastTimestampOfMonth 获取t时间所在月的开始和结束时间
