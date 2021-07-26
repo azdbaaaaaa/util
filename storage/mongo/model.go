@@ -5,7 +5,7 @@ import (
 )
 
 type Model struct {
-	Id         int64 `bson:"_id"`
+	ID         int64 `json:"id" bson:"_id"`
 	CreateTime int64 `json:"create_time" bson:"create_time"`
 	UpdateTime int64 `json:"update_time" bson:"update_time"`
 }
