@@ -20,6 +20,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.0.1-0.20190118093823-f849b5445de4
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 	github.com/leodido/go-urn v1.2.1 // indirect
+	github.com/qiniu/qmgo v0.9.4 // indirect
 	github.com/satori/go.uuid v1.2.0
 	github.com/tealeg/xlsx/v3 v3.2.3
 	github.com/ugorji/go v1.2.3 // indirect

@@ -71,3 +71,35 @@ func IsInOneDay(ts1, ts2 int64) (equal bool, err error) {
 	}
 	return t1 == t2, nil
 }
+
+func TodayInUTC() time.Time {
+	return time.Now().UTC()
+}
+
+func GetMonthStartEndInUTC(t time.Time) (time.Time, time.Time) {
+	t = t.UTC()
+	monthStartDay := t.AddDate(0, 0, -t.Day()+1)
+	monthStartTime := time.Date(monthStartDay.Year(), monthStartDay.Month(), monthStartDay.Day(), 0, 0, 0, 0, t.Location())
+	monthEndDay := monthStartTime.AddDate(0, 1, -1)
+	monthEndTime := time.Date(monthEndDay.Year(), monthEndDay.Month(), monthEndDay.Day(), 23, 59, 59, 0, t.Location())
+	return monthStartTime, monthEndTime
+}
+
+func GetLastMonthStartEndInUTC(t time.Time) (time.Time, time.Time) {
+	t = t.UTC()
+	monthStartDay := t.AddDate(0, -1, -t.Day()+1)
+	monthStartTime := time.Date(monthStartDay.Year(), monthStartDay.Month(), monthStartDay.Day(), 0, 0, 0, 0, t.Location())
+	monthEndDay := monthStartTime.AddDate(0, 1, -1)
+	monthEndTime := time.Date(monthEndDay.Year(), monthEndDay.Month(), monthEndDay.Day(), 23, 59, 59, 0, t.Location())
+	return monthStartTime, monthEndTime
+}
+
+func GetTodayStartTimeInUTC() int64 {
+	currentTime := time.Now().UTC()
+	return time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 0, 0, 0, 0, currentTime.Location()).UnixNano() / 1e6
+}
+
+func GetTodayEndTimeInUTC() int64 {
+	currentTime := time.Now().UTC()
+	return time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 23, 59, 59, 0, currentTime.Location()).UnixNano() / 1e6
+}
