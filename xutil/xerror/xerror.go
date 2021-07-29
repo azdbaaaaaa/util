@@ -10,6 +10,7 @@ type Error interface {
 	GetSubCode() int32
 	GetMessage() string
 	GetReason() string
+	WithReason(reason string) Error
 }
 
 type err struct {
