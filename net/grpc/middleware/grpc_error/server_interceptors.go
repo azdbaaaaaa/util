@@ -27,13 +27,11 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 			if err == gorm.ErrRecordNotFound {
 				return nil, status.Errorf(codes.NotFound, err.Error())
 			}
-			switch err.(type) {
-			case xerror.Error:
-				err = nil
-			default:
-				logger.Error("unknown error", zap.Errors("err", []error{err}), SystemField, ServerField)
-				return nil, status.Errorf(codes.Internal, err.Error())
+			if _, ok := err.(xerror.Error); ok {
+				return nil, nil
 			}
+			logger.Error("unknown error", zap.Errors("err", []error{err}), SystemField, ServerField)
+			return nil, status.Errorf(codes.Internal, err.Error())
 		}
 		return resp, err
 	}
@@ -50,13 +48,11 @@ func StreamServerInterceptor(logger *zap.Logger) grpc.StreamServerInterceptor {
 			if err == gorm.ErrRecordNotFound {
 				return status.Errorf(codes.NotFound, err.Error())
 			}
-			switch err.(type) {
-			case xerror.Error:
-				err = nil
-			default:
-				logger.Error("unknown error", zap.Errors("err", []error{err}), SystemField, ServerField)
-				return status.Errorf(codes.Internal, err.Error())
+			if _, ok := err.(xerror.Error); ok {
+				return nil
 			}
+			logger.Error("unknown error", zap.Errors("err", []error{err}), SystemField, ServerField)
+			return status.Errorf(codes.Internal, err.Error())
 		}
 		return err
 	}
