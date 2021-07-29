@@ -22,12 +22,11 @@ type err struct {
 }
 
 // New returns an error object for the code, message.
-func New(code, subCode int32, message, reason string) Error {
+func New(code, subCode int32, message string) Error {
 	return &err{
 		Code:    code,
 		SubCode: subCode,
 		Message: message,
-		Reason:  reason,
 	}
 }
 
