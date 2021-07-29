@@ -1,4 +1,4 @@
-package error
+package grpc_error
 
 import (
 	"context"
