@@ -25,13 +25,13 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 		resp, err := handler(ctx, req)
 		if err != nil {
 			if err == gorm.ErrRecordNotFound {
-				return nil, status.Errorf(codes.NotFound, err.Error())
+				return resp, status.Errorf(codes.NotFound, err.Error())
 			}
 			if _, ok := err.(xerror.Error); ok {
-				return nil, nil
+				return resp, nil
 			}
 			logger.Error("unknown error", zap.Errors("err", []error{err}), SystemField, ServerField)
-			return nil, status.Errorf(codes.Internal, err.Error())
+			return resp, status.Errorf(codes.Internal, err.Error())
 		}
 		return resp, err
 	}
