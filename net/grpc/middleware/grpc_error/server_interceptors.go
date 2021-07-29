@@ -31,7 +31,7 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 				return resp, nil
 			}
 			logger.Error("unknown error", zap.Errors("err", []error{err}), SystemField, ServerField)
-			return resp, status.Errorf(codes.Internal, err.Error())
+			return resp, status.Errorf(status.FromContextError(err).Code(), err.Error())
 		}
 		return resp, err
 	}
@@ -52,7 +52,7 @@ func StreamServerInterceptor(logger *zap.Logger) grpc.StreamServerInterceptor {
 				return nil
 			}
 			logger.Error("unknown error", zap.Errors("err", []error{err}), SystemField, ServerField)
-			return status.Errorf(codes.Internal, err.Error())
+			return status.Errorf(status.FromContextError(err).Code(), err.Error())
 		}
 		return err
 	}
