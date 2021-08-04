@@ -2,6 +2,7 @@ package grpc
 
 import (
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_device"
+	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_error"
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_in_param"
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_request_id"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
@@ -25,6 +26,7 @@ func NewServer(conf ServerConfig, logger *zap.Logger) (s *grpc.Server) {
 			grpc_request_id.StreamServerInterceptor(logger),
 			grpc_device.StreamServerInterceptor(logger),
 			grpc_in_param.StreamServerInterceptor(logger),
+			grpc_error.StreamServerInterceptor(logger),
 		)),
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
 			grpc_recovery.UnaryServerInterceptor(),
@@ -34,6 +36,7 @@ func NewServer(conf ServerConfig, logger *zap.Logger) (s *grpc.Server) {
 			grpc_request_id.UnaryServerInterceptor(logger),
 			grpc_device.UnaryServerInterceptor(logger),
 			grpc_in_param.UnaryServerInterceptor(logger),
+			grpc_error.UnaryServerInterceptor(logger),
 		)),
 	)
 	grpc_health_v1.RegisterHealthServer(s, health.NewServer())
