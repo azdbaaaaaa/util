@@ -103,3 +103,15 @@ func GetTodayEndTimeInUTC() int64 {
 	currentTime := time.Now().UTC()
 	return time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 23, 59, 59, 0, currentTime.Location()).UnixNano() / 1e6
 }
+
+func GetYesterdayStartTimeInUTC() int64 {
+	t := time.Now().UTC()
+	yesterdayDay := t.AddDate(0, 0, -1)
+	return time.Date(yesterdayDay.Year(), yesterdayDay.Month(), yesterdayDay.Day(), 0, 0, 0, 0, yesterdayDay.Location()).UnixNano() / 1e6
+}
+
+func GetYesterdayEndTimeInUTC() int64 {
+	t := time.Now().UTC()
+	yesterdayDay := t.AddDate(0, 0, -1)
+	return time.Date(yesterdayDay.Year(), yesterdayDay.Month(), yesterdayDay.Day(), 23, 59, 59, 0, yesterdayDay.Location()).UnixNano() / 1e6
+}
