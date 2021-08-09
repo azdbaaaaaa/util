@@ -27,6 +27,11 @@ enum ErrSubCode {
   err_sub_code_book_service = -101000; // 内容库服务
   err_sub_code_go_book_service = -200000; // golang版本内容库服务
   err_sub_code_agreement_service = -201000; // agreement service
+  err_sub_code_book_store_service = -202000; // golang 书城服务
+  err_sub_code_go_device_service = -203000; // golang 设备服务
+  err_sub_code_task_service = -204000; // 任务服务
+  err_sub_code_account_service = -205000; // 账户金额服务
+  err_sub_code_writing_contest_service = -206000;
 }
 
 message OutParam {
