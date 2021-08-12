@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-var src = []byte("imei|v1.0.0")
+var src = []byte("ffffffffd9eb0f22000000001a36c32f|1.6.2.5|720|1640|sdk|11|1|TECNO LC7|1625|sdk|1628672412294|0||||||GMT+08:00|Asia/Shanghai||1628672412295")
 
 var dst = []byte("A1bT6bpU9ZyrXYbFUAKS2w==")
 
@@ -17,6 +17,7 @@ func TestAesCBCEncrypt(t *testing.T) {
 	encrypted, err := openssl.AesCBCEncrypt(src, []byte(device.KEY_BASE64), []byte(device.ENCRYPT_IV), openssl.PKCS7_PADDING)
 	assert.Equal(t, err, nil)
 	assert.Equal(t, base64.StdEncoding.EncodeToString(encrypted), string(dst))
+	fmt.Println(base64.StdEncoding.EncodeToString(encrypted))
 }
 
 func TestAesCBCDecrypt(t *testing.T) {
