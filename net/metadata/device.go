@@ -11,7 +11,6 @@ const (
 	ContextKeyDevice = "device"
 )
 
-
 type Device struct {
 	IMEI         string            `json:"imei"`
 	VersionName  string            `json:"version_name"`
@@ -30,10 +29,10 @@ type Device struct {
 	CountryCode  string            `json:"country_code"`
 	City         string            `json:"city"`
 	MCC          string            `json:"mcc"`
-	TimeZone     string           `json:"time_zone"`
-	ZoneId       string           `json:"zone_id"`
-	GAID         string           `json:"gaid"`
-	Timestamp    int64            `json:"timestamp"`
+	TimeZone     string            `json:"time_zone"`
+	ZoneId       string            `json:"zone_id"`
+	GAID         string            `json:"gaid"`
+	Timestamp    int64             `json:"timestamp"`
 
 	UserAgent string `json:"user_agent"`
 }
@@ -61,13 +60,13 @@ func (d *Device) ValueFromIdx(i int, v string) (err error) {
 	case 1:
 		d.VersionName = v
 	case 2:
-		sw, err := strconv.ParseInt(v, 32, 10)
+		sw, err := strconv.ParseInt(v, 10, 32)
 		if err != nil {
 			return err
 		}
 		d.ScreenWidth = int32(sw)
 	case 3:
-		sh, err := strconv.ParseInt(v, 32, 10)
+		sh, err := strconv.ParseInt(v, 10, 32)
 		if err != nil {
 			return err
 		}
@@ -85,7 +84,7 @@ func (d *Device) ValueFromIdx(i int, v string) (err error) {
 	case 7:
 		d.PhoneModel = v
 	case 8:
-		vc, err := strconv.ParseInt(v, 32, 10)
+		vc, err := strconv.ParseInt(v, 10, 32)
 		if err != nil {
 			return err
 		}
@@ -93,13 +92,13 @@ func (d *Device) ValueFromIdx(i int, v string) (err error) {
 	case 9:
 		d.Channel = v
 	case 10:
-		ct, err := strconv.ParseInt(v, 64, 10)
+		ct, err := strconv.ParseInt(v, 10, 64)
 		if err != nil {
 			return err
 		}
 		d.ClientTime = ct
 	case 11:
-		ie, err := strconv.ParseInt(v, 32, 10)
+		ie, err := strconv.ParseInt(v, 10, 32)
 		if err != nil {
 			return err
 		}
@@ -125,7 +124,7 @@ func (d *Device) ValueFromIdx(i int, v string) (err error) {
 			d.GAID = v
 		}
 	case 20:
-		ts, err := strconv.ParseInt(v, 64, 10)
+		ts, err := strconv.ParseInt(v, 10, 64)
 		if err != nil {
 			return err
 		}
