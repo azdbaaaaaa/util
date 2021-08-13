@@ -28,8 +28,7 @@ func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 			}
 		}
 		if len(data) != 0 {
-			md := metadata.Pairs(metadata2.ContextKeyDevice, string(data))
-			ctx = metadata.NewOutgoingContext(ctx, md)
+			ctx = metadata.AppendToOutgoingContext(ctx, metadata2.ContextKeyDevice, string(data))
 		}
 
 		err := invoker(ctx, method, req, reply, cc, opts...)

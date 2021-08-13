@@ -36,8 +36,7 @@ func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 			ClientField,
 			zap.String("req_id", reqID),
 		)
-		md := metadata.Pairs(metadata2.ContextKeyReqID, reqID)
-		ctx = metadata.NewOutgoingContext(ctx, md)
+		ctx = metadata.AppendToOutgoingContext(ctx, metadata2.ContextKeyReqID, reqID)
 		err := invoker(ctx, method, req, reply, cc, opts...)
 		return err
 	}
