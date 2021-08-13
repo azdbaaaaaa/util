@@ -18,17 +18,21 @@ var (
 func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
 		logger.Debug("start in_param client interceptor", ClientField)
+		var (
+			data []byte
+		)
 		if v := ctx.Value(metadata2.ContextKeyInParam); v != nil {
 			if inParam, ok := v.(metadata2.InParam); ok {
-				data, err := json.Marshal(inParam)
+				var err error
+				data, err = json.Marshal(inParam)
 				if err != nil {
 					logger.Error("in_param marshal error", ClientField, zap.String("key", metadata2.ContextKeyInParam))
-				} else {
-					logger.Debug("in_param into metadata", ClientField)
-					md := metadata.Pairs(metadata2.ContextKeyInParam, string(data))
-					ctx = metadata.NewOutgoingContext(ctx, md)
 				}
 			}
+		}
+		if len(data) != 0 {
+			md := metadata.Pairs(metadata2.ContextKeyInParam, string(data))
+			ctx = metadata.NewOutgoingContext(ctx, md)
 		}
 
 		err := invoker(ctx, method, req, reply, cc, opts...)

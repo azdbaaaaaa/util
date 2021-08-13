@@ -8,6 +8,7 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
+	"path"
 )
 
 var (
@@ -21,6 +22,8 @@ var (
 // UnaryServerInterceptor returns a new unary server interceptors that adds zap.Logger to the context.
 func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+		service := path.Dir(info.FullMethod)[1:]
+		methodName := path.Base(info.FullMethod)
 		reqID := ""
 		if md, ok := metadata.FromIncomingContext(ctx); ok {
 			if md[metadata2.ContextKeyReqID] != nil && len(md[metadata2.ContextKeyReqID]) > 0 {
@@ -31,6 +34,13 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 			reqID = uuid.NewV4().String()
 			//logger.Debug("not found req_id generate one", SystemField, ServerField, zap.String("uuid", reqID))
 		}
+		logger.Info("finished server unary call interceptor",
+			zap.String("grpc.service", service),
+			zap.String("grpc.method", methodName),
+			SystemField,
+			ServerField,
+			zap.String("req_id", reqID),
+		)
 		ctx = context.WithValue(ctx, metadata2.ContextKeyReqID, reqID)
 		resp, err := handler(ctx, req)
 		return resp, err

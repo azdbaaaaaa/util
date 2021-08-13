@@ -28,12 +28,12 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 			}
 		}
 		if deviceStr != "" {
-			device := &metadata2.Device{}
-			err := json.Unmarshal([]byte(deviceStr), device)
+			device := metadata2.Device{}
+			err := json.Unmarshal([]byte(deviceStr), &device)
 			if err != nil {
 				logger.Error("device unmarshal", zap.String("key", metadata2.ContextKeyDevice), SystemField, ServerField)
 			} else {
-				ctx = context.WithValue(ctx, metadata2.ContextKeyDevice, *device)
+				ctx = context.WithValue(ctx, metadata2.ContextKeyDevice, device)
 			}
 		}
 		resp, err := handler(ctx, req)

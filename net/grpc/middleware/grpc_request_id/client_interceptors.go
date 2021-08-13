@@ -7,6 +7,7 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
+	"path"
 )
 
 var (
@@ -14,21 +15,27 @@ var (
 	ClientField = zap.String("span.kind", "client")
 )
 
-
 // UnaryClientInterceptor returns a new unary client interceptor that optionally logs the execution of external gRPC calls.
 func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
-		logger.Debug("start req_id client interceptor", ClientField)
+		logger.Info("start req_id client interceptor", ClientField)
+		service := path.Dir(method)[1:]
+		methodName := path.Base(method)
 		reqID := ""
 		v := ctx.Value(metadata2.ContextKeyReqID)
 		if v == nil {
 			reqID = uuid.NewV4().String()
-			//logger.Debug("not found req_id generate one", ClientField, zap.String("uuid", reqID))
+			logger.Debug("not found req_id generate one", ClientField, zap.String("uuid", reqID))
 			ctx = context.WithValue(ctx, metadata2.ContextKeyReqID, reqID)
 		} else {
 			reqID = v.(string)
 		}
-		logger.Debug("req_id into metadata", ClientField)
+		logger.Info("finished client unary call interceptor",
+			zap.String("grpc.service", service),
+			zap.String("grpc.method", methodName),
+			ClientField,
+			zap.String("req_id", reqID),
+		)
 		md := metadata.Pairs(metadata2.ContextKeyReqID, reqID)
 		ctx = metadata.NewOutgoingContext(ctx, md)
 		err := invoker(ctx, method, req, reply, cc, opts...)
@@ -43,7 +50,7 @@ func StreamClientInterceptor(logger *zap.Logger) grpc.StreamClientInterceptor {
 		v := ctx.Value(metadata2.ContextKeyReqID)
 		if v == nil {
 			reqID = uuid.NewV4().String()
-			//logger.Debug("not found req_id generate one", ClientField, zap.String("uuid", reqID))
+			logger.Debug("not found req_id generate one", ClientField, zap.String("uuid", reqID))
 			ctx = context.WithValue(ctx, metadata2.ContextKeyReqID, reqID)
 		} else {
 			reqID = v.(string)
