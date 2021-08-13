@@ -23,8 +23,8 @@ func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 				if err != nil {
 					logger.Error("device marshal error", ClientField, zap.String("key", metadata2.ContextKeyDevice))
 				} else {
-					md := metadata.New(map[string]string{})
-					md.Set(metadata2.ContextKeyDevice, string(data))
+					logger.Debug("device into metadata", ClientField)
+					md := metadata.Pairs(metadata2.ContextKeyDevice, string(data))
 					ctx = metadata.NewOutgoingContext(ctx, md)
 				}
 			}

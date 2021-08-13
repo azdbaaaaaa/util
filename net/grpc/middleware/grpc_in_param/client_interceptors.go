@@ -17,14 +17,15 @@ var (
 // UnaryClientInterceptor returns a new unary client interceptor that optionally logs the execution of external gRPC calls.
 func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
+		logger.Debug("start in_param client interceptor", ClientField)
 		if v := ctx.Value(metadata2.ContextKeyInParam); v != nil {
 			if inParam, ok := v.(metadata2.InParam); ok {
 				data, err := json.Marshal(inParam)
 				if err != nil {
 					logger.Error("in_param marshal error", ClientField, zap.String("key", metadata2.ContextKeyInParam))
 				} else {
-					md := metadata.New(map[string]string{})
-					md.Set(metadata2.ContextKeyInParam, string(data))
+					logger.Debug("in_param into metadata", ClientField)
+					md := metadata.Pairs(metadata2.ContextKeyInParam, string(data))
 					ctx = metadata.NewOutgoingContext(ctx, md)
 				}
 			}
