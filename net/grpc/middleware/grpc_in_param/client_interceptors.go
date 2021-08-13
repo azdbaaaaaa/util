@@ -18,9 +18,7 @@ var (
 func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
 		logger.Debug("start in_param client interceptor", ClientField)
-		var (
-			data []byte
-		)
+		data := make([]byte, 0)
 		if v := ctx.Value(metadata2.ContextKeyInParam); v != nil {
 			if inParam, ok := v.(metadata2.InParam); ok {
 				var err error
