@@ -76,6 +76,11 @@ func TodayInUTC() time.Time {
 	return time.Now().UTC()
 }
 
+func YesterdayInUTC() time.Time {
+	currentTime := time.Now().UTC()
+	return currentTime.AddDate(0, 0, -1)
+}
+
 func GetMonthStartEndInUTC(t time.Time) (time.Time, time.Time) {
 	t = t.UTC()
 	monthStartDay := t.AddDate(0, 0, -t.Day()+1)
