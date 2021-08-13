@@ -38,6 +38,7 @@ type Device struct {
 }
 
 func New(text string) (d *Device) {
+	d = &Device{}
 	parts := strings.Split(text, "|")
 	for i, v := range parts {
 		v = strings.TrimSpace(v)
