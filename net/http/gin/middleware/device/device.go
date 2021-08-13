@@ -44,9 +44,13 @@ func SetDevice(c *gin.Context) {
 			c.Next()
 			return
 		}
+
+		d := metadata2.New(string(decrypted))
+
 		// 获取userAgent的header
-		hua := c.GetHeader(HeaderUserAgent)
-		c.Set(metadata2.ContextKeyDevice, metadata2.New(string(decrypted), hua))
+		userAgent := c.GetHeader(HeaderUserAgent)
+		d.UserAgent = userAgent
+		c.Set(metadata2.ContextKeyDevice, *d)
 	}
 	c.Next()
 	return

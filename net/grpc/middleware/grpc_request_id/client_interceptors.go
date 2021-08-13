@@ -54,12 +54,8 @@ func StreamClientInterceptor(logger *zap.Logger) grpc.StreamClientInterceptor {
 		} else {
 			reqID = v.(string)
 		}
-		md := metadata.New(map[string]string{})
-		md.Set(metadata2.ContextKeyReqID, reqID)
-		ctx = metadata.NewOutgoingContext(ctx, md)
+		ctx = metadata.AppendToOutgoingContext(ctx, metadata2.ContextKeyReqID, reqID)
 		clientStream, err := streamer(ctx, desc, cc, method, opts...)
-		//newCtx := ctxzap.ToContext(ctx, logger.With(fields...))
-		//logFinalClientLine(newCtx, o, startTime, err, "finished client streaming call")
 		return clientStream, err
 	}
 }

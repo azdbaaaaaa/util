@@ -37,10 +37,7 @@ type Device struct {
 	UserAgent string `json:"user_agent"`
 }
 
-func New(text string, userAgent string) (d Device) {
-	d = Device{
-		UserAgent: userAgent,
-	}
+func New(text string) (d *Device) {
 	parts := strings.Split(text, "|")
 	for i, v := range parts {
 		v = strings.TrimSpace(v)
@@ -53,7 +50,7 @@ func New(text string, userAgent string) (d Device) {
 	return
 }
 
-func (d Device) ValueFromIdx(i int, v string) (err error) {
+func (d *Device) ValueFromIdx(i int, v string) (err error) {
 	switch i {
 	case 0:
 		d.IMEI = v
@@ -133,7 +130,7 @@ func (d Device) ValueFromIdx(i int, v string) (err error) {
 	return
 }
 
-func (d Device) GetAreaID() common.AreaIdType {
+func (d *Device) GetAreaID() common.AreaIdType {
 	switch d.ClientType {
 	case common.ClientType_CLIENT_TYPE_IOS:
 		return common.AreaIdType_AREA_ID_IOS
