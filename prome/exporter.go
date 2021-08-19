@@ -1,11 +1,9 @@
 package prome
 
 import (
-	"fmt"
+	"github.com/azdbaaaaaa/util/log"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/zap"
-	"kfc/pkg/log"
 	"net/http"
 )
 
@@ -76,7 +74,7 @@ func (pe *PromeExporter) reset() {
 func (pe *PromeExporter) Collect(ch chan<- prometheus.Metric) {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Info("prometheus", zap.String("err", "collect"))
+			log.Infow("prometheus", zap.String("err", "collect"))
 		}
 	}()
 
@@ -108,24 +106,28 @@ func (pe *PromeExporter) Collect(ch chan<- prometheus.Metric) {
 		pe.avgCounter.Collect(ch)
 	}
 	ch <- pe.up
-	log.Info("prometheus", zap.Bool("success", true))
+	log.Infow("prometheus", zap.Bool("success", true))
 }
 
-func (pe *PromeExporter) ServerStart(port int) error {
-	err := prometheus.Register(pe)
-	if err != nil {
-		return err
-	}
-	addr := fmt.Sprintf(":%d", port)
-	log.Info("prometheus", zap.String("addr", addr))
-	pe.srv = &http.Server{Addr: addr, Handler: promhttp.Handler()}
-	return pe.srv.ListenAndServe()
-}
+//func (pe *PromeExporter) ServerStart(port int) error {
+//	err := prometheus.Register(pe)
+//	if err != nil {
+//		return err
+//	}
+//	addr := fmt.Sprintf(":%d", port)
+//	log.Infow("prometheus", zap.String("addr", addr))
+//	pe.srv = &http.Server{Addr: addr, Handler: promhttp.Handler()}
+//	return pe.srv.ListenAndServe()
+//}
+//
+//func (pe *PromeExporter) ServerClose() error {
+//	log.Infow("prometheus", zap.Bool("server_close", true))
+//	return pe.srv.Close()
+//}
 
-func (pe *PromeExporter) ServerClose() error {
-	log.Info("prometheus", zap.Bool("server_close", true))
-	return pe.srv.Close()
-}
+//func (pe *PromeExporter) Register(router *gin.RouterGroup)  {
+//	router.Handle()
+//}
 
 //func init() {
 //	promeExport := NewExporter("prome")
