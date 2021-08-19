@@ -7,7 +7,7 @@ import (
 
 func New(conf *qmgo.Config) (*qmgo.QmgoClient, error) {
 	ctx := context.Background()
-	cli, err := qmgo.Open(ctx, &qmgo.Config{Uri: conf.Uri})
+	cli, err := qmgo.Open(ctx, conf)
 	if err != nil {
 		return nil, err
 	}
