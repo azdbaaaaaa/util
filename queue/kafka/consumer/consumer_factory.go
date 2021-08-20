@@ -11,6 +11,7 @@ import (
 
 type ConsumerGroup struct {
 	group sarama.ConsumerGroup
+	conf  *Config
 }
 
 func Run(ctx context.Context, conf *Config, cs ConsumerService) {
@@ -20,11 +21,11 @@ func Run(ctx context.Context, conf *Config, cs ConsumerService) {
 }
 
 func New(conf *Config) *ConsumerGroup {
-	return &ConsumerGroup{group: NewConsumerGroup(conf)}
+	return &ConsumerGroup{group: NewConsumerGroup(conf), conf: conf}
 }
 
 func (CG *ConsumerGroup) Consume(topics []string, ctx context.Context, cs ConsumerService) {
-	var consumer = ConsumerGroupHandler{cs: cs}
+	var consumer = ConsumerGroupHandler{cs: cs, conf: CG.conf}
 	defer CG.group.Close()
 	for {
 		if err := CG.group.Consume(ctx, topics, &consumer); err != nil {
@@ -39,7 +40,8 @@ func (CG *ConsumerGroup) Consume(topics []string, ctx context.Context, cs Consum
 }
 
 type ConsumerGroupHandler struct {
-	cs ConsumerService
+	cs   ConsumerService
+	conf *Config
 }
 
 func (CGH *ConsumerGroupHandler) Setup(sarama.ConsumerGroupSession) error {
@@ -62,8 +64,13 @@ func (CGH *ConsumerGroupHandler) ConsumeClaim(session sarama.ConsumerGroupSessio
 			lastLagTime = nowTs
 		}
 		err := CGH.cs.ReceiveMessages(message)
-		if err == nil {
-			session.MarkMessage(message, "")
+		if err != nil {
+			log.Errorf("ReceiveMessagesError", "message", *message)
+			continue
+		}
+		session.MarkMessage(message, "")
+		if CGH.conf.AutoCommit == false {
+			session.Commit()
 		}
 	}
 
