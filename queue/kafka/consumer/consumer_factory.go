@@ -62,7 +62,7 @@ func (CGH *ConsumerGroupHandler) ConsumeClaim(session sarama.ConsumerGroupSessio
 			lastLagTime = nowTs
 		}
 		err := CGH.cs.ReceiveMessages(message)
-		if err != nil {
+		if err == nil {
 			session.MarkMessage(message, "")
 		}
 	}
