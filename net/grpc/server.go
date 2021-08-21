@@ -12,14 +12,20 @@ import (
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/health"
 	"google.golang.org/grpc/health/grpc_health_v1"
+	"google.golang.org/grpc/status"
 )
 
 func NewServer(conf ServerConfig, logger *zap.Logger) (s *grpc.Server) {
 	s = grpc.NewServer(
 		grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
-			grpc_recovery.StreamServerInterceptor(),
+			grpc_recovery.StreamServerInterceptor([]grpc_recovery.Option{
+				grpc_recovery.WithRecoveryHandler(func(p interface{}) (err error) {
+					return status.Errorf(codes.Unknown, "panic triggered: %v", p)
+				}),
+			}...),
 			grpc_prometheus.StreamServerInterceptor,
 			grpc_zap.StreamServerInterceptor(logger),
 			grpc_validator.StreamServerInterceptor(),
@@ -29,7 +35,11 @@ func NewServer(conf ServerConfig, logger *zap.Logger) (s *grpc.Server) {
 			grpc_error.StreamServerInterceptor(logger),
 		)),
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
-			grpc_recovery.UnaryServerInterceptor(),
+			grpc_recovery.UnaryServerInterceptor([]grpc_recovery.Option{
+				grpc_recovery.WithRecoveryHandler(func(p interface{}) (err error) {
+					return status.Errorf(codes.Unknown, "panic triggered: %v", p)
+				}),
+			}...),
 			grpc_prometheus.UnaryServerInterceptor,
 			grpc_zap.UnaryServerInterceptor(logger),
 			grpc_validator.UnaryServerInterceptor(),
