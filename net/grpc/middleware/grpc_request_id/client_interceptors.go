@@ -18,14 +18,14 @@ var (
 // UnaryClientInterceptor returns a new unary client interceptor that optionally logs the execution of external gRPC calls.
 func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
-		logger.Info("start req_id client interceptor", ClientField)
+		//logger.Info("start req_id client interceptor", ClientField)
 		service := path.Dir(method)[1:]
 		methodName := path.Base(method)
 		reqID := ""
 		v := ctx.Value(metadata2.ContextKeyReqID)
 		if v == nil {
 			reqID = uuid.NewV4().String()
-			logger.Debug("not found req_id generate one", ClientField, zap.String("uuid", reqID))
+			//logger.Debug("not found req_id generate one", ClientField, zap.String("uuid", reqID))
 			ctx = context.WithValue(ctx, metadata2.ContextKeyReqID, reqID)
 		} else {
 			reqID = v.(string)
@@ -49,7 +49,7 @@ func StreamClientInterceptor(logger *zap.Logger) grpc.StreamClientInterceptor {
 		v := ctx.Value(metadata2.ContextKeyReqID)
 		if v == nil {
 			reqID = uuid.NewV4().String()
-			logger.Debug("not found req_id generate one", ClientField, zap.String("uuid", reqID))
+			//logger.Debug("not found req_id generate one", ClientField, zap.String("uuid", reqID))
 			ctx = context.WithValue(ctx, metadata2.ContextKeyReqID, reqID)
 		} else {
 			reqID = v.(string)
