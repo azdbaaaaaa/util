@@ -1,7 +1,9 @@
 package metadata
 
 import (
+	"context"
 	"github.com/azdbaaaaaa/util/proto/common"
+	"github.com/azdbaaaaaa/util/xutil/xerror"
 )
 
 const (
@@ -21,4 +23,13 @@ type InParam struct {
 	//Language string           `json:"language,omitempty"`
 	//Country  string           `json:"country,omitempty"`
 	//AuthorId int64            `json:"author_id,omitempty"`
+}
+
+func InParamFromContext(ctx context.Context) (i InParam, err error) {
+	if v := ctx.Value(ContextKeyInParam); v != nil {
+		if i, ok := v.(InParam); ok {
+			return i, nil
+		}
+	}
+	return i, xerror.ErrNoInParamError
 }

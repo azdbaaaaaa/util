@@ -1,8 +1,10 @@
 package metadata
 
 import (
+	"context"
 	"github.com/azdbaaaaaa/util/log"
 	"github.com/azdbaaaaaa/util/proto/common"
+	"github.com/azdbaaaaaa/util/xutil/xerror"
 	"strconv"
 	"strings"
 )
@@ -49,6 +51,15 @@ func New(text string) (d *Device) {
 		}
 	}
 	return
+}
+
+func DeviceFromContext(ctx context.Context) (d Device, err error) {
+	if v := ctx.Value(ContextKeyDevice); v != nil {
+		if d, ok := v.(Device); ok {
+			return d, nil
+		}
+	}
+	return d,xerror.ErrNoDeviceError
 }
 
 func (d *Device) ValueFromIdx(i int, v string) (err error) {

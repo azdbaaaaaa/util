@@ -20,6 +20,9 @@ enum ErrCode {
   client_timeout = -100006; // 服务调用超时
   client_exception = -100007; // 服务调用异常
   client_broken = -100008; // 服务熔断
+
+  no_device_error = -200009; // context 中没有device
+  no_in_param_error = -200010; // context 中没有in_param
 }
 
 enum ErrSubCode {
