@@ -38,7 +38,7 @@ func Run(httpConf net_http.ServerConfig, grpcConf net_grpc.ServerConfig, log *za
 		}, func(error) {
 			log.Info("http shutdown running")
 			if httpConf.ShutdownTimeout == 0 {
-				httpConf.ShutdownTimeout = 10 // default 10s
+				httpConf.ShutdownTimeout = net_http.DefaultClientDialTimeoutInSec
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), time.Duration(httpConf.ShutdownTimeout)*time.Second)
 			defer cancel()

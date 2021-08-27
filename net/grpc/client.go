@@ -13,19 +13,6 @@ import (
 	"time"
 )
 
-const (
-	DefaultClientDialTimeoutInSec = 10
-)
-
-type ServerConfig struct {
-	Addr string `json:"addr"`
-}
-
-type ClientConfig struct {
-	Addr        string `json:"addr"`
-	DialTimeout int    `json:"dial_timeout" mapstructure:"dial_timeout"`
-}
-
 func NewClientConn(conf ClientConfig, logger *zap.Logger) (conn *grpc.ClientConn, err error) {
 	if conf.DialTimeout == 0 {
 		conf.DialTimeout = DefaultClientDialTimeoutInSec
