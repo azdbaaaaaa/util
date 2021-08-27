@@ -18,7 +18,7 @@ import (
 	"time"
 )
 
-func NewServer(httpConf net_http.ServerConfig, grpcConf net_grpc.ServerConfig, log *zap.Logger, register func()) () {
+func Run(httpConf net_http.ServerConfig, grpcConf net_grpc.ServerConfig, log *zap.Logger, register func()) () {
 	var g run.Group
 	{
 		r := gin.Default()
