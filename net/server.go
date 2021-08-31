@@ -10,6 +10,7 @@ import (
 	"github.com/oklog/run"
 	ginprometheus "github.com/zsais/go-gin-prometheus"
 	"go.uber.org/zap"
+	"google.golang.org/grpc"
 	"net"
 	"net/http"
 	"os"
@@ -18,7 +19,7 @@ import (
 	"time"
 )
 
-func Run(httpConf net_http.ServerConfig, grpcConf net_grpc.ServerConfig, log *zap.Logger, register func()) () {
+func Run(httpConf net_http.ServerConfig, grpcConf net_grpc.ServerConfig, log *zap.Logger, register func(s *grpc.Server)) () {
 	var g run.Group
 	{
 		r := gin.Default()
@@ -57,7 +58,7 @@ func Run(httpConf net_http.ServerConfig, grpcConf net_grpc.ServerConfig, log *za
 		g.Add(func() error {
 			log.Info("transport HTTP ", zap.String("addr", grpcConf.Addr))
 			s := net_grpc.NewServer(grpcConf, log)
-			register()
+			register(s)
 			return s.Serve(grpcListener)
 		}, func(error) {
 			log.Info("gRPC Listener closing")
