@@ -3,6 +3,7 @@ package device
 import (
 	"encoding/base64"
 	"fmt"
+	"github.com/azdbaaaaaa/util/log"
 	metadata2 "github.com/azdbaaaaaa/util/net/metadata"
 	"github.com/forgoer/openssl"
 	"github.com/go-playground/assert/v2"
@@ -18,12 +19,17 @@ func TestDecode(t *testing.T) {
 	//wdtoken := "6owSdLMdAElY7xxSiQMVn4BFclqO9oRVuRxMrDPDtzQnErIvkBL7KXJYj3FBauaPsMH5M0eolTKcQYngjmHbsVBG93hIfLTrwTklniykUVtiD+7jF9+79lp7Iujjg0yqoyJbSzmLZBhFP78KwgdzzwU7BrkB+plhuCQNCwi6fRBg5irK8wiSmsKrRAKp52yl"
 	decrypted, err := Decode(dst)
 	assert.Equal(t, err, nil)
-	d := metadata2.New(string(decrypted), "user_agent")
+	d := metadata2.New(string(decrypted))
 	assert.NotEqual(t, d, nil)
 }
 
 func TestAesCBCEncrypt(t *testing.T) {
-	encrypted, err := openssl.AesCBCEncrypt(src, []byte(KEY_BASE64), []byte(ENCRYPT_IV), openssl.PKCS7_PADDING)
+	key, err := base64.StdEncoding.DecodeString(KEY_BASE64)
+	if err != nil {
+		log.Errorw("base64.StdEncoding.DecodeString KEY_BASE64 error", "err", err, "dst", dst)
+		return
+	}
+	encrypted, err := openssl.AesCBCEncrypt(src, key, []byte(ENCRYPT_IV), openssl.PKCS5_PADDING)
 	assert.Equal(t, err, nil)
 	token := base64.StdEncoding.EncodeToString(encrypted)
 	fmt.Println(token)

@@ -27,7 +27,12 @@ func Decode(dst string) (decrypted []byte, err error) {
 		log.Errorw("base64.StdEncoding.DecodeString error", "err", err, "dst", dst)
 		return
 	}
-	decrypted, err = openssl.AesCBCDecrypt(decoded, []byte(KEY_BASE64), []byte(ENCRYPT_IV), openssl.PKCS7_PADDING)
+	key, err := base64.StdEncoding.DecodeString(KEY_BASE64)
+	if err != nil {
+		log.Errorw("base64.StdEncoding.DecodeString KEY_BASE64 error", "err", err, "dst", dst)
+		return
+	}
+	decrypted, err = openssl.AesCBCDecrypt(decoded, key, []byte(ENCRYPT_IV), openssl.PKCS5_PADDING)
 	if err != nil {
 		log.Errorw("openssl.AesCBCDecrypt error", "err", err, "dst", dst)
 		return
