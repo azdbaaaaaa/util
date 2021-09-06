@@ -35,7 +35,9 @@ enum ErrSubCode {
   err_sub_code_task_service = 204; // 任务服务
   err_sub_code_account_service = 205; // 账户金额服务
   err_sub_code_writing_contest_service = 206;
-  err_sub_code_go_user_service = 207;
+  err_sub_code_go_user_service = 207;  // 用户服务
+  err_sub_code_balance_service = 208;  // 流水管理服务
+  err_sub_code_track_service = 209;  // 埋点上报服务
 }
 
 message OutParam {
