@@ -24,9 +24,6 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		resp, err := handler(ctx, req)
 		if err != nil {
-			//if err == gorm.ErrRecordNotFound || err == qmgo.ErrNoSuchDocuments {
-			//	return resp, status.Errorf(codes.NotFound, err.Error())
-			//}
 			if _, ok := err.(xerror.Error); ok {
 				return resp, nil
 			}
