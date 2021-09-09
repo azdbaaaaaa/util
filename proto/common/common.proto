@@ -54,6 +54,14 @@ enum AppIdType {
   APP_ID_LIGHTHOUSE = 100;
 }
 
+enum AreaIdType {
+  AREA_ID_UNKNOWN = 0;
+  AREA_ID_ANDROID = 30;
+  AREA_ID_IOS = 40;
+  AREA_ID_WEB = 99;
+  AREA_ID_H5 = 98;
+}
+
 enum LanguageType {
   LAN_ZH = 0; // 中文
   LAN_EN = 1; // 英文

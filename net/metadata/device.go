@@ -141,3 +141,14 @@ func (d *Device) ValueFromIdx(i int, v string) (err error) {
 	}
 	return
 }
+
+func (d *Device) GetAreaID() common.AreaIdType {
+	switch d.ClientType {
+	case common.ClientType_CLIENT_TYPE_IOS:
+		return common.AreaIdType_AREA_ID_IOS
+	case common.ClientType_CLIENT_TYPE_ANDROID:
+		return common.AreaIdType_AREA_ID_ANDROID
+	default:
+		return common.AreaIdType_AREA_ID_ANDROID
+	}
+}
