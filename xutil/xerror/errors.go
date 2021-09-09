@@ -11,4 +11,5 @@ var (
 
 	ErrNoDeviceError = New(int32(common.ErrCode_no_device_error), int32(common.ErrSubCode_err_sub_code_unknown), common.ErrCode_no_device_error.String())
 	ErrNoInParamError = New(int32(common.ErrCode_no_in_param_error), int32(common.ErrSubCode_err_sub_code_unknown), common.ErrCode_no_in_param_error.String())
+	ErrNotFound = New(int32(common.ErrCode_not_found), int32(common.ErrSubCode_err_sub_code_unknown), common.ErrCode_not_found.String())
 )
