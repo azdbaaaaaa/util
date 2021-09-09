@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-var src = []byte("ffffffffd9eb0f22000000001a36c32f|1.6.2.5|720|1640|sdk|11|1|TECNO LC7|1625|sdk|1628672277370|0||||||GMT+08:00|Asia/Shanghai||1628672277371")
+var src = []byte("000000003fe4c136ffffffffe5f22f86|1.6.2.5|720|1640|sdk_phoenix|11|1|TECNO LC7|1625|sdk_phoenix|1628672277370|0||||||GMT+08:00|Asia/Shanghai||1628672277371")
 
 var dst = string("e17mw+tAoqZxUmnnyzFw0zzzaI2a7inFFjIb2zMt1OJrO1yGZVpcpOFuDSF+fETEUpWUDFvzu3YQbWuaZn2DkeaLEtPdiG7+NliL7LV9Ui2BnnRe506YGT5fv60O/bogXGwvF+kqhbyKWeIC1Idg/+R+P+iLwNCNocb6k9ZfzswMwoxcC1jsYQFrJ3H1bRH6")
 

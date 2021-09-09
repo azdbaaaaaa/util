@@ -14,27 +14,27 @@ const (
 )
 
 type Device struct {
-	IMEI         string            `json:"imei"`
-	VersionName  string            `json:"version_name"`
-	ScreenWidth  int32             `json:"screen_width"`
-	ScreenHeight int32             `json:"screen_height"`
-	Source       string            `json:"source"`
-	SDK          string            `json:"sdk"`
-	ClientType   common.ClientType `json:"client_type"`
-	PhoneModel   string            `json:"phone_model"`
-	VersionCode  int32             `json:"version_code"`
-	Channel      string            `json:"channel"`
-	ClientTime   int64             `json:"client_time"`
-	IsEmulator   int32             `json:"is_emulator"`
-	Longitude    string            `json:"longitude"`
-	Latitude     string            `json:"latitude"`
-	CountryCode  string            `json:"country_code"`
-	City         string            `json:"city"`
-	MCC          string            `json:"mcc"`
-	TimeZone     string            `json:"time_zone"`
-	ZoneId       string            `json:"zone_id"`
-	GAID         string            `json:"gaid"`
-	Timestamp    int64             `json:"timestamp"`
+	IMEI         string            `json:"imei"`          // deviceId
+	VersionName  string            `json:"version_name"`  // 版本号 1.6.2.5
+	ScreenWidth  int32             `json:"screen_width"`  // 屏幕宽度
+	ScreenHeight int32             `json:"screen_height"` // 屏幕高度
+	Source       string            `json:"source"`        // 第三方使用的source
+	SDK          string            `json:"sdk"`           // 字符串
+	ClientType   common.ClientType `json:"client_type"`   // 客户端类型  1：Android 5：iOS
+	PhoneModel   string            `json:"phone_model"`   // 手机型号
+	VersionCode  int32             `json:"version_code"`  // 版本号的数字版本，1.6.0以后都是4位，老版本是3位
+	Channel      string            `json:"channel"`       // sdk为sdk_phoenix
+	ClientTime   int64             `json:"client_time"`   // 客户端时间戳
+	IsEmulator   int32             `json:"is_emulator"`   // 是否模拟器
+	Longitude    string            `json:"longitude"`     // 经度
+	Latitude     string            `json:"latitude"`      // 纬度
+	CountryCode  string            `json:"country_code"`  // 国家
+	City         string            `json:"city"`          // 城市
+	MCC          string            `json:"mcc"`           // 运营商编码
+	TimeZone     string            `json:"time_zone"`     // 时区 GMT+08:00
+	ZoneId       string            `json:"zone_id"`       // 地区 Asia/Shanghai
+	GAID         string            `json:"gaid"`          // gaid
+	Timestamp    int64             `json:"timestamp"`     // 同client_time 客户端时间戳
 
 	UserAgent string `json:"user_agent"`
 }
@@ -59,7 +59,7 @@ func DeviceFromContext(ctx context.Context) (d Device, err error) {
 			return d, nil
 		}
 	}
-	return d,xerror.ErrNoDeviceError
+	return d, xerror.ErrNoDeviceError
 }
 
 func (d *Device) ValueFromIdx(i int, v string) (err error) {

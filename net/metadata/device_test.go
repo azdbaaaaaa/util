@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-var src = []byte("ffffffffd9eb0f22000000001a36c32f|1.6.2.5|720|1640|sdk|11|1|TECNO LC7|1625|sdk|1628672412294|0||||||GMT+08:00|Asia/Shanghai||1628672412295")
+var src = []byte("ffffffffd9eb0f22000000001a36c32f|1.6.2.5|720|1640|sdk_phoenix|11|1|TECNO LC7|1625|sdk_phoenix|1628672412294|0||||||GMT+08:00|Asia/Shanghai||1628672412295")
 
 var dst = []byte("A1bT6bpU9ZyrXYbFUAKS2w==")
 
