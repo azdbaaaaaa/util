@@ -49,7 +49,7 @@ func SetDevice(c *gin.Context) {
 		if err != nil {
 			log.Errorw("SetDevice.Decode", "err", err, "device_header", hd)
 			err = xerror.ErrDeviceInvalidError
-			c.Abort()
+			c.AbortWithStatus(400)
 			return
 		}
 		d := metadata2.New(string(decrypted))
