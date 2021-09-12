@@ -24,6 +24,7 @@ enum ErrCode {
   no_device_error = -200000; // context 中没有device
   no_in_param_error = -200001; // context 中没有in_param
   not_found = -200002; // not found
+  device_invalid = -200003; // device invalid
 }
 
 enum ErrSubCode {

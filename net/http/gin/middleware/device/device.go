@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"github.com/azdbaaaaaa/util/log"
 	metadata2 "github.com/azdbaaaaaa/util/net/metadata"
+	"github.com/azdbaaaaaa/util/xutil/xerror"
 	"github.com/forgoer/openssl"
 	"github.com/gin-gonic/gin"
 )
@@ -46,17 +47,15 @@ func SetDevice(c *gin.Context) {
 	if len(hd) > 0 {
 		decrypted, err := Decode(hd)
 		if err != nil {
-			c.Next()
-			return
+			log.Errorw("SetDevice.Decode", "err", err, "device_header", hd)
+			err = xerror.ErrDeviceInvalidError
+			c.Abort()
 		}
-
 		d := metadata2.New(string(decrypted))
-
 		// 获取userAgent的header
 		userAgent := c.GetHeader(HeaderUserAgent)
 		d.UserAgent = userAgent
 		c.Set(metadata2.ContextKeyDevice, *d)
 	}
 	c.Next()
-	return
 }

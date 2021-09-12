@@ -32,7 +32,7 @@ func ErrorWrapper(handle WrapperHandle) gin.HandlerFunc {
 			if ec, ok := err.(xerror.Error); ok {
 				code = ec
 			} else {
-				code = xerror.ErrUnknown
+				code = xerror.ErrUnknown.WithReason(err.Error())
 			}
 		} else {
 			code = xerror.Success
