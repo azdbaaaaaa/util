@@ -50,6 +50,7 @@ func SetDevice(c *gin.Context) {
 			log.Errorw("SetDevice.Decode", "err", err, "device_header", hd)
 			err = xerror.ErrDeviceInvalidError
 			c.Abort()
+			return
 		}
 		d := metadata2.New(string(decrypted))
 		// 获取userAgent的header
@@ -58,4 +59,5 @@ func SetDevice(c *gin.Context) {
 		c.Set(metadata2.ContextKeyDevice, *d)
 	}
 	c.Next()
+	return
 }
