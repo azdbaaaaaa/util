@@ -14,7 +14,7 @@ deploy(){
     else
       SERVICE="${PROJECT}_${CMD}"
     fi
-    ssh root@${HOST} -p 60022 "
+    ssh mqq@${HOST} "
         docker stop ${SERVICE}
         docker rm ${SERVICE}
         aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin ${IMAGE_REPO}
