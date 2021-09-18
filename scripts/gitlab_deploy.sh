@@ -14,8 +14,7 @@ deploy(){
     else
       SERVICE="${PROJECT}_${CMD}"
     fi
-    # shellcheck disable=SC2006
-    code=`ssh -o stricthostkeychecking=no mqq@${HOST} "
+    ssh -o stricthostkeychecking=no mqq@${HOST} "
         docker stop ${SERVICE}
         docker rm ${SERVICE}
         aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin ${IMAGE_REPO}
@@ -24,8 +23,7 @@ deploy(){
         ${IMAGE_REPO}/${PROJECT}:${VERSION} \
         ${CMD} --config=/app/config/${PROJECT}-${ENV}.yaml
         docker container list
-        "`
-    exit $code
+        "
 }
 
 deploy_k8s() {
