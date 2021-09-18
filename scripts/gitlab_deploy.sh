@@ -20,7 +20,7 @@ deploy(){
         aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin ${IMAGE_REPO}
         docker run -d --restart=always --name=${SERVICE} --network host \
         -v /usr/local/app/tars/app_log/LightHouse:/usr/local/app/tars/app_log/LightHouse \
-        -v /log:/log
+        -v /log:/log \
         ${IMAGE_REPO}/${PROJECT}:${VERSION} \
         ${CMD} --config=/app/config/${PROJECT}-${ENV}.yaml
         docker container list
