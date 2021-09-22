@@ -3,6 +3,30 @@ set -e
 
 VERSION=$(git describe --tags --always)
 
+deployPre(){
+    ENV=$1
+    HOST=$2
+    echo "开始发布，主机ip为:${HOST}"
+    echo ${PROJECT},${IMAGE_REPO},${VERSION},${ENV},${HOST},${CMD}
+    if [[ ${CMD} == "serve" ]]
+    then
+      SERVICE="${PROJECT}"
+    else
+      SERVICE="${PROJECT}_${CMD}"
+    fi
+    ssh -o stricthostkeychecking=no mqq@${HOST} -p 60022 "
+        docker stop ${SERVICE}
+        docker rm ${SERVICE}
+        aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin ${IMAGE_REPO}
+        docker run -d --restart=always --name=${SERVICE} --network host \
+        -v /usr/local/app/tars/app_log/LightHouse:/usr/local/app/tars/app_log/LightHouse \
+        -v /log:/log \
+        ${IMAGE_REPO}/${PROJECT}:${VERSION} \
+        ${CMD} --config=/app/config/${PROJECT}-${ENV}.yaml
+        docker container list
+        "
+}
+
 deploy(){
     ENV=$1
     HOST=$2
@@ -66,7 +90,7 @@ case ${CI_COMMIT_REF_NAME} in
     fi
     for HOST in ${FICOOL_PRE}
     do
-      deploy ${ENV} "${HOST}"
+      deployPre ${ENV} "${HOST}"
     done
     ;;
   master)
