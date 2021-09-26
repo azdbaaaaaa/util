@@ -12,7 +12,7 @@ import (
 
 var src = []byte("000000003fe4c136ffffffffe5f22f86|1.6.2.5|720|1640|sdk_phoenix|11|1|TECNO LC7|1625|sdk_phoenix|1628672277370|0||||||GMT+08:00|Asia/Shanghai||1628672277371")
 
-var dst = string("e17mw+tAoqZxUmnnyzFw0zzzaI2a7inFFjIb2zMt1OJrO1yGZVpcpOFuDSF+fETEUpWUDFvzu3YQbWuaZn2DkeaLEtPdiG7+NliL7LV9Ui2BnnRe506YGT5fv60O/bogXGwvF+kqhbyKWeIC1Idg/+R+P+iLwNCNocb6k9ZfzswMwoxcC1jsYQFrJ3H1bRH6")
+var dst = string("Wzf0fZQvTX0TXKbtypJp4j0dTsfmW/sJcesGSEwMVv+ysI5d0vN0TbegjlktwayLw2toAdQPY99I5WV18uS+/iEDI1RByDEgitCuIh5Z2t3UrFe6fhQAt/Fm1da6uqr76hb7YNwD8iGXVwR7Phe7QUfasIfvVDN02mgzj8M1ZhC4F0Ha8VQxwFpU6SkoZuiLu2iQKw9qcp4uNIdywE8bIA==")
 
 func TestDecode(t *testing.T) {
 	//dst = "A1bT6bpU9ZyrXYbFUAKS2w=="

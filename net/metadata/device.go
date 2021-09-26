@@ -35,6 +35,7 @@ type Device struct {
 	ZoneId       string            `json:"zone_id"`       // 地区 Asia/Shanghai
 	GAID         string            `json:"gaid"`          // gaid
 	Timestamp    int64             `json:"timestamp"`     // 同client_time 客户端时间戳
+	PackageName  string            `json:"package_name"`  // 当前应用包名（sdk取的宿主应用包名）
 
 	UserAgent string `json:"user_agent"`
 }
@@ -138,6 +139,8 @@ func (d *Device) ValueFromIdx(i int, v string) (err error) {
 			return err
 		}
 		d.Timestamp = ts
+	case 21:
+		d.PackageName = v
 	}
 	return
 }
