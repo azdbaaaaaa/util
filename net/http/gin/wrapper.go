@@ -1,11 +1,30 @@
 package gin
 
 import (
+	gin_prometheus "github.com/azdbaaaaaa/util/net/http/gin/middleware/prometheus"
 	"github.com/azdbaaaaaa/util/net/metadata"
 	"github.com/azdbaaaaaa/util/xutil/xerror"
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus"
 	"net/http"
+	"strconv"
 )
+
+var (
+	metricResultTotal = prometheus.NewCounterVec(
+		prometheus.CounterOpts{
+			Namespace:   gin_prometheus.DefaultNameSpace,
+			Subsystem:   gin_prometheus.DefaultSubSystem,
+			Name:        "result_request_total",
+			Help:        "all the server response result count",
+			ConstLabels: gin_prometheus.ConstLabels,
+		},
+		[]string{"path", "method", "code", "ip", "result"})
+)
+
+func init() {
+	prometheus.MustRegister(metricResultTotal)
+}
 
 type ApiError struct {
 	// 错误码 ex:999999
@@ -24,10 +43,10 @@ type ApiError struct {
 type WrapperHandle func(c *gin.Context) (interface{}, error)
 
 func ErrorWrapper(handle WrapperHandle) gin.HandlerFunc {
-	return func(c *gin.Context) {
+	return func(ctx *gin.Context) {
 		var code xerror.Error
 		var rid string
-		data, err := handle(c)
+		data, err := handle(ctx)
 		if err != nil {
 			if ec, ok := err.(xerror.Error); ok {
 				code = ec
@@ -37,13 +56,16 @@ func ErrorWrapper(handle WrapperHandle) gin.HandlerFunc {
 		} else {
 			code = xerror.Success
 		}
-		reqId, exists := c.Get(metadata.ContextKeyReqID)
+		reqId, exists := ctx.Get(metadata.ContextKeyReqID)
 		if exists {
 			if v, ok := reqId.(string); ok {
 				rid = v
 			}
 		}
-		c.JSON(http.StatusOK, ApiError{
+		metricResultTotal.
+			WithLabelValues([]string{ctx.FullPath(), ctx.Request.Method, strconv.Itoa(ctx.Writer.Status()), ctx.ClientIP(), strconv.Itoa(int(code.GetCode()))}...).
+			Inc()
+		ctx.JSON(http.StatusOK, ApiError{
 			Result:  code.GetCode(),
 			Message: code.GetMessage(),
 			Data:    data,
