@@ -69,6 +69,10 @@ var (
 		[]string{"path", "method", "code", "ip"})
 )
 
+func init() {
+	prometheus.MustRegister(metricRequestTotal, metricRequestBody, metricResponseBody, metricRequestDuration, metricSlowRequest)
+}
+
 func Collector() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		if ctx.Request.URL.Path == DefaultMetricsPath {
