@@ -3,6 +3,7 @@ syntax = "proto3";
 
 //import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 //import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
+import "google/protobuf/any.proto";
 
 //指定包名
 package common;
@@ -50,6 +51,15 @@ message OutParam {
   map<string, string> metadata = 5;
 }
 
+message CommonResponse {
+  int32 code = 1;
+  int32 sub_code = 2;
+  string message = 3;
+  string reason = 4;
+  map<string, string> metadata = 5;
+  google.protobuf.Any data = 6;
+}
+
 enum AppIdType {
   APP_ID_UNKNOWN = 0;
   APP_ID_LIGHTHOUSE = 100;
@@ -64,13 +74,9 @@ enum AreaIdType {
 }
 
 enum LanguageType {
-  LAN_ZH = 0; // 中文
-  LAN_EN = 1; // 英文
-  LAN_ES = 2; // 西班牙语
-  LAN_IN = 3; // 印尼语
-  LAN_TL = 4; // 菲律宾语（他加禄语)
-  LAN_MS = 5; // 马来语
-  LAN_KO = 6; // 韩语
+  LAN_ZH = 0; // Not Set
+  LAN_EN = 1; // 英文 English
+  LAN_SW = 2; // 斯瓦希里语 Swahili
 };
 
 enum ClientType {

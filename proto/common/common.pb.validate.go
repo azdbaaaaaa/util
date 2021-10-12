@@ -106,3 +106,88 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = OutParamValidationError{}
+
+// Validate checks the field values on CommonResponse with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *CommonResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Code
+
+	// no validation rules for SubCode
+
+	// no validation rules for Message
+
+	// no validation rules for Reason
+
+	// no validation rules for Metadata
+
+	if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CommonResponseValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// CommonResponseValidationError is the validation error returned by
+// CommonResponse.Validate if the designated constraints aren't met.
+type CommonResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CommonResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CommonResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CommonResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CommonResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CommonResponseValidationError) ErrorName() string { return "CommonResponseValidationError" }
+
+// Error satisfies the builtin error interface
+func (e CommonResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCommonResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CommonResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CommonResponseValidationError{}
