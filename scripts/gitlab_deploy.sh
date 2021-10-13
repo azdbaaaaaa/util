@@ -36,7 +36,7 @@ deploy(){
     then
       SERVICE="${PROJECT}"
     else
-      SERVICE="${PROJECT}_${CMD}"
+      SERVICE="${PROJECT}__${CMD}"
     fi
     ssh -o stricthostkeychecking=no mqq@${HOST} "
         docker stop ${SERVICE}
@@ -59,7 +59,7 @@ deploy_k8s() {
     then
       DEPLOYMENT="${PROJECT}"
     else
-      DEPLOYMENT="${PROJECT}_${CMD}"
+      DEPLOYMENT="${PROJECT}__${CMD}"
     fi
 
     kubectl create configmap "${PROJECT}" --from-file=${PROJECT}.yaml="config/${PROJECT}-${ENV}.yaml" -n ficool -o yaml --dry-run=client | kubectl replace -f -
