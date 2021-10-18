@@ -7,8 +7,8 @@ package common
 
 import (
 	fmt "fmt"
+	anypb "github.com/gogo/protobuf/types"
 	proto "github.com/golang/protobuf/proto"
-	anypb "google.golang.org/protobuf/types/known/anypb"
 	io "io"
 	math "math"
 	math_bits "math/bits"

@@ -12,20 +12,21 @@ require (
 	github.com/gin-gonic/contrib v0.0.0-20201101042839-6a891bf89f19
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/assert/v2 v2.0.1
-	github.com/go-playground/validator/v10 v10.4.1 // indirect
 	github.com/go-redis/redis/v8 v8.11.0
-	github.com/gogo/protobuf v1.2.1
+	github.com/gogo/protobuf v1.3.2
 	github.com/golang/protobuf v1.4.3
 	github.com/gorilla/websocket v0.0.0-20170926233335-4201258b820c
 	github.com/grpc-ecosystem/go-grpc-middleware v1.0.1-0.20190118093823-f849b5445de4
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 	github.com/leodido/go-urn v1.2.1 // indirect
-	github.com/qiniu/qmgo v0.9.4 // indirect
+	github.com/oklog/run v1.0.0
+	github.com/prometheus/client_golang v1.10.0
+	github.com/qiniu/qmgo v0.9.4
 	github.com/satori/go.uuid v1.2.0
 	github.com/tealeg/xlsx/v3 v3.2.3
 	github.com/ugorji/go v1.2.3 // indirect
 	github.com/zsais/go-gin-prometheus v0.1.0
-	go.mongodb.org/mongo-driver v1.5.3
+	go.mongodb.org/mongo-driver v1.5.3 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.16.0
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
