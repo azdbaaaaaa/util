@@ -7,6 +7,8 @@ import (
 	"github.com/azdbaaaaaa/util/xutil/xerror"
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus"
+	"go.mongodb.org/mongo-driver/mongo"
+	"gorm.io/gorm"
 	"net/http"
 	"strconv"
 )
@@ -49,15 +51,23 @@ func ErrorWrapper(handle WrapperHandle) gin.HandlerFunc {
 		var rid string
 		data, err := handle(ctx)
 		if err != nil {
-			if ec, ok := err.(xerror.Error); ok {
-				code = ec
-			} else {
-				code = xerror.ErrUnknown.WithReason(err.Error())
+			switch err {
+			case gorm.ErrRecordNotFound, mongo.ErrNoDocuments:
+				code = xerror.ErrNotFound.WithReason(err.Error())
+			default:
+				if ec, ok := err.(xerror.Error); ok {
+					code = ec
+				} else {
+					code = xerror.ErrUnknown.WithReason(err.Error())
+				}
 			}
 		} else {
 			code = xerror.Success
 		}
-		rid = metadata.ReqIdFromContext(ctx)
+		reqId, exists := ctx.Get(metadata.ContextKeyReqID)
+		if exists {
+			rid = reqId.(string)
+		}
 		metricResultTotal.
 			WithLabelValues([]string{ctx.FullPath(), ctx.Request.Method, strconv.Itoa(ctx.Writer.Status()), ctx.ClientIP(), strconv.Itoa(int(code.GetCode()))}...).
 			Inc()
