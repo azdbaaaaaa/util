@@ -1,6 +1,7 @@
 package gin
 
 import (
+	"github.com/azdbaaaaaa/util/log"
 	gin_prometheus "github.com/azdbaaaaaa/util/net/http/gin/middleware/prometheus"
 	"github.com/azdbaaaaaa/util/net/metadata"
 	"github.com/azdbaaaaaa/util/xutil/xerror"
@@ -56,21 +57,18 @@ func ErrorWrapper(handle WrapperHandle) gin.HandlerFunc {
 		} else {
 			code = xerror.Success
 		}
-		reqId, exists := ctx.Get(metadata.ContextKeyReqID)
-		if exists {
-			if v, ok := reqId.(string); ok {
-				rid = v
-			}
-		}
+		rid = metadata.ReqIdFromContext(ctx)
 		metricResultTotal.
 			WithLabelValues([]string{ctx.FullPath(), ctx.Request.Method, strconv.Itoa(ctx.Writer.Status()), ctx.ClientIP(), strconv.Itoa(int(code.GetCode()))}...).
 			Inc()
-		ctx.JSON(http.StatusOK, ApiError{
+		resp := ApiError{
 			Result:  code.GetCode(),
 			Message: code.GetMessage(),
 			Data:    data,
 			Reason:  code.GetReason(),
 			Rid:     rid,
-		})
+		}
+		log.Infow("logging api", "result", resp.Result, "message", resp.Message, "reason", resp.Reason, "req_id", rid)
+		ctx.JSON(http.StatusOK, resp)
 	}
 }
