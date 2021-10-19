@@ -51,15 +51,14 @@ func ErrorWrapper(handle WrapperHandle) gin.HandlerFunc {
 		var rid string
 		data, err := handle(ctx)
 		if err != nil {
-			switch err {
-			case gorm.ErrRecordNotFound, mongo.ErrNoDocuments:
+			if ec, ok := err.(xerror.Error); ok {
+				code = ec
+			} else if err == gorm.ErrRecordNotFound {
 				code = xerror.ErrNotFound.WithReason(err.Error())
-			default:
-				if ec, ok := err.(xerror.Error); ok {
-					code = ec
-				} else {
-					code = xerror.ErrUnknown.WithReason(err.Error())
-				}
+			} else if err == mongo.ErrNoDocuments {
+				code = xerror.ErrNotFound.WithReason(err.Error())
+			} else {
+				code = xerror.ErrUnknown.WithReason(err.Error())
 			}
 		} else {
 			code = xerror.Success
