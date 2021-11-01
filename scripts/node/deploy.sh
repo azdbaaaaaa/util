@@ -13,7 +13,7 @@ deployPre(){
         docker stop ${PROJECT}
         docker rm ${PROJECT}
         aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin ${IMAGE_REPO}
-        docker run -d --restart=always --name=${PROJECT} --network host \
+        docker run -d --restart=always --name=${PROJECT} --network host --env NODE_ENV=pre \
         ${IMAGE_REPO}/${PROJECT}:${VERSION} \
         npm run start
         docker container list
@@ -30,7 +30,7 @@ deploy(){
         docker stop ${PROJECT}
         docker rm ${PROJECT}
         aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin ${IMAGE_REPO}
-        docker run -d --restart=always --name=${PROJECT} --network host \
+        docker run -d --restart=always --name=${PROJECT} --network host --env NODE_ENV=prd\
         ${IMAGE_REPO}/${PROJECT}:${VERSION} \
         npm run start
         docker container list
