@@ -8,20 +8,14 @@ deployPre(){
     HOST=$2
     echo "开始发布，主机ip为:${HOST}"
     echo ${PROJECT},${IMAGE_REPO},${VERSION},${ENV},${HOST},${CMD}
-    if [[ ${CMD} == "serve" ]]
-    then
-      SERVICE="${PROJECT}"
-    else
-      SERVICE="${PROJECT}-${CMD}"
-    fi
+    SERVICE="${PROJECT}"
     ssh -o stricthostkeychecking=no mqq@${HOST} -p 60022 "
-        docker stop ${SERVICE}
-        docker rm ${SERVICE}
+        docker stop ${PROJECT}
+        docker rm ${PROJECT}
         aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin ${IMAGE_REPO}
-        docker run -d --restart=always --name=${SERVICE} --network host \
-        -v /log:/log \
+        docker run -d --restart=always --name=${PROJECT} --network host \
         ${IMAGE_REPO}/${PROJECT}:${VERSION} \
-        ${CMD} --config=/app/config/${PROJECT}-${ENV}.yaml
+        npm run start
         docker container list
         "
 }
@@ -31,20 +25,14 @@ deploy(){
     HOST=$2
     echo "开始发布，主机ip为:${HOST}"
     echo ${PROJECT},${IMAGE_REPO},${VERSION},${ENV},${HOST},${CMD}
-    if [[ ${CMD} == "serve" ]]
-    then
-      SERVICE="${PROJECT}"
-    else
-      SERVICE="${PROJECT}-${CMD}"
-    fi
+    SERVICE="${PROJECT}"
     ssh -o stricthostkeychecking=no mqq@${HOST} "
-        docker stop ${SERVICE}
-        docker rm ${SERVICE}
+        docker stop ${PROJECT}
+        docker rm ${PROJECT}
         aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin ${IMAGE_REPO}
-        docker run -d --restart=always --name=${SERVICE} --network host \
-        -v /log:/log \
+        docker run -d --restart=always --name=${PROJECT} --network host \
         ${IMAGE_REPO}/${PROJECT}:${VERSION} \
-        ${CMD} --config=/app/config/${PROJECT}-${ENV}.yaml
+        npm run start
         docker container list
         "
 }
