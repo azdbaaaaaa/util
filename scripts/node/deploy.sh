@@ -48,7 +48,7 @@ deploy_k8s() {
 
 
 case ${CI_COMMIT_REF_NAME} in
-  v*)
+  master|v*)
     ENV="prod"
     echo "${FICOOL_PROD}"
     if [[ "${FICOOL_PROD}" == "" ]];then
@@ -71,10 +71,6 @@ case ${CI_COMMIT_REF_NAME} in
     do
       deployPre ${ENV} "${HOST}"
     done
-    ;;
-  master)
-    echo "please set tags to publish!"
-    exit 1
     ;;
   *)
     ENV="dev"
