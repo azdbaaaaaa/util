@@ -8,7 +8,7 @@ package common
 import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	protobuf "google/protobuf"
+	anypb "github.com/gogo/protobuf/types"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -397,7 +397,7 @@ type CommonResponse struct {
 	Message              string            `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`
 	Reason               string            `protobuf:"bytes,4,opt,name=reason,proto3" json:"reason,omitempty"`
 	Metadata             map[string]string `protobuf:"bytes,5,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	Data                 *protobuf.Any     `protobuf:"bytes,6,opt,name=data,proto3" json:"data,omitempty"`
+	Data                 *anypb.Any     `protobuf:"bytes,6,opt,name=data,proto3" json:"data,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`
 	XXX_sizecache        int32             `json:"-"`
@@ -471,7 +471,7 @@ func (m *CommonResponse) GetMetadata() map[string]string {
 	return nil
 }
 
-func (m *CommonResponse) GetData() *protobuf.Any {
+func (m *CommonResponse) GetData() *anypb.Any {
 	if m != nil {
 		return m.Data
 	}
@@ -1367,7 +1367,7 @@ func (m *CommonResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Data == nil {
-				m.Data = &protobuf.Any{}
+				m.Data = &anypb.Any{}
 			}
 			if err := m.Data.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
