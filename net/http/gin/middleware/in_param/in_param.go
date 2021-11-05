@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	HeaderAppID  = "appId"
-	HeaderAreaID = "areaId"
+	HeaderUid  = "uid"
+	HeaderUkey = "ukey"
 )
 
 func SetInParam(c *gin.Context) {

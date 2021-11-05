@@ -52,11 +52,11 @@ func Run(httpConf net_http.ServerConfig, grpcConf net_grpc.ServerConfig, log *za
 	{
 		grpcListener, err := net.Listen("tcp", grpcConf.Addr)
 		if err != nil {
-			log.Error("Listen Grpc Error", zap.String("addr", grpcConf.Addr))
+			log.Error("Listen GRPC Error", zap.String("addr", grpcConf.Addr))
 			os.Exit(1)
 		}
 		g.Add(func() error {
-			log.Info("transport HTTP ", zap.String("addr", grpcConf.Addr))
+			log.Info("transport GRPC ", zap.String("addr", grpcConf.Addr))
 			s := net_grpc.NewServer(grpcConf, log)
 			register(s)
 			return s.Serve(grpcListener)
