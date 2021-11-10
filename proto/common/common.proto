@@ -85,15 +85,3 @@ enum ClientType {
   CLIENT_TYPE_ANDROID = 1;
   CLIENT_TYPE_IOS = 5;
 }
-
-enum ChannelType {
-  ChannelType_Unknown = 0;
-  light_reader = 1;
-  sdk_phoenix = 2;
-}
-
-enum SDKType {
-  SDK_UNKNOWN = 0;
-  SDK_FICOOL = 1;
-  SDK_PHOENIX = 2;
-}

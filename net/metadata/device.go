@@ -13,13 +13,24 @@ const (
 	ContextKeyDevice = "device"
 )
 
+type AppType string
+
+const (
+	AppType_LightReader AppType = "light_reader"
+	AppType_SDK         AppType = "sdk"
+)
+
+const (
+	Channel_SDK_Phoenix = "sdk_phoenix"
+)
+
 type Device struct {
 	IMEI         string            `json:"imei"`          // deviceId
 	VersionName  string            `json:"version_name"`  // 版本号 1.6.2.5
 	ScreenWidth  int32             `json:"screen_width"`  // 屏幕宽度
 	ScreenHeight int32             `json:"screen_height"` // 屏幕高度
 	Source       string            `json:"source"`        // 第三方使用的source（首次安装使用的channel号）
-	SDK          string            `json:"sdk"`           // 系统版本号字符串
+	SDK          string            `json:"sdk"`           // 手机系统版本号
 	ClientType   common.ClientType `json:"client_type"`   // 客户端类型  1：Android 5：iOS
 	PhoneModel   string            `json:"phone_model"`   // 手机型号
 	VersionCode  int32             `json:"version_code"`  // 版本号的数字版本，1.6.0以后都是4位，老版本是3位
@@ -37,7 +48,8 @@ type Device struct {
 	Timestamp    int64             `json:"timestamp"`     // 同client_time 客户端时间戳
 	PackageName  string            `json:"package_name"`  // 当前应用包名（sdk取的宿主应用包名）
 
-	UserAgent string `json:"user_agent"`
+	UserAgent string  `json:"user_agent"`
+	AppType   AppType `json:"app_type"` // app类型， 1：light_reader 2: sdk
 }
 
 func New(text string) (d *Device) {
@@ -100,11 +112,12 @@ func (d *Device) ValueFromIdx(i int, v string) (err error) {
 		}
 		d.VersionCode = int32(vc)
 	case 9:
+		d.Channel = v
 		switch v {
-		case common.ChannelType_sdk_phoenix.String():
-			d.Channel = common.ChannelType_sdk_phoenix.String()
+		case Channel_SDK_Phoenix:
+			d.AppType = AppType_SDK
 		default:
-			d.Channel = common.ChannelType_light_reader.String()
+			d.AppType = AppType_LightReader
 		}
 	case 10:
 		ct, err := strconv.ParseInt(v, 10, 64)
