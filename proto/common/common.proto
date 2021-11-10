@@ -88,6 +88,7 @@ enum ClientType {
 
 enum ChannelType {
   ChannelType_Unknown = 0;
+  light_reader = 1;
   sdk_phoenix = 2;
 }
 

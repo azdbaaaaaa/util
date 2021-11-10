@@ -18,12 +18,12 @@ type Device struct {
 	VersionName  string            `json:"version_name"`  // 版本号 1.6.2.5
 	ScreenWidth  int32             `json:"screen_width"`  // 屏幕宽度
 	ScreenHeight int32             `json:"screen_height"` // 屏幕高度
-	Source       string            `json:"source"`        // 第三方使用的source
-	SDK          string            `json:"sdk"`           // 字符串
+	Source       string            `json:"source"`        // 第三方使用的source（首次安装使用的channel号）
+	SDK          string            `json:"sdk"`           // 系统版本号字符串
 	ClientType   common.ClientType `json:"client_type"`   // 客户端类型  1：Android 5：iOS
 	PhoneModel   string            `json:"phone_model"`   // 手机型号
 	VersionCode  int32             `json:"version_code"`  // 版本号的数字版本，1.6.0以后都是4位，老版本是3位
-	Channel      string            `json:"channel"`       // sdk为sdk_phoenix
+	Channel      string            `json:"channel"`       // sdk为sdk_phoenix；light_reader为9000001等
 	ClientTime   int64             `json:"client_time"`   // 客户端时间戳
 	IsEmulator   int32             `json:"is_emulator"`   // 是否模拟器
 	Longitude    string            `json:"longitude"`     // 经度
@@ -100,7 +100,12 @@ func (d *Device) ValueFromIdx(i int, v string) (err error) {
 		}
 		d.VersionCode = int32(vc)
 	case 9:
-		d.Channel = v
+		switch v {
+		case common.ChannelType_sdk_phoenix.String():
+			d.Channel = common.ChannelType_sdk_phoenix.String()
+		default:
+			d.Channel = common.ChannelType_light_reader.String()
+		}
 	case 10:
 		ct, err := strconv.ParseInt(v, 10, 64)
 		if err != nil {
