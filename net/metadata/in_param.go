@@ -15,6 +15,7 @@ type InParam struct {
 	UserIp   string           `json:"user_ip,omitempty"`
 	UserId   int64            `json:"user_id,omitempty"`
 	ClientIp string           `json:"client_ip,omitempty"`
+	Token    string           `json:"token,omitempty"`
 }
 
 func InParamFromContext(ctx context.Context) (i InParam, err error) {
