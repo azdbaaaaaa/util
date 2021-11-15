@@ -31,14 +31,14 @@ func (m *PaginationReq) Limit() int32 {
 	return m.PageSize
 }
 
-func (m *PaginationReq) Start() int32 {
+func (m *PaginationReq) Start() int64 {
 	m.checkValid()
-	return (m.Page - 1) * m.PageSize
+	return int64((m.Page - 1) * m.PageSize)
 }
 
-func (m *PaginationReq) End() int32 {
+func (m *PaginationReq) End() int64 {
 	m.checkValid()
-	return m.Page * m.PageSize
+	return int64(m.Page * m.PageSize)
 }
 
 func (m *PaginationReq) GetIndex(totalNum int32) (from, to int32, err error) {
