@@ -16,7 +16,7 @@ var (
 func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
 		err := invoker(ctx, method, req, reply, cc, opts...)
-		if res, ok := reply.(common.CommonResponse); ok {
+		if res, ok := reply.(*common.CommonResponse); ok {
 			if res.Code != int32(common.ErrCode_success) {
 				logger.Error("CommonResponse error",
 					ClientField,
