@@ -2,6 +2,7 @@ package grpc_error
 
 import (
 	"context"
+	"github.com/azdbaaaaaa/util/proto/common"
 	"github.com/azdbaaaaaa/util/xutil/xerror"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"go.uber.org/zap"
@@ -24,7 +25,14 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		resp, err := handler(ctx, req)
 		if err != nil {
-			if _, ok := err.(xerror.Error); ok {
+			if xerr, ok := err.(xerror.Error); ok {
+				if res, ok := resp.(common.CommonResponse); ok {
+					res.Code = xerr.GetCode()
+					res.SubCode = xerr.GetSubCode()
+					res.Message = xerr.GetMessage()
+					res.Reason = xerr.GetReason()
+					return res, nil
+				}
 				return resp, nil
 			}
 			logger.Error("unknown error", zap.Errors("err", []error{err}), SystemField, ServerField)
