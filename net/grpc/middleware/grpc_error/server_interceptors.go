@@ -26,7 +26,7 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 		resp, err := handler(ctx, req)
 		if err != nil {
 			if xerr, ok := err.(xerror.Error); ok {
-				if res, ok := resp.(common.CommonResponse); ok {
+				if res, ok := resp.(*common.CommonResponse); ok {
 					res.Code = xerr.GetCode()
 					res.SubCode = xerr.GetSubCode()
 					res.Message = xerr.GetMessage()
