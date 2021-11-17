@@ -120,3 +120,12 @@ func GetYesterdayEndTimeInUTC() int64 {
 	yesterdayDay := t.AddDate(0, 0, -1)
 	return time.Date(yesterdayDay.Year(), yesterdayDay.Month(), yesterdayDay.Day(), 23, 59, 59, 0, yesterdayDay.Location()).UnixNano() / 1e6
 }
+
+func GetNextMonthStartEndInUTC(t time.Time) (time.Time, time.Time) {
+	t = t.UTC()
+	monthStartDay := t.AddDate(0, 1, -t.Day()+1)
+	monthStartTime := time.Date(monthStartDay.Year(), monthStartDay.Month(), monthStartDay.Day(), 0, 0, 0, 0, t.Location())
+	monthEndDay := monthStartTime.AddDate(0, 1, -1)
+	monthEndTime := time.Date(monthEndDay.Year(), monthEndDay.Month(), monthEndDay.Day(), 23, 59, 59, 0, t.Location())
+	return monthStartTime, monthEndTime
+}

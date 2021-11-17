@@ -63,3 +63,11 @@ func TestParseTimeInLoc(t *testing.T) {
 	_, err := ParseTimeInLoc("6 8, 2021 | 08:58:16 BST", "Jan _2, 2006 | 15:04:05 MST", "Europe/London")
 	assert.Equal(t, err, nil)
 }
+
+func TestGetNextMonthStartEndInUTC(t *testing.T) {
+	ts := 1637132342199 / 1000
+	tu := time.Unix(int64(ts), 0)
+	log.Println(tu)
+	startTime, endTime := GetNextMonthStartEndInUTC(tu)
+	log.Println(startTime, endTime)
+}
