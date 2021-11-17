@@ -9,6 +9,7 @@ const (
 	DateTimeFormat          = "2006-01-02 15:04:05"
 	DateTimeFormat_YYYYMMDD = "20060102"
 	DateTimeFormat_YYYYMM   = "200601"
+	DateTimeFormat_YYYY_MM  = "2006-01"
 )
 
 // FirstAndLastTimestampOfMonth 获取t时间所在月的开始和结束时间
@@ -128,4 +129,9 @@ func GetNextMonthStartEndInUTC(t time.Time) (time.Time, time.Time) {
 	monthEndDay := monthStartTime.AddDate(0, 1, -1)
 	monthEndTime := time.Date(monthEndDay.Year(), monthEndDay.Month(), monthEndDay.Day(), 23, 59, 59, 0, t.Location())
 	return monthStartTime, monthEndTime
+}
+
+func ParseStringToInt(date string) int64 {
+	t, _ := time.ParseInLocation(DateTimeFormat_YYYY_MM, date, time.UTC)
+	return t.UnixNano() / 1e6
 }
