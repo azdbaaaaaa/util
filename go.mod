@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/Shopify/sarama v1.29.1
+	github.com/TarsCloud/TarsGo v1.1.6
 	github.com/aws/aws-sdk-go v1.34.28
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/envoyproxy/protoc-gen-validate v0.1.0
@@ -26,7 +27,7 @@ require (
 	github.com/tealeg/xlsx/v3 v3.2.3
 	github.com/ugorji/go v1.2.3 // indirect
 	github.com/zsais/go-gin-prometheus v0.1.0
-	go.mongodb.org/mongo-driver v1.5.3 // indirect
+	go.mongodb.org/mongo-driver v1.5.3
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.16.0
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect

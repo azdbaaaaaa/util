@@ -1,0 +1,143 @@
+module common
+{
+
+    // 以下在code中返回
+    const int SUCCESS = 0;
+    // 以下在code中返回
+    // 被调返回异常
+    const int ERROR_SERVER_FAIL = -100001; // 不重要的失败，建议重试
+    const int ERROR_SERVER_PARAMETER = -100002; // 参数错误
+    const int ERROR_SERVER_EXCEPTION = -100003; // 服务本身异常
+    const int ERROR_SERVER_REJECT = -100004; // 服务忙，被调限流
+    const int ERROR_SERVER_BUSY = -100005; // 服务忙，请求队列已满
+
+    // 主调捕获异常
+    const int ERROR_CALL_TIMEOUT = -100006; // 服务调用超时
+    const int ERROR_CALL_EXCEPTION = -100007; // 服务调用异常
+    const int ERROR_CALL_BROKEN = -100008; // 服务熔断
+
+    // 以下在subCode中返回
+    // 业务错误代码
+    const int ERROR_BOOK = -101000; // 内容库服务
+    const int ERROR_ID_SERVICE = -102000; // id服务
+    const int ERROR_SEARCH_SERVICE = -103000; // 搜索服务
+    const int ERROR_OPERATION_CONFIG = -104000; //运营位
+    const int ERROR_FEED_BACK = -105000; //用户反馈
+    const int ERROR_TAG = -106000; //标签服务
+    const int ERROR_IMAGE = -107000; //图片服务
+    const int ERROR_SYNC = -108000; //同步服务
+    const int ERROR_BOOK_SEARCH = -109000; //搜索书服务
+    const int ERROR_MQ = -110000; //mq服务
+    const int ERROR_DEVICE_SERVICE = -120000; //device服务
+    const int ERROR_USER_SERVICE = -130000; //device服务
+    const int ERROR_FILE_CACHE = -140000; // 服务缓存
+    const int ERROR_AUTHENTICATION = -150000; //鉴权中心
+    const int ERROR_LOGIN = -160000; //登录服务
+
+    //一下CODE代表了某个服务,发消息中使用
+    //服务代码
+    const int BOOK_SERVICE = 200001; //内容库服务
+    const int MESSAGE_SERVICE = 200002; //消息服务
+    const int USER_SERVICE = 200003; //用户服务
+    const int AUTHENTICATION_SERVICE = 200004; //用户鉴权服务
+    const int SYNC_SERVICE = 200005; //用户鉴权服务
+
+
+    struct InParam
+    {
+        0  optional int    appId;
+        1  optional int    areaId;
+        2  optional int    version;
+        3  optional long   userId;
+        4  optional string deviceId;
+        5  optional string clientIp;
+        6  optional string channel;
+        7  optional string source;
+        8  optional string userIp;
+        9  optional string language;
+        10 optional string country;
+        11 optional long   authorId;
+    };
+
+    struct OutParam
+    {
+        0 optional int    code;
+        1 optional int    subCode;
+        2 optional string message;
+    };
+
+    enum AppIdEnum
+    {
+        LIGHT_HOUSE = 100
+    };
+
+    enum AreaIdEnum
+    {
+        ANDROID = 30,
+        IOS     = 40,
+        WEB     = 99,
+        H5      = 98
+    };
+
+    enum CheckLevelEnum
+    {
+        NORMAL              = 15,
+        NO_AUTO_RECOMMEND   = 10,
+        NO_MANUAL_RECOMMEND = 9,
+        NO_CHARGE           = 8
+    };
+
+    enum MqSourceEnum
+    {
+        TOPIC = 1,
+        QUEUE = 2
+    };
+
+    enum LanguageEnum
+    {
+        ZH = 0, // 中文
+        EN = 1, // 英文
+        ES = 2, // 西班牙语
+        IN = 3, // 印尼语
+        TL = 4, // 菲律宾语（他加禄语)
+        MS = 5, // 马来语
+        KO = 6  // 韩语
+    };
+
+    struct ContentFilter
+    {
+        0 optional string blackCountries;
+        1 optional string whiteCountries;
+    };
+
+    enum ContentSourceEnum
+    {
+        PDF_DRIVE = 1,     //  www.pdfdrive.com
+        B_OK      = 2,     //  b-ok.cc
+        LIB_GEN   = 3,     //  gen.lib.rus.ec/fiction
+        CONTENT   = 4      //  内容中心
+    };
+
+    enum FileFormatEnum
+    {
+        PDF  = 1,
+        EPUB = 2,
+        TXT = 3,
+    };
+
+    enum LoginTypeEnum
+    {
+        GOOGLE   = 1,
+        FACEBOOK = 2,
+        EMAIL    = 3,
+        GOOGLE_H5 = 4,
+    };
+
+    enum GenderEnum
+    {
+        MALE    = 1,
+        FEMALE  = 2,
+        UNKNOWN = 0
+    };
+
+};
