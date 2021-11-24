@@ -38,7 +38,7 @@ func (m *PaginationReq) Start() int64 {
 
 func (m *PaginationReq) End() int64 {
 	m.checkValid()
-	return int64(m.Page * m.PageSize)
+	return int64(m.Page * m.PageSize) - 1
 }
 
 func (m *PaginationReq) GetIndex(totalNum int32) (from, to int32, err error) {
