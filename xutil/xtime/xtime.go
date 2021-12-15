@@ -135,3 +135,20 @@ func ParseStringToInt(date string) int64 {
 	t, _ := time.ParseInLocation(DateTimeFormat_YYYY_MM, date, time.UTC)
 	return t.UnixNano() / 1e6
 }
+
+func CalAge(birthdate, today time.Time) int {
+	today = today.In(birthdate.Location())
+	ty, tm, td := today.Date()
+	today = time.Date(ty, tm, td, 0, 0, 0, 0, time.UTC)
+	by, bm, bd := birthdate.Date()
+	birthdate = time.Date(by, bm, bd, 0, 0, 0, 0, time.UTC)
+	if today.Before(birthdate) {
+		return 0
+	}
+	age := ty - by
+	anniversary := birthdate.AddDate(age, 0, 0)
+	if anniversary.After(today) {
+		age--
+	}
+	return age
+}
