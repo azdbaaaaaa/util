@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/azdbaaaaaa/util/net/metadata"
 	"github.com/azdbaaaaaa/util/net/tars/common"
+	proto_common "github.com/azdbaaaaaa/util/proto/common"
 )
 
 type ClientConfig struct {
@@ -35,6 +36,9 @@ func NewTarsInParam(ctx context.Context) *common.InParam {
 			inParam.Source = device.Source
 			inParam.Country = device.CountryCode
 		}
+	}
+	if inParam.AppId == 0 {
+		inParam.AppId = int32(proto_common.AppIdType_APP_ID_LIGHTHOUSE)
 	}
 	return inParam
 }
