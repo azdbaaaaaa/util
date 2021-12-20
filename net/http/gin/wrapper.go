@@ -11,6 +11,7 @@ import (
 	"gorm.io/gorm"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 var (
@@ -41,6 +42,8 @@ type ApiError struct {
 	Reason string `json:"reason,omitempty"`
 	// request id
 	Rid string `json:"rid"`
+	// ts now
+	Ts int64 `json:"ts"`
 }
 
 type WrapperHandle func(c *gin.Context) (interface{}, error)
@@ -76,6 +79,7 @@ func ErrorWrapper(handle WrapperHandle) gin.HandlerFunc {
 			Data:    data,
 			Reason:  code.GetReason(),
 			Rid:     rid,
+			Ts:      time.Now().UnixNano() / 1e6,
 		}
 		log.Infow("logging api", "result", resp.Result, "message", resp.Message, "reason", resp.Reason, "req_id", rid)
 		ctx.JSON(http.StatusOK, resp)
