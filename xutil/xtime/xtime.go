@@ -152,3 +152,15 @@ func CalAge(birthdate, today time.Time) int {
 	}
 	return age
 }
+
+func IsAdult(layout, birth string) (bool, error) {
+	birthday, err := time.Parse(layout, birth)
+	if err != nil {
+		return false, err
+	}
+	age := CalAge(birthday, time.Now())
+	if age >= 18 {
+		return true, nil
+	}
+	return false, nil
+}
