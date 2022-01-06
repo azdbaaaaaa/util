@@ -82,7 +82,7 @@ func ErrorWrapper(handle WrapperHandle) gin.HandlerFunc {
 			Rid:     rid,
 			Ts:      time.Now().UnixNano() / 1e6,
 		}
-		log.Debugf("logging api", "result", resp.Result, "message", resp.Message, "reason", resp.Reason, "req_id", rid)
+		log.Debugw("logging api", "result", resp.Result, "message", resp.Message, "reason", resp.Reason, "req_id", rid)
 		ctx.JSON(http.StatusOK, resp)
 	}
 }
