@@ -1,21 +1,27 @@
 //版本号
 syntax = "proto3";
 
-import "github.com/gogo/protobuf/gogoproto/gogo.proto";
-import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
-
 //指定包名
 package pagination;
+
+import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+
 option go_package = "github.com/azdbaaaaaa/util/proto/pagination;pagination";
 
 enum SortOrder {
-  SortDefault = 0;
-  SortDesc = 1;
-  SortAsc = 2;
+    SortDefault = 0;
+    SortDesc = 1;
+    SortAsc = 2;
 }
 
 message PaginationReq {
-  int32 page = 1 [(validate.rules).int32.gt = 0];
-  int32 page_size = 2 [(validate.rules).int32 = {gt:0, lte: 5000}];
-  map<string, SortOrder> sort = 3 [(gogoproto.nullable) = false];
+    int32 page = 1 [(validate.rules).int32.gt = 0];
+    int32 page_size = 2 [(validate.rules).int32 = {gt: 0, lte: 5000}];
+    map<string, SortOrder> sort = 3 [(gogoproto.nullable) = false];
+}
+
+message TimeRange {
+    int64 start = 1 [(validate.rules).int64.gt = 0];
+    int64 end = 2 [(validate.rules).int64.gt = 0];
 }
