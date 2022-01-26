@@ -23,7 +23,7 @@ var (
 			Help:        "all the server response result count",
 			ConstLabels: gin_prometheus.ConstLabels,
 		},
-		[]string{"path", "method", "code", "ip", "result", "sub"})
+		[]string{"path", "method", "code", "ip", "result", "version"})
 )
 
 func init() {
@@ -51,7 +51,10 @@ type WrapperHandle func(c *gin.Context) (interface{}, error)
 func ErrorWrapper(handle WrapperHandle) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		code := xerror.Success
-		var rid string
+		var (
+			rid, version string
+		)
+		start := time.Now()
 		data, err := handle(ctx)
 		if err != nil {
 			if ec, ok := err.(xerror.Error); ok {
@@ -64,14 +67,16 @@ func ErrorWrapper(handle WrapperHandle) gin.HandlerFunc {
 				code = xerror.ErrUnknown.WithReason(err.Error())
 			}
 		}
-		reqId, exists := ctx.Get(metadata.ContextKeyReqID)
-		if exists {
+		if reqId, exists := ctx.Get(metadata.ContextKeyReqID); exists {
 			rid = reqId.(string)
+		}
+		if device, exists := ctx.Get(metadata.ContextKeyDevice); exists {
+			version = device.(metadata.Device).VersionName
 		}
 		metricResultTotal.
 			WithLabelValues([]string{
 				ctx.FullPath(), ctx.Request.Method, strconv.Itoa(ctx.Writer.Status()),
-				ctx.ClientIP(), strconv.Itoa(int(code.GetCode())), strconv.Itoa(int(code.GetSubCode())),
+				ctx.ClientIP(), strconv.Itoa(int(code.GetCode())), version,
 			}...).
 			Inc()
 		resp := ApiError{
@@ -82,7 +87,7 @@ func ErrorWrapper(handle WrapperHandle) gin.HandlerFunc {
 			Rid:     rid,
 			Ts:      time.Now().UnixNano() / 1e6,
 		}
-		log.Debugw("logging api", "result", resp.Result, "message", resp.Message, "reason", resp.Reason, "req_id", rid)
+		log.Infow(ctx.FullPath(), "result", resp.Result, "message", resp.Message, "reason", resp.Reason, "rid", rid, "time", time.Since(start).String())
 		ctx.JSON(http.StatusOK, resp)
 	}
 }
