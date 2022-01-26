@@ -30,7 +30,7 @@ func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 		} else {
 			reqID = v.(string)
 		}
-		logger.Info("finished client unary call interceptor",
+		logger.Debug("finished client unary call interceptor",
 			zap.String("grpc.service", service),
 			zap.String("grpc.method", methodName),
 			ClientField,
