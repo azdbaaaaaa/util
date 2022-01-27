@@ -95,10 +95,10 @@ func (log *zapLogger) openSinks() (zapcore.WriteSyncer, zapcore.WriteSyncer, zap
 		log.option.MaxSize = 20
 	}
 	if log.option.MaxBackups == 0 {
-		log.option.MaxSize = 30
+		log.option.MaxBackups = 30
 	}
 	if log.option.MaxAge == 0 {
-		log.option.MaxSize = 30
+		log.option.MaxAge = 30
 	}
 
 	sink := zapcore.AddSync(&lumberjack.Logger{
