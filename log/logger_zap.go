@@ -87,6 +87,7 @@ func (log *zapLogger) build() *zapLogger {
 		zapcore.NewCore(encoder, errSink, stderrPriority),
 		zapcore.NewCore(encoder, outSink, logLevel),
 	)
+	log.Level = zap.NewAtomicLevelAt(log.option.Level)
 	log.Logger = zap.New(core, log.buildOptions(errSink)...)
 	log.SugaredLogger = zap.New(core, log.buildOptions(errSink)...).Sugar()
 	return log
