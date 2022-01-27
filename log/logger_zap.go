@@ -91,14 +91,16 @@ func (log *zapLogger) build() *zapLogger {
 }
 
 func (log *zapLogger) openSinks() (zapcore.WriteSyncer, zapcore.WriteSyncer, zapcore.WriteSyncer, error) {
-	if log.option.Logger == nil {
-		log.option.Logger = &lumberjack.Logger{
-			MaxSize:    20,
-			MaxBackups: 30,
-			MaxAge:     30,
-			Compress:   false,
-		}
+	if log.option.MaxSize == 0 {
+		log.option.MaxSize = 20
 	}
+	if log.option.MaxBackups == 0 {
+		log.option.MaxSize = 30
+	}
+	if log.option.MaxAge == 0 {
+		log.option.MaxSize = 30
+	}
+
 	sink := zapcore.AddSync(&lumberjack.Logger{
 		Filename:   log.option.StdoutPath,
 		MaxSize:    log.option.MaxSize,
