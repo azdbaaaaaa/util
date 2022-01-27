@@ -13,6 +13,7 @@ import (
 type zapLogger struct {
 	Logger        *zap.Logger
 	SugaredLogger *zap.SugaredLogger
+	Level         zap.AtomicLevel
 
 	contextKeys []string
 	option      LoggerOption
@@ -20,13 +21,14 @@ type zapLogger struct {
 }
 
 func (log *zapLogger) SetLevel(level zapcore.Level) {
-	log.config.Level = zap.NewAtomicLevelAt(level)
+	log.Level.SetLevel(level)
 }
 
 func New(option LoggerOption) *zapLogger {
 	zLogger := &zapLogger{
 		contextKeys: []string{metadata.ContextKeyReqID},
 		option:      option,
+		Level:       zap.NewAtomicLevelAt(option.Level),
 	}
 
 	if option.ContextKeys != nil {
@@ -34,7 +36,7 @@ func New(option LoggerOption) *zapLogger {
 	}
 	if option.Development {
 		zLogger.config = zap.Config{
-			Level:             zap.NewAtomicLevelAt(option.Level),
+			Level:             zLogger.Level,
 			Development:       true,
 			DisableCaller:     false,
 			DisableStacktrace: false,
@@ -42,7 +44,7 @@ func New(option LoggerOption) *zapLogger {
 		}
 	} else {
 		zLogger.config = zap.Config{
-			Level:             zap.NewAtomicLevelAt(option.Level),
+			Level:             zLogger.Level,
 			Development:       false,
 			DisableCaller:     false,
 			DisableStacktrace: false,
