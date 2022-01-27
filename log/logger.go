@@ -88,6 +88,10 @@ func SetLevel(lvl zapcore.Level) {
 	logger.SetLevel(lvl)
 }
 
+func Level() (lvl zap.AtomicLevel){
+	return logger.Level
+}
+
 func WithContext(ctx context.Context) *zap.SugaredLogger {
 	return logger.WithContext(ctx)
 }

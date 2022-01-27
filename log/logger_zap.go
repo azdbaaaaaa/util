@@ -74,20 +74,19 @@ func (log *zapLogger) build() *zapLogger {
 	default:
 		panic("encoder not support")
 	}
-	logLevel := log.config.Level.Level()
-	stdoutPriority := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
-		return lvl >= logLevel && lvl < zapcore.ErrorLevel
-	})
-	stderrPriority := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
-		return lvl >= zapcore.ErrorLevel
-	})
 
 	core := zapcore.NewTee(
-		zapcore.NewCore(encoder, sink, stdoutPriority),
-		zapcore.NewCore(encoder, errSink, stderrPriority),
-		zapcore.NewCore(encoder, outSink, logLevel),
+		zapcore.NewCore(encoder, sink, zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
+			return lvl >= log.config.Level.Level() && lvl < zapcore.ErrorLevel
+		})),
+		zapcore.NewCore(encoder, errSink, zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
+			return lvl >= zapcore.ErrorLevel
+		})),
+		zapcore.NewCore(encoder, outSink, zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
+			return lvl >= log.config.Level.Level()
+		})),
 	)
-	log.Level = zap.NewAtomicLevelAt(log.option.Level)
+
 	log.Logger = zap.New(core, log.buildOptions(errSink)...)
 	log.SugaredLogger = zap.New(core, log.buildOptions(errSink)...).Sugar()
 	return log
