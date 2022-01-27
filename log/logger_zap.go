@@ -106,16 +106,16 @@ func (log *zapLogger) build() *zapLogger {
 func (log *zapLogger) openSinks() (zapcore.WriteSyncer, zapcore.WriteSyncer, zapcore.WriteSyncer, error) {
 	sink := zapcore.AddSync(&lumberjack.Logger{
 		Filename:   log.option.StdoutPath,
-		MaxSize:    1,
-		MaxBackups: 5,
+		MaxSize:    20,
+		MaxBackups: 30,
 		MaxAge:     30,
 		Compress:   false,
 	})
 
 	errSink := zapcore.AddSync(&lumberjack.Logger{
 		Filename:   log.option.StderrPath,
-		MaxSize:    1,
-		MaxBackups: 5,
+		MaxSize:    20,
+		MaxBackups: 30,
 		MaxAge:     30,
 		Compress:   false,
 	})
