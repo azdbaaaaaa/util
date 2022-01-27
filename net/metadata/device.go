@@ -2,7 +2,6 @@ package metadata
 
 import (
 	"context"
-	"github.com/azdbaaaaaa/util/log"
 	"github.com/azdbaaaaaa/util/proto/common"
 	"github.com/azdbaaaaaa/util/xutil/xerror"
 	"strconv"
@@ -59,7 +58,6 @@ func New(text string) (d *Device) {
 		v = strings.TrimSpace(v)
 		err := d.ValueFromIdx(i, v)
 		if err != nil {
-			log.Errorw("ValueFromIdx", "i", i, "v", v)
 			continue
 		}
 	}
