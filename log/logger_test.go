@@ -21,7 +21,7 @@ func TestZapLogger_SetLevelDebugf(t *testing.T) {
 }
 
 func TestMain(m *testing.M) {
-	NewZapLogger(LoggerOption{
+	New(LoggerOption{
 		Development: false,
 		Level:       -1,
 		StdoutPath:  "/tmp/test-out.log",

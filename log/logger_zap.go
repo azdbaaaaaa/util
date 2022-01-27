@@ -22,7 +22,7 @@ func (log *zapLogger) SetLevel(level zapcore.Level) {
 	log.config.Level = zap.NewAtomicLevelAt(level)
 }
 
-func NewZapLogger(option LoggerOption) *zapLogger {
+func New(option LoggerOption) *zapLogger {
 	zLogger := &zapLogger{
 		contextKeys: []string{"req_id", "trace_id"},
 		option:      option,

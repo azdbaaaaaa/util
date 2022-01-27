@@ -16,6 +16,14 @@ type LoggerOption struct {
 	ContextKeys []string      `json:"context_keys" toml:"context_keys" yaml:"context_keys" mapstructure:"context_keys"`
 }
 
+func Logger() *zap.Logger {
+	return logger.Logger
+}
+
+func SugaredLogger() *zap.SugaredLogger {
+	return logger.SugaredLogger
+}
+
 func Debugf(template string, args ...interface{}) {
 	logger.SugaredLogger.Debugf(template, args...)
 }
@@ -61,5 +69,5 @@ func WithContext(ctx context.Context) *zap.SugaredLogger {
 }
 
 func init() {
-	NewZapLogger(LoggerOption{Development: true, Level: zapcore.DebugLevel})
+	New(LoggerOption{Development: true, Level: zapcore.DebugLevel})
 }
