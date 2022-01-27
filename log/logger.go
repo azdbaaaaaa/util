@@ -10,12 +10,12 @@ import (
 var logger *zapLogger
 
 type LoggerOption struct {
-	Development       bool          `json:"development"  yaml:"development"`
-	Level             zapcore.Level `json:"level"  yaml:"level"`
-	StdoutPath        string        `json:"stdout_path"  yaml:"stdout_path" mapstructure:"stdout_path"`
-	StderrPath        string        `json:"stderr_path"  yaml:"stderr_path" mapstructure:"stderr_path"`
-	ContextKeys       []string      `json:"context_keys"  yaml:"context_keys" mapstructure:"context_keys"`
-	lumberjack.Logger `json:",inline"`
+	Development        bool          `json:"development"  yaml:"development"`
+	Level              zapcore.Level `json:"level"  yaml:"level"`
+	StdoutPath         string        `json:"stdout_path"  yaml:"stdout_path" mapstructure:"stdout_path"`
+	StderrPath         string        `json:"stderr_path"  yaml:"stderr_path" mapstructure:"stderr_path"`
+	ContextKeys        []string      `json:"context_keys"  yaml:"context_keys" mapstructure:"context_keys"`
+	*lumberjack.Logger `json:",inline"`
 }
 
 func Logger() *zap.Logger {
