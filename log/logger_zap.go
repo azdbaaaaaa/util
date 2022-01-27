@@ -2,6 +2,7 @@ package log
 
 import (
 	"context"
+	"github.com/azdbaaaaaa/util/net/metadata"
 	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -24,18 +25,10 @@ func (log *zapLogger) SetLevel(level zapcore.Level) {
 
 func New(option LoggerOption) *zapLogger {
 	zLogger := &zapLogger{
-		contextKeys: []string{"req_id", "trace_id"},
+		contextKeys: []string{metadata.ContextKeyReqID},
 		option:      option,
 	}
 
-	outputPaths := []string{"stdout"}
-	if option.StdoutPath != "" {
-		outputPaths = append(outputPaths, option.StdoutPath)
-	}
-	errorOutputPaths := []string{"stderr"}
-	if option.StderrPath != "" {
-		errorOutputPaths = append(errorOutputPaths, option.StderrPath)
-	}
 	if option.ContextKeys != nil {
 		zLogger.contextKeys = append(zLogger.contextKeys, option.ContextKeys...)
 	}
@@ -46,9 +39,6 @@ func New(option LoggerOption) *zapLogger {
 			DisableCaller:     false,
 			DisableStacktrace: false,
 			Encoding:          "console",
-			OutputPaths:       outputPaths,
-			ErrorOutputPaths:  errorOutputPaths,
-			EncoderConfig:     zap.NewDevelopmentEncoderConfig(),
 		}
 	} else {
 		zLogger.config = zap.Config{
@@ -57,9 +47,6 @@ func New(option LoggerOption) *zapLogger {
 			DisableCaller:     false,
 			DisableStacktrace: false,
 			Encoding:          "json",
-			OutputPaths:       outputPaths,
-			ErrorOutputPaths:  errorOutputPaths,
-			EncoderConfig:     zap.NewProductionEncoderConfig(),
 		}
 	}
 

@@ -2,6 +2,7 @@ package log
 
 import (
 	"context"
+	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -9,11 +10,12 @@ import (
 var logger *zapLogger
 
 type LoggerOption struct {
-	Development bool          `json:"development" toml:"development" yaml:"development"`
-	Level       zapcore.Level `json:"level" toml:"level" yaml:"level"`
-	StdoutPath  string        `json:"stdout_path" toml:"stdout_path" yaml:"stdout_path" mapstructure:"stdout_path"`
-	StderrPath  string        `json:"stderr_path" toml:"stderr_path" yaml:"stderr_path" mapstructure:"stderr_path"`
-	ContextKeys []string      `json:"context_keys" toml:"context_keys" yaml:"context_keys" mapstructure:"context_keys"`
+	Development       bool          `json:"development"  yaml:"development"`
+	Level             zapcore.Level `json:"level"  yaml:"level"`
+	StdoutPath        string        `json:"stdout_path"  yaml:"stdout_path" mapstructure:"stdout_path"`
+	StderrPath        string        `json:"stderr_path"  yaml:"stderr_path" mapstructure:"stderr_path"`
+	ContextKeys       []string      `json:"context_keys"  yaml:"context_keys" mapstructure:"context_keys"`
+	lumberjack.Logger `json:",inline"`
 }
 
 func Logger() *zap.Logger {
