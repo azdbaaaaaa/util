@@ -3,30 +3,6 @@ set -e
 
 VERSION=$(git describe --tags --always)
 
-deployPre(){
-    ENV=$1
-    HOST=$2
-    echo "开始发布，主机ip为:${HOST}"
-    echo ${PROJECT},${IMAGE_REPO},${VERSION},${ENV},${HOST},${CMD}
-    if [[ ${CMD} == "serve" ]]
-    then
-      SERVICE="${PROJECT}"
-    else
-      SERVICE="${PROJECT}-${CMD}"
-    fi
-    ssh -o stricthostkeychecking=no mqq@${HOST} -p 60022 "
-        docker stop ${SERVICE}
-        docker rm ${SERVICE}
-        aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin ${IMAGE_REPO}
-        docker run -d --restart=always --name=${SERVICE} --network host \
-        -v /usr/local/app/tars/app_log/LightHouse:/usr/local/app/tars/app_log/LightHouse \
-        -v /log:/log \
-        ${IMAGE_REPO}/${PROJECT}:${VERSION} \
-        ${CMD} --config=/app/config/${PROJECT}-${ENV}.yaml
-        docker container list
-        "
-}
-
 deploy(){
     ENV=$1
     HOST=$2
@@ -52,9 +28,7 @@ deploy(){
 
 deploy_k8s() {
     ENV=$1
-    HOST=$2
-    echo "开始发布，主机ip为:${HOST}"
-    echo ${PROJECT},${IMAGE_REPO},${VERSION},${ENV},${HOST},${CMD}
+    echo "开始发布，环境:${ENV}"
     if [[ ${CMD} == "serve" ]]
     then
       DEPLOYMENT="${PROJECT}"
@@ -82,15 +56,7 @@ case ${CI_COMMIT_REF_NAME} in
     ;;
   pre)
     ENV="pre"
-    echo "${FICOOL_PRE}"
-    if [[ "${FICOOL_PRE}" == "" ]];then
-      echo "FICOOL_PRE not set"
-      exit 1
-    fi
-    for HOST in ${FICOOL_PRE}
-    do
-      deployPre ${ENV} "${HOST}"
-    done
+    deploy_k8s ${ENV}
     ;;
   master)
     echo "please set tags to publish!"
@@ -98,7 +64,7 @@ case ${CI_COMMIT_REF_NAME} in
     ;;
   *)
     ENV="dev"
-    deploy_k8s ${ENV} "${HOST}"
+    deploy_k8s ${ENV}
     ;;
 esac
 
