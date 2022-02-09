@@ -28,6 +28,7 @@ deploy(){
 
 deploy_k8s() {
     ENV=$1
+    NAMESPACE=$2
     echo "开始发布，环境:${ENV}"
     if [[ ${CMD} == "serve" ]]
     then
@@ -36,8 +37,8 @@ deploy_k8s() {
       DEPLOYMENT="${PROJECT}-${CMD}"
     fi
 
-    kubectl create configmap "${PROJECT}" --from-file=${PROJECT}.yaml="config/${PROJECT}-${ENV}.yaml" -n ficool -o yaml --dry-run=client | kubectl replace -f -
-    kubectl set image "deployment/${DEPLOYMENT}" ${DEPLOYMENT}="$IMAGE_REPO/$PROJECT:$VERSION" -n ficool
+    kubectl create configmap "${PROJECT}" --from-file=${PROJECT}.yaml="config/${PROJECT}-${ENV}.yaml" -n "${NAMESPACE}" -o yaml --dry-run=client | kubectl replace -f -
+    kubectl set image "deployment/${DEPLOYMENT}" ${DEPLOYMENT}="$IMAGE_REPO/$PROJECT:$VERSION" -n "${NAMESPACE}"
 }
 
 
@@ -56,7 +57,8 @@ case ${CI_COMMIT_REF_NAME} in
     ;;
   pre)
     ENV="pre"
-    deploy_k8s ${ENV}
+    NAMESPACE="pre-ficool"
+    deploy_k8s ${ENV} ${NAMESPACE}
     ;;
   master)
     echo "please set tags to publish!"
@@ -64,7 +66,8 @@ case ${CI_COMMIT_REF_NAME} in
     ;;
   *)
     ENV="dev"
-    deploy_k8s ${ENV}
+    NAMESPACE="ficool"
+    deploy_k8s ${ENV} ${NAMESPACE}
     ;;
 esac
 
