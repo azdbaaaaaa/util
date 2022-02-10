@@ -30,6 +30,13 @@ func New(code, subCode int32, message string) Error {
 	}
 }
 
+func NewError(code int32, message string) Error {
+	return &err{
+		Code:    code,
+		Message: message,
+	}
+}
+
 func (e *err) Error() string {
 	return fmt.Sprintf("error: code = %d subCode = %d reason = %s message = %s metadata = %v", e.Code, e.SubCode, e.Reason, e.Message, e.Metadata)
 }
