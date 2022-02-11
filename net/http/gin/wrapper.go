@@ -23,7 +23,7 @@ var (
 			Help:        "all the server response result count",
 			ConstLabels: gin_prometheus.ConstLabels,
 		},
-		[]string{"path", "method", "code", "ip", "result", "version"})
+		[]string{"path", "method", "code", "ip", "result", "version", "app_type"})
 )
 
 func init() {
@@ -52,7 +52,7 @@ func ErrorWrapper(handle WrapperHandle) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		code := xerror.Success
 		var (
-			rid, version string
+			rid, version, appType string
 		)
 		start := time.Now()
 		data, err := handle(ctx)
@@ -72,11 +72,12 @@ func ErrorWrapper(handle WrapperHandle) gin.HandlerFunc {
 		}
 		if device, exists := ctx.Get(metadata.ContextKeyDevice); exists {
 			version = device.(metadata.Device).VersionName
+			appType = string(device.(metadata.Device).AppType)
 		}
 		metricResultTotal.
 			WithLabelValues([]string{
 				ctx.FullPath(), ctx.Request.Method, strconv.Itoa(ctx.Writer.Status()),
-				ctx.ClientIP(), strconv.Itoa(int(code.GetCode())), version,
+				ctx.ClientIP(), strconv.Itoa(int(code.GetCode())), version, appType,
 			}...).
 			Inc()
 		resp := ApiError{
