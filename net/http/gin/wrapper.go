@@ -88,7 +88,11 @@ func ErrorWrapper(handle WrapperHandle) gin.HandlerFunc {
 			Rid:     rid,
 			Ts:      time.Now().UnixNano() / 1e6,
 		}
-		log.Infow(ctx.FullPath(), "result", resp.Result, "message", resp.Message, "reason", resp.Reason, "rid", rid, "time", time.Since(start).String())
+		if resp.Result != 0 {
+			log.Infow(ctx.FullPath(), "result", resp.Result, "message", resp.Message, "reason", resp.Reason, "rid", rid, "time", time.Since(start).String())
+		} else {
+			log.Debugw(ctx.FullPath(), "result", resp.Result, "message", resp.Message, "reason", resp.Reason, "rid", rid, "time", time.Since(start).String())
+		}
 		ctx.JSON(http.StatusOK, resp)
 	}
 }
