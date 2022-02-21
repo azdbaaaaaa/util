@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $DEPLOYMENT
+  namespace: $NAMESPACE
+  labels:
+    app: $DEPLOYMENT
+    level: "2"
+    version: v1
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: $DEPLOYMENT
+  template:
+    metadata:
+      labels:
+        app: $DEPLOYMENT
+        version: v1
+    spec:
+      containers:
+        - name: $DEPLOYMENT
+          image: $IMAGE_REPO:$VERSION
+          command: [ "/app/$PROJECT", "$CMD" ]  # command 和args
+          imagePullPolicy: Always
+          ports:
+            - name: grpc
+              containerPort: $PORT
+          livenessProbe:
+            tcpSocket:
+              port: $PORT
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            tcpSocket:
+              port: $PORT
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+          volumeMounts:
+            - name: config
+              mountPath: /etc/config
+      volumes:
+        - name: config
+          configMap:
+            name: $DEPLOYMENT
