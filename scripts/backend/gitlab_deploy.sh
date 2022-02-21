@@ -9,14 +9,16 @@ export IMAGE_REPO
 
 yaml_deployment(){
   export PORT=$PORT
-  cp -a https://raw.githubusercontent.com/azdbaaaaaa/util/master/scripts/k8s/${ENV}/${TYPE}/deployment.template.yaml deployment.yaml
+  wget https://raw.githubusercontent.com/azdbaaaaaa/util/master/scripts/k8s/${ENV}/${TYPE}/deployment.template.yaml
+  cp -a deployment.template.yaml deployment.yaml
   file=`cat deployment.yaml`
   printf "`export -p`\ncat << EOF\n$file\nEOF" | bash > deployment.yaml
 }
 
 yaml_service(){
   export PORT=$PORT
-  cp -a https://raw.githubusercontent.com/azdbaaaaaa/util/master/scripts/k8s/${ENV}/${TYPE}/service.template.yaml service.yaml
+  wget https://raw.githubusercontent.com/azdbaaaaaa/util/master/scripts/k8s/${ENV}/${TYPE}/service.template.yaml
+  cp -a service.template.yaml service.yaml
   file=`cat service.yaml`
   printf "`export -p`\ncat << EOF\n$file\nEOF" | bash > service.yaml
 }
