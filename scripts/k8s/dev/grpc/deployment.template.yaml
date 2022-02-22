@@ -49,7 +49,12 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /etc/config
+            - name: log
+              mountPath: /log
       volumes:
         - name: config
           configMap:
             name: $DEPLOYMENT
+        - name: log
+            persistentVolumeClaim:
+              claimName: efs-claim
