@@ -4,8 +4,10 @@ import (
 	"context"
 	"github.com/azdbaaaaaa/util/proto/common"
 	"github.com/azdbaaaaaa/util/xutil/xerror"
+	"github.com/qiniu/qmgo"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"gorm.io/gorm"
 )
 
 var (
@@ -24,9 +26,14 @@ func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 					zap.Int32("subCode", res.SubCode),
 					zap.String("message", res.Message),
 					zap.String("reason", res.Reason),
-					)
+				)
 				return xerror.New(res.Code, res.SubCode, res.Message).WithReason(res.Reason)
 			}
+		}
+		switch err {
+		case qmgo.ErrNoSuchDocuments, gorm.ErrRecordNotFound:
+			return xerror.ErrNotFound
+		default:
 		}
 		return err
 	}

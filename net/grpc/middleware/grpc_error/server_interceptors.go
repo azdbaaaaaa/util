@@ -33,7 +33,7 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 					res.Reason = xerr.GetReason()
 					return res, nil
 				}
-				return resp, nil
+				return resp, xerr
 			}
 			logger.Error("unknown error", zap.Errors("err", []error{err}), SystemField, ServerField)
 			return resp, status.Errorf(status.FromContextError(err).Code(), err.Error())

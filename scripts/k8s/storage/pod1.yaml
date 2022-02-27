@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app1
+  namespace: pre-ficool
+spec:
+  containers:
+    - name: app1
+      image: busybox
+      command: ["/bin/sh"]
+      args: ["-c", "while true; do echo $(date -u) >> /data/out1.txt; sleep 5; done"]
+      volumeMounts:
+        - name: log
+          mountPath: /log
+  volumes:
+    - name: log
+      persistentVolumeClaim:
+        claimName: efs-claim
