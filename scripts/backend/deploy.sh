@@ -3,8 +3,10 @@ set -e
 
 VERSION=$(git describe --tags --always)
 export VERSION
+echo '$VERSION',$VERSION
 IMAGE_REPO=${IMAGE_REPO}
 export IMAGE_REPO
+echo '$IMAGE_REPO',$IMAGE_REPO
 
 deploy(){
     ENV=$1
@@ -33,7 +35,7 @@ deploy_k8s() {
     export ENV=$1
     export NAMESPACE=$2
 
-    echo "开始发布，环境:",${ENV},"type",$TYPE,"init",$INIT,"cmd",$CMD
+    echo "开始发布，环境:",${ENV},'$NAMESPACE',$NAMESPACE,'$TYPE',$TYPE,'$INIT',$INIT,'$CMD',$CMD
     if [[ ${CMD} == "serve" ]]
     then
       export DEPLOYMENT="${PROJECT}"
@@ -45,27 +47,18 @@ deploy_k8s() {
     echo "DEPLOYMENT",$DEPLOYMENT,"SERVICE",$SERVICE
 
     ## k8s configmap
-    echo $INIT
     if [[ $INIT == "" ]];then
-      echo 1
-    else
-      echo 2
-    fi
-
-    if [[ $INIT == "" ]];then
-      echo 3
       echo "replace configmap, deployment"
       kubectl create configmap "${DEPLOYMENT}" --from-file=${DEPLOYMENT}.yaml="config/${PROJECT}-${ENV}.yaml" -n "${NAMESPACE}" -o yaml --dry-run=client | kubectl replace -f -
       kubectl set image "deployment/${DEPLOYMENT}" ${DEPLOYMENT}="$IMAGE_REPO/$PROJECT:$VERSION" -n "${NAMESPACE}"
     else
-      echo 4
       echo "create configmap, deployment, service"
       kubectl create configmap "${DEPLOYMENT}" --from-file=${DEPLOYMENT}.yaml="config/${PROJECT}-${ENV}.yaml" -n "${NAMESPACE}"
 
       case "${TYPE}" in
       http)
         PORT=`kubectl get configmap ${DEPLOYMENT} -n "${NAMESPACE}" -o json | jq -r ".data.\"$DEPLOYMENT.yaml\"" | yq e '.http.addr' - | sed 's/://g'`
-        echo "port", $PORT
+        echo "port",$PORT
         if [[ ${PORT} -eq "" ]];then
           exit 1
         fi
@@ -73,7 +66,7 @@ deploy_k8s() {
         ;;
       grpc)
         PORT=`kubectl get configmap ${DEPLOYMENT} -n "${NAMESPACE}" -o json | jq -r ".data.\"$DEPLOYMENT.yaml\"" | yq e '.grpc.addr' - | sed 's/://g'`
-        echo "port", $PORT
+        echo "port",$PORT
         if [[ ${PORT} -eq "" ]];then
           exit 1
         fi
