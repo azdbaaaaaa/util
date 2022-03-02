@@ -6,23 +6,6 @@ export VERSION
 IMAGE_REPO=${IMAGE_REPO}
 export IMAGE_REPO
 
-
-yaml_deployment(){
-  export PORT=$PORT
-  wget https://raw.githubusercontent.com/azdbaaaaaa/util/master/scripts/k8s/${ENV}/${TYPE}/deployment.template.yaml
-  cp -a deployment.template.yaml deployment.yaml
-  file=`cat deployment.yaml`
-  printf "`export -p`\ncat << EOF\n$file\nEOF" | bash > deployment.yaml
-}
-
-yaml_service(){
-  export PORT=$PORT
-  wget https://raw.githubusercontent.com/azdbaaaaaa/util/master/scripts/k8s/${ENV}/${TYPE}/service.template.yaml
-  cp -a service.template.yaml service.yaml
-  file=`cat service.yaml`
-  printf "`export -p`\ncat << EOF\n$file\nEOF" | bash > service.yaml
-}
-
 deploy(){
     ENV=$1
     HOST=$2
@@ -66,8 +49,7 @@ deploy_k8s() {
       export TYPE="job"
     fi
     ## k8s configmap
-    kubectl create configmap "${DEPLOYMENT}" --from-file=${DEPLOYMENT}.yaml="config/${PROJECT}-${ENV}.yaml" -n "${NAMESPACE}" ||
-    kubectl create configmap "${DEPLOYMENT}" --from-file=${DEPLOYMENT}.yaml="config/${PROJECT}-${ENV}.yaml" -n "${NAMESPACE}" -o yaml --dry-run=client | kubectl replace -f -
+    kubectl create configmap "${DEPLOYMENT}" --from-file=${DEPLOYMENT}.yaml="config/${PROJECT}-${ENV}.yaml" -n "${NAMESPACE}"
 
     case "${TYPE}" in
     http)
@@ -83,32 +65,8 @@ deploy_k8s() {
         exit 1
       fi
       export PORT=$PORT
-
-      ## k8s deployment
-#      is_deploy=`kubectl get deploy -n "${NAMESPACE}" | grep "${DEPLOYMENT}" | wc -l`
-#      if [[ $is_deploy -gt 0 ]];then
-#        kubectl set image "deployment/${DEPLOYMENT}" ${DEPLOYMENT}="$IMAGE_REPO/$PROJECT:$VERSION" -n "${NAMESPACE}"
-#      else
-#        yaml_deployment
-#        kubectl apply -f deployment.yaml
-#      fi
-#
-#      ## k8s service
-#      is_service=`kubectl get svc -n "${NAMESPACE}" | grep "${SERVICE}" | wc -l`
-#      if [[ is_service -eq 0 ]];then
-#        yaml_service
-#        kubectl apply -f service.yaml
-#      fi
       ;;
     job)
-      ## k8s deployment
-#      is_deploy=`kubectl get deploy -n "${NAMESPACE}" | grep "${DEPLOYMENT}" | wc -l`
-#      if [[ $is_deploy -gt 0 ]];then
-#        kubectl set image "deployment/${DEPLOYMENT}" ${DEPLOYMENT}="$IMAGE_REPO/$PROJECT:$VERSION" -n "${NAMESPACE}"
-#      else
-#        yaml_deployment
-#        kubectl apply -f deployment.yaml
-#      fi
       ;;
     esac
 
