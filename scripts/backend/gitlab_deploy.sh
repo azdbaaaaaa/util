@@ -72,10 +72,16 @@ deploy_k8s() {
     case "${TYPE}" in
     http)
       PORT=`kubectl get configmap ${DEPLOYMENT} -n "${NAMESPACE}" -o json | jq -r ".data.\"$DEPLOYMENT.yaml\"" | yq e '.http.addr' - | sed 's/://g'`
+      if [[ ${PORT} -eq "" ]];then
+        exit 1
+      fi
       export PORT=$PORT
       ;;
     grpc)
       PORT=`kubectl get configmap ${DEPLOYMENT} -n "${NAMESPACE}" -o json | jq -r ".data.\"$DEPLOYMENT.yaml\"" | yq e '.grpc.addr' - | sed 's/://g'`
+      if [[ ${PORT} -eq "" ]];then
+        exit 1
+      fi
       export PORT=$PORT
 
       ## k8s deployment
