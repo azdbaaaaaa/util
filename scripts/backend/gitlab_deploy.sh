@@ -107,9 +107,9 @@ deploy_k8s() {
     esac
 
         git clone https://github.com/azdbaaaaaa/util.git
-        kustomize build util/scripts/k8s/${TYPE}/overlays/${ENV} > configmap.yaml
-    #    file=`cat all.yaml`
-        printf "`export -p`\ncat << EOF\n`cat all.yaml`\nEOF" | bash > all.yaml
+        kustomize build util/scripts/k8s/${TYPE}/overlays/${ENV} > all.yaml
+        file=`cat all.yaml`
+        printf "`export -p`\ncat << EOF\n$file\nEOF" | bash > all.yaml
         cat all.yaml
         kubectl apply -f all.yaml
 }
