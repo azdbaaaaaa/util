@@ -75,7 +75,7 @@ deploy_k8s() {
         fi
         export PORT=$PORT
         ;;
-      job)
+      *)
         ;;
       esac
 
