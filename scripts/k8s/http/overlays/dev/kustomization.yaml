@@ -1,0 +1,11 @@
+namespace: "ficool"
+
+commonLabels:
+  env: "dev"
+
+bases:
+  - ../../base
+patchesStrategicMerge:
+  - replicas.yaml
+  - probe.yaml
+  - volume.yaml
