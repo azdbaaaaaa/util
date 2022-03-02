@@ -65,16 +65,15 @@ deploy_k8s() {
       export SERVICE="${PROJECT}-${CMD}"
       export TYPE="job"
     fi
-
     ## k8s configmap
-    kubectl get cm ${DEPLOYMENT} -n "${NAMESPACE}" || exit 0
-    is_cm
+#    kubectl get cm ${DEPLOYMENT} -n "${NAMESPACE}" || exit 0
+
     kubectl create configmap "${DEPLOYMENT}" --from-file=${DEPLOYMENT}.yaml="config/${PROJECT}-${ENV}.yaml" -n "${NAMESPACE}" ||
     kubectl create configmap "${DEPLOYMENT}" --from-file=${DEPLOYMENT}.yaml="config/${PROJECT}-${ENV}.yaml" -n "${NAMESPACE}" -o yaml --dry-run=client | kubectl replace -f -
 
     case "${TYPE}" in
     http)
-      PORT=`kubectl get configmap ${DEPLOYMENT} -n "${NAMESPACE}" -o json | jq -r ".data.\"$DEPLOYMENT.yaml\"" | yq e '.grpc.http' - | sed 's/://g'`
+      PORT=`kubectl get configmap ${DEPLOYMENT} -n "${NAMESPACE}" -o json | jq -r ".data.\"$DEPLOYMENT.yaml\"" | yq e '.http.addr' - | sed 's/://g'`
       export PORT=$PORT
       ;;
     grpc)
@@ -82,33 +81,39 @@ deploy_k8s() {
       export PORT=$PORT
 
       ## k8s deployment
-      is_deploy=`kubectl get deploy -n "${NAMESPACE}" | grep "${DEPLOYMENT}" | wc -l`
-      if [[ $is_deploy -gt 0 ]];then
-        kubectl set image "deployment/${DEPLOYMENT}" ${DEPLOYMENT}="$IMAGE_REPO/$PROJECT:$VERSION" -n "${NAMESPACE}"
-      else
-        yaml_deployment
-        kubectl apply -f deployment.yaml
-      fi
-
-      ## k8s service
-      is_service=`kubectl get svc -n "${NAMESPACE}" | grep "${SERVICE}" | wc -l`
-      if [[ is_service -eq 0 ]];then
-        yaml_service
-        kubectl apply -f service.yaml
-      fi
+#      is_deploy=`kubectl get deploy -n "${NAMESPACE}" | grep "${DEPLOYMENT}" | wc -l`
+#      if [[ $is_deploy -gt 0 ]];then
+#        kubectl set image "deployment/${DEPLOYMENT}" ${DEPLOYMENT}="$IMAGE_REPO/$PROJECT:$VERSION" -n "${NAMESPACE}"
+#      else
+#        yaml_deployment
+#        kubectl apply -f deployment.yaml
+#      fi
+#
+#      ## k8s service
+#      is_service=`kubectl get svc -n "${NAMESPACE}" | grep "${SERVICE}" | wc -l`
+#      if [[ is_service -eq 0 ]];then
+#        yaml_service
+#        kubectl apply -f service.yaml
+#      fi
       ;;
     job)
       ## k8s deployment
-      is_deploy=`kubectl get deploy -n "${NAMESPACE}" | grep "${DEPLOYMENT}" | wc -l`
-      if [[ $is_deploy -gt 0 ]];then
-        kubectl set image "deployment/${DEPLOYMENT}" ${DEPLOYMENT}="$IMAGE_REPO/$PROJECT:$VERSION" -n "${NAMESPACE}"
-      else
-        yaml_deployment
-        kubectl apply -f deployment.yaml
-      fi
+#      is_deploy=`kubectl get deploy -n "${NAMESPACE}" | grep "${DEPLOYMENT}" | wc -l`
+#      if [[ $is_deploy -gt 0 ]];then
+#        kubectl set image "deployment/${DEPLOYMENT}" ${DEPLOYMENT}="$IMAGE_REPO/$PROJECT:$VERSION" -n "${NAMESPACE}"
+#      else
+#        yaml_deployment
+#        kubectl apply -f deployment.yaml
+#      fi
       ;;
     esac
 
+    git clone https://github.com/azdbaaaaaa/util.git
+    kustomize build util/scripts/k8s/${TYPE}/overlays/${ENV} > all.yaml
+#    file=`cat all.yaml`
+    printf "`export -p`\ncat << EOF\n`cat all.yaml`\nEOF" | bash > all.yaml
+    cat all.yaml
+    kubectl apply -f all.yaml
 }
 
 case ${CI_COMMIT_REF_NAME} in
