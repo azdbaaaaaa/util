@@ -1,11 +1,10 @@
-namespace: "pre-ficool"
+namespace: "ficool"
 
 commonLabels:
-  env: "pre"
+  env: "dev"
 
 bases:
   - ../../base
 patchesStrategicMerge:
   - replicas.yaml
-  - probe.yaml
   - volume.yaml

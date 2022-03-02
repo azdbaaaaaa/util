@@ -1,4 +1,4 @@
-namespace: ficool
+namespace: "ficool"
 
 commonLabels:
   env: "dev"
