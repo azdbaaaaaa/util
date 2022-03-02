@@ -13,6 +13,3 @@ spec:
           image: $IMAGE_REPO/$PROJECT:$VERSION
           command: [ "/app/$PROJECT", "$CMD" ]
           imagePullPolicy: Always
-          ports:
-            - name: service
-              containerPort: $PORT
