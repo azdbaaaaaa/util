@@ -46,14 +46,17 @@ deploy_k8s() {
 
     ## k8s configmap
     if [[ ${INIT} -eq "" ]];then
+      echo "replace configmap, deployment"
       kubectl create configmap "${DEPLOYMENT}" --from-file=${DEPLOYMENT}.yaml="config/${PROJECT}-${ENV}.yaml" -n "${NAMESPACE}" -o yaml --dry-run=client | kubectl replace -f -
       kubectl set image "deployment/${DEPLOYMENT}" ${DEPLOYMENT}="$IMAGE_REPO/$PROJECT:$VERSION" -n "${NAMESPACE}"
     else
+      echo "create configmap, deployment, service"
       kubectl create configmap "${DEPLOYMENT}" --from-file=${DEPLOYMENT}.yaml="config/${PROJECT}-${ENV}.yaml" -n "${NAMESPACE}"
 
       case "${TYPE}" in
       http)
         PORT=`kubectl get configmap ${DEPLOYMENT} -n "${NAMESPACE}" -o json | jq -r ".data.\"$DEPLOYMENT.yaml\"" | yq e '.http.addr' - | sed 's/://g'`
+        echo "port", $PORT
         if [[ ${PORT} -eq "" ]];then
           exit 1
         fi
@@ -61,6 +64,7 @@ deploy_k8s() {
         ;;
       grpc)
         PORT=`kubectl get configmap ${DEPLOYMENT} -n "${NAMESPACE}" -o json | jq -r ".data.\"$DEPLOYMENT.yaml\"" | yq e '.grpc.addr' - | sed 's/://g'`
+        echo "port", $PORT
         if [[ ${PORT} -eq "" ]];then
           exit 1
         fi
