@@ -66,8 +66,6 @@ deploy_k8s() {
       export TYPE="job"
     fi
     ## k8s configmap
-#    kubectl get cm ${DEPLOYMENT} -n "${NAMESPACE}" || exit 0
-
     kubectl create configmap "${DEPLOYMENT}" --from-file=${DEPLOYMENT}.yaml="config/${PROJECT}-${ENV}.yaml" -n "${NAMESPACE}" ||
     kubectl create configmap "${DEPLOYMENT}" --from-file=${DEPLOYMENT}.yaml="config/${PROJECT}-${ENV}.yaml" -n "${NAMESPACE}" -o yaml --dry-run=client | kubectl replace -f -
 
@@ -108,12 +106,12 @@ deploy_k8s() {
       ;;
     esac
 
-    git clone https://github.com/azdbaaaaaa/util.git
-    kustomize build util/scripts/k8s/${TYPE}/overlays/${ENV} > all.yaml
-#    file=`cat all.yaml`
-    printf "`export -p`\ncat << EOF\n`cat all.yaml`\nEOF" | bash > all.yaml
-    cat all.yaml
-    kubectl apply -f all.yaml
+        git clone https://github.com/azdbaaaaaa/util.git
+        kustomize build util/scripts/k8s/${TYPE}/overlays/${ENV} > configmap.yaml
+    #    file=`cat all.yaml`
+        printf "`export -p`\ncat << EOF\n`cat all.yaml`\nEOF" | bash > all.yaml
+        cat all.yaml
+        kubectl apply -f all.yaml
 }
 
 case ${CI_COMMIT_REF_NAME} in

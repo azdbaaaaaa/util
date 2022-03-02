@@ -10,12 +10,12 @@ commonLabels:
   version: "v1"
 
 #configMapGenerator:
-#  - name: example-configmap-1
+#  - name: $DEPLOYMENT
 #    files:
-#      - application.properties
+#      - ${DEPLOYMENT}.yaml="config/${PROJECT}-${ENV}.yaml"
 
 
 resources:
   - deployment.yaml
-#  - service.yaml
+  - service.yaml
 
