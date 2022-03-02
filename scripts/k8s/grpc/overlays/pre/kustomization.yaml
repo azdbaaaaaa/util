@@ -1,4 +1,4 @@
-namespace: ficool
+namespace: pre-ficool
 
 commonLabels:
   env: "pre"
