@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $DEPLOYMENT
+spec:
+  selector:
+    matchLabels:
+      app: $DEPLOYMENT
+  template:
+    spec:
+      containers:
+        - name: $DEPLOYMENT
+          image: $IMAGE_REPO:$VERSION
+          command: [ "/app/$PROJECT", "$CMD" ]
+          imagePullPolicy: Always
+          ports:
+            - name: service
+              containerPort: $PORT
