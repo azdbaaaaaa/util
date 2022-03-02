@@ -45,6 +45,13 @@ deploy_k8s() {
     echo "DEPLOYMENT",$DEPLOYMENT,"SERVICE",$SERVICE
 
     ## k8s configmap
+    echo $INIT
+    if [[ $INIT == "" ]];then
+      echo 1
+    else
+      echo 2
+    fi
+
     if [[ $INIT -eq "" ]];then
       echo "replace configmap, deployment"
       kubectl create configmap "${DEPLOYMENT}" --from-file=${DEPLOYMENT}.yaml="config/${PROJECT}-${ENV}.yaml" -n "${NAMESPACE}" -o yaml --dry-run=client | kubectl replace -f -
