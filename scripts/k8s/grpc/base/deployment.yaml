@@ -10,7 +10,7 @@ spec:
     spec:
       containers:
         - name: $DEPLOYMENT
-          image: $IMAGE_REPO:$VERSION
+          image: $IMAGE_REPO/$PROJECT:$VERSION
           command: [ "/app/$PROJECT", "$CMD" ]
           imagePullPolicy: Always
           ports:
