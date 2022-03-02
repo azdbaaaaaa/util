@@ -76,9 +76,11 @@ deploy_k8s() {
         export PORT=$PORT
         ;;
       *)
+        echo "job continue"
         ;;
       esac
 
+      echo "kustomize yaml"
       git clone https://github.com/azdbaaaaaa/util.git --depth=1
       kustomize build util/scripts/k8s/${TYPE}/overlays/${ENV} > all.yaml
       file=`cat all.yaml`
