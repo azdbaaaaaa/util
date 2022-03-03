@@ -3,10 +3,13 @@ kind: Deployment
 metadata:
   name: $DEPLOYMENT
 spec:
-#  selector:
-#    matchLabels:
-#      app: $DEPLOYMENT
+  selector:
+    matchLabels:
+      app: $DEPLOYMENT
   template:
+    metadata:
+      labels:
+        app: $DEPLOYMENT
     spec:
       containers:
         - name: $DEPLOYMENT
