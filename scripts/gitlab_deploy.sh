@@ -79,7 +79,7 @@ case ${CI_COMMIT_REF_NAME} in
       deploy ${ENV} "${HOST}"
     done
     ;;
-  pre)
+  pre|pre*)
     ENV="pre"
 #    NAMESPACE="pre-ficool"
 #    deploy_k8s ${ENV} ${NAMESPACE}
