@@ -2,11 +2,16 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: $DEPLOYMENT
+  labels:
+    app: $DEPLOYMENT
 spec:
-#  selector:
-#    matchLabels:
-#      app: $DEPLOYMENT
+  selector:
+    matchLabels:
+      app: $DEPLOYMENT
   template:
+    metadata:
+      labels:
+        app: $DEPLOYMENT
     spec:
       containers:
         - name: $DEPLOYMENT
