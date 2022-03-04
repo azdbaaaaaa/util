@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/azdbaaaaaa/util/net/metadata"
 	"github.com/azdbaaaaaa/util/net/tars/common"
+	tars_common "github.com/azdbaaaaaa/util/net/tars/common"
 	proto_common "github.com/azdbaaaaaa/util/proto/common"
 )
 
@@ -16,7 +17,10 @@ type Registry struct {
 }
 
 func NewTarsInParam(ctx context.Context) *common.InParam {
-	inParam := new(common.InParam)
+	inParam := &common.InParam{
+		AppId:  tars_common.AppIdEnum_LIGHT_HOUSE,
+		AreaId: 91,
+	}
 
 	// inparam
 	if v := ctx.Value(metadata.ContextKeyInParam); v != nil {
