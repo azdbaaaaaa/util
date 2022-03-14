@@ -65,7 +65,7 @@ func (CGH *ConsumerGroupHandler) ConsumeClaim(session sarama.ConsumerGroupSessio
 		}
 		err := CGH.cs.ReceiveMessages(message)
 		if err != nil {
-			log.Errorf("ReceiveMessagesError", "message", *message)
+			log.Debugw("ReceiveMessagesError", "message", *message)
 			continue
 		}
 		session.MarkMessage(message, "")

@@ -18,6 +18,7 @@ type InParam struct {
 	Token    string           `json:"token,omitempty"`
 }
 
+// InParamFromContext 只有在app网关层才会注入，如果直接内部调用会返回：ErrNoInParamError
 func InParamFromContext(ctx context.Context) (i InParam, err error) {
 	if v := ctx.Value(ContextKeyInParam); v != nil {
 		if i, ok := v.(InParam); ok {

@@ -64,6 +64,7 @@ func New(text string) (d *Device) {
 	return
 }
 
+// DeviceFromContext 只有在app网关层才会注入，如果直接内部调用会返回：ErrNoDeviceError
 func DeviceFromContext(ctx context.Context) (d Device, err error) {
 	if v := ctx.Value(ContextKeyDevice); v != nil {
 		if d, ok := v.(Device); ok {
