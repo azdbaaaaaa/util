@@ -7,9 +7,9 @@ metadata:
     app: $SERVICE
 spec:
   ports:
-    - name: grpc
+    - name: http
       protocol: TCP
-      port: 8088
+      port: 8087
       targetPort: $PORT
   selector:
     app: $SERVICE
