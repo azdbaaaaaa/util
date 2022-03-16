@@ -23,7 +23,8 @@ deploy(){
         docker stop ${SERVICE}
         docker rm ${SERVICE}
         aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin ${IMAGE_REPO}
-        docker run -d --log-driver json-file --log-opt max-size=50m --log-opt max-file=10 --restart=always --name=${SERVICE} --network host \
+        docker run -d --log-driver json-file --log-opt max-size=50m --log-opt max-file=10 --restart=always --name=${SERVICE} \
+        --network host --env GIN_MODE=release\
         -v /log:/log \
         ${IMAGE_REPO}/${PROJECT}:${VERSION} \
         ${CMD} --config=/app/config/${PROJECT}-${ENV}.yaml
