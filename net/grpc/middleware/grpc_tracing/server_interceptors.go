@@ -1,9 +1,11 @@
-package grpc_request_id
+package grpc_tracing
 
 import (
 	"context"
+	"fmt"
 	metadata2 "github.com/azdbaaaaaa/util/net/metadata"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	"github.com/opentracing/opentracing-go"
 	uuid "github.com/satori/go.uuid"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
@@ -24,24 +26,36 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		service := path.Dir(info.FullMethod)[1:]
 		methodName := path.Base(info.FullMethod)
-		reqID := ""
-		if md, ok := metadata.FromIncomingContext(ctx); ok {
-			if md[metadata2.ContextKeyReqID] != nil && len(md[metadata2.ContextKeyReqID]) > 0 {
-				reqID = md[metadata2.ContextKeyReqID][0]
-			}
+		md, ok := metadata.FromIncomingContext(ctx)
+		if !ok {
+			md = metadata.New(nil)
+		} else {
+			//如果对metadata进行修改，那么需要用拷贝的副本进行修改。（FromIncomingContext的注释）
+			md = md.Copy()
 		}
-		if reqID == "" {
-			reqID = uuid.NewV4().String()
-			//logger.Debug("not found req_id generate one", SystemField, ServerField, zap.String("uuid", reqID))
+		carrier := TextMapReader{md}
+		_ = carrier.ForeachKey(func(key, val string) error {
+			logger.Debug("incoming md", zap.String(key, val))
+			return nil
+		})
+		tracer := opentracing.GlobalTracer()
+		spanContext, e := tracer.Extract(opentracing.TextMap, carrier)
+		if e != nil {
+			logger.Debug("extract error",
+				zap.String("grpc.service", service),
+				zap.String("grpc.method", methodName),
+				ServerField,
+				SystemField,
+				zap.Error(e),
+			)
+			fmt.Println("Extract err:", e)
 		}
-		logger.Debug("finished server unary call interceptor",
-			zap.String("grpc.service", service),
-			zap.String("grpc.method", methodName),
-			SystemField,
-			ServerField,
-			zap.String("req_id", reqID),
-		)
-		ctx = context.WithValue(ctx, metadata2.ContextKeyReqID, reqID)
+
+		span := tracer.StartSpan(info.FullMethod, opentracing.ChildOf(spanContext))
+		defer span.Finish()
+		ctx = opentracing.ContextWithSpan(ctx, span)
+
+		//ctx = context.WithValue(ctx, metadata2.ContextKeyReqID, reqID)
 		resp, err := handler(ctx, req)
 		return resp, err
 	}

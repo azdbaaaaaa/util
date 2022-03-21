@@ -5,6 +5,7 @@ import (
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_error"
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_in_param"
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_request_id"
+	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_tracing"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
@@ -47,6 +48,7 @@ func NewServer(conf ServerConfig, logger *zap.Logger) (s *grpc.Server) {
 			grpc_device.UnaryServerInterceptor(logger),
 			grpc_in_param.UnaryServerInterceptor(logger),
 			grpc_error.UnaryServerInterceptor(logger),
+			grpc_tracing.UnaryServerInterceptor(logger),
 		)),
 	)
 	grpc_health_v1.RegisterHealthServer(s, health.NewServer())
