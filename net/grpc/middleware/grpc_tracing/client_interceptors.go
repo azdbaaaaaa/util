@@ -2,10 +2,7 @@ package grpc_tracing
 
 import (
 	"context"
-	"fmt"
-	metadata2 "github.com/azdbaaaaaa/util/net/metadata"
 	"github.com/opentracing/opentracing-go"
-	uuid "github.com/satori/go.uuid"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
@@ -47,27 +44,16 @@ func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 		//将span的context信息注入到carrier中
 		e := tracer.Inject(span.Context(), opentracing.TextMap, carrier)
 		if e != nil {
-			fmt.Println("tracer Inject err,", e)
+			logger.Debug("inject error",
+				zap.String("grpc.service", service),
+				zap.String("grpc.method", methodName),
+				ClientField,
+				SystemField,
+				zap.Error(e),
+			)
 		}
 		//创建一个新的context，把metadata附带上
 		ctx = metadata.NewOutgoingContext(ctx, md)
-
-		//
-		//var span opentracing.Span
-		//opName := service + ":" + methodName
-		//wireContext, err := opentracing.GlobalTracer().Extract(
-		//	opentracing.TextMap,
-		//	opentracing.TextMapCarrier(),
-		//	//opentracing.HTTPHeadersCarrier(c.Request().Header),
-		//)
-		//if err != nil {
-		//	span = opentracing.StartSpan(opName)
-		//} else {
-		//	log.Debug("opentracing span child")
-		//	span = opentracing.StartSpan(opName, opentracing.ChildOf(wireContext))
-		//}
-		//
-		//defer span.Finish()
 
 		span.SetTag("span.kind", "server")
 		span.SetTag("grpc.service", service)
@@ -82,16 +68,14 @@ func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 // StreamClientInterceptor returns a new streaming client interceptor that optionally logs the execution of external gRPC calls.
 func StreamClientInterceptor(logger *zap.Logger) grpc.StreamClientInterceptor {
 	return func(ctx context.Context, desc *grpc.StreamDesc, cc *grpc.ClientConn, method string, streamer grpc.Streamer, opts ...grpc.CallOption) (grpc.ClientStream, error) {
-		reqID := ""
-		v := ctx.Value(metadata2.ContextKeyReqID)
-		if v == nil {
-			reqID = uuid.NewV4().String()
-			//logger.Debug("not found req_id generate one", ClientField, zap.String("uuid", reqID))
-			ctx = context.WithValue(ctx, metadata2.ContextKeyReqID, reqID)
+		md, ok := metadata.FromIncomingContext(ctx)
+		if !ok {
+			md = metadata.New(nil)
 		} else {
-			reqID = v.(string)
+			//如果对metadata进行修改，那么需要用拷贝的副本进行修改。（FromIncomingContext的注释）
+			md = md.Copy()
 		}
-		ctx = metadata.AppendToOutgoingContext(ctx, metadata2.ContextKeyReqID, reqID)
+		ctx = metadata.NewOutgoingContext(ctx, md)
 		clientStream, err := streamer(ctx, desc, cc, method, opts...)
 		return clientStream, err
 	}
