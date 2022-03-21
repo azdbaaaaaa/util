@@ -34,6 +34,7 @@ func NewServer(conf ServerConfig, logger *zap.Logger) (s *grpc.Server) {
 			grpc_device.StreamServerInterceptor(logger),
 			grpc_in_param.StreamServerInterceptor(logger),
 			grpc_error.StreamServerInterceptor(logger),
+			grpc_tracing.StreamServerInterceptor(logger),
 		)),
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
 			grpc_recovery.UnaryServerInterceptor([]grpc_recovery.Option{

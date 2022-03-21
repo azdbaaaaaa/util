@@ -6,6 +6,7 @@ import (
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_error"
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_in_param"
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_request_id"
+	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_tracing"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
@@ -30,6 +31,7 @@ func NewClientConn(conf ClientConfig, logger *zap.Logger) (conn *grpc.ClientConn
 			grpc_in_param.UnaryClientInterceptor(logger),
 			grpc_error.UnaryClientInterceptor(logger),
 			grpc_zap.UnaryClientInterceptor(logger, []grpc_zap.Option{grpc_zap.WithDurationField(grpc_zap.DurationToDurationField)}...),
+			grpc_tracing.UnaryClientInterceptor(logger),
 		)),
 		grpc.WithStreamInterceptor(grpc_middleware.ChainStreamClient(
 			grpc_prometheus.StreamClientInterceptor,
@@ -38,10 +40,12 @@ func NewClientConn(conf ClientConfig, logger *zap.Logger) (conn *grpc.ClientConn
 			grpc_in_param.StreamClientInterceptor(logger),
 			grpc_error.StreamClientInterceptor(logger),
 			grpc_zap.StreamClientInterceptor(logger, []grpc_zap.Option{grpc_zap.WithDurationField(grpc_zap.DurationToDurationField)}...),
+			grpc_tracing.StreamClientInterceptor(logger),
 		)),
 	)
 	if err != nil {
 		logger.Error("did not connect", zap.Error(err))
+		return
 	}
 	return
 }
