@@ -21,15 +21,18 @@ func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 		service := path.Dir(method)[1:]
 		methodName := path.Base(method)
 
+		// 1. 先从context中获取原始的span
 		var parentContext opentracing.SpanContext
-		//先从context中获取原始的span
 		parentSpan := opentracing.SpanFromContext(ctx)
 		if parentSpan != nil {
 			parentContext = parentSpan.Context()
 		}
+
+		// 2. 创建一个新的span
 		tracer := opentracing.GlobalTracer()
 		span := tracer.StartSpan(method, opentracing.ChildOf(parentContext))
 		defer span.Finish()
+
 		//从context中获取metadata。md.(type) == map[string][]string
 		md, ok := metadata.FromIncomingContext(ctx)
 		if !ok {
@@ -53,7 +56,7 @@ func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 			)
 		}
 		//创建一个新的context，把metadata附带上
-		ctx = metadata.NewOutgoingContext(ctx, md)
+		ctx = metadata.NewOutgoingContext(ctx, carrier.MD)
 
 		span.SetTag("span.kind", "server")
 		span.SetTag("grpc.service", service)

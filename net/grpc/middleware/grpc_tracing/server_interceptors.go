@@ -23,6 +23,7 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		service := path.Dir(info.FullMethod)[1:]
 		methodName := path.Base(info.FullMethod)
+		// 1. 从ctx中解析出md
 		md, ok := metadata.FromIncomingContext(ctx)
 		if !ok {
 			md = metadata.New(nil)
@@ -30,6 +31,8 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 			//如果对metadata进行修改，那么需要用拷贝的副本进行修改。（FromIncomingContext的注释）
 			md = md.Copy()
 		}
+
+		// 2. 从md创建的carrier中解析出span
 		carrier := TextMapReader{md}
 		_ = carrier.ForeachKey(func(key, val string) error {
 			logger.Debug("incoming md", zap.String(key, val))
@@ -47,8 +50,15 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 			)
 		}
 
+		// 3. 创建一个新的span
 		span := tracer.StartSpan(info.FullMethod, opentracing.ChildOf(spanContext))
 		defer span.Finish()
+		span.SetTag("span.kind", "server")
+		span.SetTag("grpc.service", service)
+		span.SetTag("grpc.method", methodName)
+		span.SetTag("error", false)
+
+		// 4. 把span放到ctx中
 		ctx = opentracing.ContextWithSpan(ctx, span)
 		resp, err := handler(ctx, req)
 		return resp, err
