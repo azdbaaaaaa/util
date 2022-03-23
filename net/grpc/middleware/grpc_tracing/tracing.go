@@ -1,9 +1,10 @@
 package grpc_tracing
 
 import (
+	"fmt"
 	"github.com/opentracing/opentracing-go"
 	"github.com/uber/jaeger-client-go"
-	"github.com/uber/jaeger-client-go/transport"
+	"github.com/uber/jaeger-client-go/transport/zipkin"
 	"google.golang.org/grpc/metadata"
 	"io"
 	"time"
@@ -32,7 +33,8 @@ func (t TextMapReader) ForeachKey(handler func(key, val string) error) error {
 	return nil
 }
 
-func InitJaeger(service string, jaegerAgentHost string) (tracer opentracing.Tracer, closer io.Closer, err error) {
+// zipkinHost: http://hostname:9411/api/v1/spans
+func InitJaeger(service string, zipkinHost string) (tracer opentracing.Tracer, closer io.Closer, err error) {
 	//cfg := &config.Configuration{
 	//	Sampler: &config.SamplerConfig{
 	//		Type:  "const",
@@ -43,7 +45,7 @@ func InitJaeger(service string, jaegerAgentHost string) (tracer opentracing.Trac
 	//		LocalAgentHostPort: jaegerAgentHost,
 	//	},
 	//}
-	sender := transport.NewHTTPTransport(jaegerAgentHost)
+	sender, _ := zipkin.NewHTTPTransport(fmt.Sprintf("http://%s:9411/api/v1/spans", zipkinHost))
 	//sender, _ := jaeger.NewUDPTransport("jaeger-agent.istio-system:5775", 0)
 	tracer, closer = jaeger.NewTracer(
 		service,
