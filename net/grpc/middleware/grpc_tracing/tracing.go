@@ -40,8 +40,8 @@ func InitJaeger(service string, zipkinHost string) (tracer opentracing.Tracer, c
 	//sender, _ := jaeger.NewUDPTransport("jaeger-agent.istio-system:5775", 0)
 
 	zipkinPropagator := zipkin2.NewZipkinB3HTTPHeaderPropagator()
-	injector := jaeger.TracerOptions.Injector(opentracing.HTTPHeaders, zipkinPropagator)
-	extractor := jaeger.TracerOptions.Extractor(opentracing.HTTPHeaders, zipkinPropagator)
+	injector := jaeger.TracerOptions.Injector(opentracing.TextMap, zipkinPropagator)
+	extractor := jaeger.TracerOptions.Extractor(opentracing.TextMap, zipkinPropagator)
 
 	tracer, closer = jaeger.NewTracer(
 		service,
