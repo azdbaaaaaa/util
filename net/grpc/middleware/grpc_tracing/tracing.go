@@ -5,6 +5,7 @@ import (
 	"github.com/opentracing/opentracing-go"
 	"github.com/uber/jaeger-client-go"
 	"github.com/uber/jaeger-client-go/transport/zipkin"
+	zipkin2 "github.com/uber/jaeger-client-go/zipkin"
 	"google.golang.org/grpc/metadata"
 	"io"
 	"time"
@@ -35,24 +36,22 @@ func (t TextMapReader) ForeachKey(handler func(key, val string) error) error {
 
 // zipkinHost: http://hostname:9411/api/v1/spans
 func InitJaeger(service string, zipkinHost string) (tracer opentracing.Tracer, closer io.Closer, err error) {
-	//cfg := &config.Configuration{
-	//	Sampler: &config.SamplerConfig{
-	//		Type:  "const",
-	//		Param: 1,
-	//	},
-	//	Reporter: &config.ReporterConfig{
-	//		LogSpans:           true,
-	//		LocalAgentHostPort: jaegerAgentHost,
-	//	},
-	//}
 	sender, _ := zipkin.NewHTTPTransport(fmt.Sprintf("http://%s:9411/api/v1/spans", zipkinHost))
 	//sender, _ := jaeger.NewUDPTransport("jaeger-agent.istio-system:5775", 0)
+
+	zipkinPropagator := zipkin2.NewZipkinB3HTTPHeaderPropagator()
+	injector := jaeger.TracerOptions.Injector(opentracing.HTTPHeaders, zipkinPropagator)
+	extractor := jaeger.TracerOptions.Extractor(opentracing.HTTPHeaders, zipkinPropagator)
+
 	tracer, closer = jaeger.NewTracer(
 		service,
 		jaeger.NewConstSampler(true),
 		jaeger.NewRemoteReporter(
 			sender,
 			jaeger.ReporterOptions.BufferFlushInterval(1*time.Second)),
+		injector,
+		extractor,
+		jaeger.TracerOptions.ZipkinSharedRPCSpan(true),
 	)
 	//tracer, closer, err = cfg.New(service, config.Logger(jaeger.StdLogger))
 	opentracing.SetGlobalTracer(tracer)
