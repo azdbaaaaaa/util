@@ -27,6 +27,7 @@ func NewServer(conf ServerConfig, logger *zap.Logger) (s *grpc.Server) {
 					return status.Errorf(codes.Unknown, "panic triggered: %v", p)
 				}),
 			}...),
+			grpc_tracing.StreamServerInterceptor(logger),
 			grpc_prometheus.StreamServerInterceptor,
 			grpc_zap.StreamServerInterceptor(logger),
 			grpc_validator.StreamServerInterceptor(),
@@ -34,7 +35,6 @@ func NewServer(conf ServerConfig, logger *zap.Logger) (s *grpc.Server) {
 			grpc_device.StreamServerInterceptor(logger),
 			grpc_in_param.StreamServerInterceptor(logger),
 			grpc_error.StreamServerInterceptor(logger),
-			grpc_tracing.StreamServerInterceptor(logger),
 		)),
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
 			grpc_recovery.UnaryServerInterceptor([]grpc_recovery.Option{
@@ -42,6 +42,7 @@ func NewServer(conf ServerConfig, logger *zap.Logger) (s *grpc.Server) {
 					return status.Errorf(codes.Unknown, "panic triggered: %v", p)
 				}),
 			}...),
+			grpc_tracing.UnaryServerInterceptor(logger),
 			grpc_prometheus.UnaryServerInterceptor,
 			grpc_zap.UnaryServerInterceptor(logger),
 			grpc_validator.UnaryServerInterceptor(),
@@ -49,7 +50,6 @@ func NewServer(conf ServerConfig, logger *zap.Logger) (s *grpc.Server) {
 			grpc_device.UnaryServerInterceptor(logger),
 			grpc_in_param.UnaryServerInterceptor(logger),
 			grpc_error.UnaryServerInterceptor(logger),
-			grpc_tracing.UnaryServerInterceptor(logger),
 		)),
 	)
 	grpc_health_v1.RegisterHealthServer(s, health.NewServer())
