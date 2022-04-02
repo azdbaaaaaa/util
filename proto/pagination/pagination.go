@@ -8,8 +8,11 @@ const (
 	DefaultPage     = 1
 )
 
-func New() *PaginationReq {
-	pag := &PaginationReq{}
+func New(page, pageSize int32) *PaginationReq {
+	pag := &PaginationReq{
+		Page:     page,
+		PageSize: pageSize,
+	}
 	pag.checkValid()
 	return pag
 }
@@ -44,7 +47,7 @@ func (m *PaginationReq) Start() int64 {
 
 func (m *PaginationReq) End() int64 {
 	m.checkValid()
-	return int64(m.Page * m.PageSize) - 1
+	return int64(m.Page*m.PageSize) - 1
 }
 
 func (m *PaginationReq) GetIndex(totalNum int32) (from, to int32, err error) {
