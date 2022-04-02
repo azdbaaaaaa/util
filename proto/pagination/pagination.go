@@ -60,7 +60,7 @@ func (m *PaginationReq) Index(total int32) (from, to int32, err error) {
 	}
 
 	var totalPage int32
-	totalPage = int32(math.Ceil(float64(total / m.PageSize)))
+	totalPage = int32(math.Ceil(float64(total) / float64(m.PageSize)))
 	if m.Page > totalPage {
 		err = errors.New("page is over max page")
 		return
