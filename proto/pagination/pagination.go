@@ -8,6 +8,12 @@ const (
 	DefaultPage     = 1
 )
 
+func New() *PaginationReq {
+	pag := &PaginationReq{}
+	pag.checkValid()
+	return pag
+}
+
 func (m *PaginationReq) checkValid() {
 	if m.PageSize < 0 || m.PageSize > MaxPageSize {
 		m.PageSize = MaxPageSize
