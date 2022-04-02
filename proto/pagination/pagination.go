@@ -1,6 +1,9 @@
 package pagination
 
-import "errors"
+import (
+	"errors"
+	"math"
+)
 
 const (
 	MaxPageSize     = 5000
@@ -48,6 +51,27 @@ func (m *PaginationReq) Start() int64 {
 func (m *PaginationReq) End() int64 {
 	m.checkValid()
 	return int64(m.Page*m.PageSize) - 1
+}
+
+func (m *PaginationReq) Index(total int32) (from, to int32, err error) {
+	if total == 0 {
+		err = errors.New("total is zero")
+		return
+	}
+
+	var totalPage int32
+	totalPage = int32(math.Ceil(float64(total / m.PageSize)))
+	if m.Page > totalPage {
+		err = errors.New("page is over max page")
+		return
+	}
+	from = (m.Page - 1) * m.PageSize
+	if m.Page != totalPage {
+		to = from + m.PageSize
+	} else {
+		to = total
+	}
+	return
 }
 
 func (m *PaginationReq) GetIndex(totalNum int32) (from, to int32, err error) {
