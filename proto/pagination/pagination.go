@@ -74,6 +74,7 @@ func (m *PaginationReq) Index(total int32) (from, to int32, err error) {
 	return
 }
 
+// GetIndex to be deprecated, Use Index instead
 func (m *PaginationReq) GetIndex(totalNum int32) (from, to int32, err error) {
 	var totalPage int32
 	if totalNum%m.PageSize == 0 {
