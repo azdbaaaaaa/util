@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	net_grpc "github.com/azdbaaaaaa/util/net/grpc"
+	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_tracing"
 	net_http "github.com/azdbaaaaaa/util/net/http"
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
@@ -19,7 +20,15 @@ import (
 	"time"
 )
 
-func Run(httpConf net_http.ServerConfig, grpcConf net_grpc.ServerConfig, log *zap.Logger, register func(s *grpc.Server)) () {
+func Run(httpConf net_http.ServerConfig, grpcConf net_grpc.ServerConfig, log *zap.Logger, serviceName string, register func(s *grpc.Server)) {
+	if serviceName != "" {
+		_, _, err := grpc_tracing.InitJaeger(serviceName, "zipkin.istio-system")
+		if err != nil {
+			log.Panic("init jaeger error")
+			return
+		}
+	}
+
 	var g run.Group
 	{
 		r := gin.Default()
