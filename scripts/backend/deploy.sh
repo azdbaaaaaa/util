@@ -110,9 +110,7 @@ case ${CI_COMMIT_REF_NAME} in
     ;;
   pre)
     ENV="pre"
-#    NAMESPACE="pre-ficool"
-#    deploy_k8s ${ENV} ${NAMESPACE}
-    echo "${FICOOL_PRE}"
+    echo "开始部署${FICOOL_PRE}"
     if [[ "${FICOOL_PRE}" == "" ]];then
       echo "FICOOL_PRE not set"
       exit 1
@@ -121,6 +119,9 @@ case ${CI_COMMIT_REF_NAME} in
     do
       deploy ${ENV} "${HOST}"
     done
+    echo "开始部署k8s"
+    NAMESPACE="pre-ficool"
+    deploy_k8s ${ENV} ${NAMESPACE}
     ;;
   master)
     echo "please set tags to publish!"
