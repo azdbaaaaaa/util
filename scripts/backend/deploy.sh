@@ -103,8 +103,11 @@ deploy_k8s() {
         ;;
       cronjob)
         ;;
+      job)
+        ;;
       *)
-        echo "${TYPE} continue"
+        echo "${TYPE} not supported"
+        exit 1
         ;;
       esac
 
