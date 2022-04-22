@@ -2,6 +2,8 @@ package xerror
 
 import (
 	"fmt"
+	proto_common "github.com/azdbaaaaaa/util/proto/common"
+	"reflect"
 )
 
 type Error interface {
@@ -41,9 +43,20 @@ type ErrorCodeMessage interface {
 	String() string
 }
 
-func NewProtoError(code interface{}) Error {
-	e := &err{Code: code.(int32)}
-	e.Message = code.(ErrorCodeMessage).String()
+func NewProtoError(code ErrorCodeMessage) (e Error) {
+	e = &err{
+		Code:    int32(proto_common.ErrCode_unknown_error),
+		Message: proto_common.ErrCode_unknown_error.String(),
+	}
+	defer func() {
+		if err := recover(); err != nil {
+			return
+		}
+	}()
+	e = &err{
+		Code:    int32(reflect.ValueOf(code).Int()),
+		Message: code.(ErrorCodeMessage).String(),
+	}
 	return e
 }
 
