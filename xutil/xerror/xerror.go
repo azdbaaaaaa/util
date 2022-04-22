@@ -37,6 +37,31 @@ func NewError(code int32, message string) Error {
 	}
 }
 
+type ErrorCodeMessage interface {
+	String() string
+}
+
+func NewProtoError(code interface{}) Error {
+	e := &err{Code: code.(int32)}
+	e.Message = code.(ErrorCodeMessage).String()
+	return e
+}
+
+func (e *err) WithSubCode(subCode int32) Error {
+	e.SubCode = subCode
+	return e
+}
+
+func (e *err) WithMessage(message string) Error {
+	e.Message = message
+	return e
+}
+
+func (e *err) WithReason(reason string) Error {
+	e.Reason = reason
+	return e
+}
+
 func (e *err) Error() string {
 	return fmt.Sprintf("error: code = %d subCode = %d reason = %s message = %s metadata = %v", e.Code, e.SubCode, e.Reason, e.Message, e.Metadata)
 }
@@ -63,9 +88,4 @@ func (e *err) GetMessage() string {
 
 func (e *err) GetReason() string {
 	return e.Reason
-}
-
-func (e *err) WithReason(reason string) Error {
-	e.Reason = reason
-	return e
 }
