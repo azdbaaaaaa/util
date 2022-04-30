@@ -4,6 +4,7 @@ import (
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_device"
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_error"
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_in_param"
+	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_log"
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_request_id"
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_tracing"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
@@ -30,6 +31,7 @@ func NewServer(conf ServerConfig, logger *zap.Logger) (s *grpc.Server) {
 			grpc_tracing.StreamServerInterceptor(logger),
 			grpc_prometheus.StreamServerInterceptor,
 			grpc_zap.StreamServerInterceptor(logger),
+			grpc_log.StreamServerInterceptor(logger),
 			grpc_validator.StreamServerInterceptor(),
 			grpc_request_id.StreamServerInterceptor(logger),
 			grpc_device.StreamServerInterceptor(logger),
@@ -45,6 +47,7 @@ func NewServer(conf ServerConfig, logger *zap.Logger) (s *grpc.Server) {
 			grpc_tracing.UnaryServerInterceptor(logger),
 			grpc_prometheus.UnaryServerInterceptor,
 			grpc_zap.UnaryServerInterceptor(logger),
+			grpc_log.UnaryServerInterceptor(logger),
 			grpc_validator.UnaryServerInterceptor(),
 			grpc_request_id.UnaryServerInterceptor(logger),
 			grpc_device.UnaryServerInterceptor(logger),

@@ -5,6 +5,7 @@ import (
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_device"
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_error"
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_in_param"
+	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_log"
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_request_id"
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_tracing"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
@@ -30,6 +31,7 @@ func NewClientConn(conf ClientConfig, logger *zap.Logger) (conn *grpc.ClientConn
 			grpc_device.UnaryClientInterceptor(logger),
 			grpc_in_param.UnaryClientInterceptor(logger),
 			grpc_error.UnaryClientInterceptor(logger),
+			grpc_log.UnaryClientInterceptor(logger),
 			grpc_zap.UnaryClientInterceptor(logger, []grpc_zap.Option{grpc_zap.WithDurationField(grpc_zap.DurationToDurationField)}...),
 			grpc_tracing.UnaryClientInterceptor(logger),
 		)),
@@ -39,6 +41,7 @@ func NewClientConn(conf ClientConfig, logger *zap.Logger) (conn *grpc.ClientConn
 			grpc_device.StreamClientInterceptor(logger),
 			grpc_in_param.StreamClientInterceptor(logger),
 			grpc_error.StreamClientInterceptor(logger),
+			grpc_log.StreamClientInterceptor(logger),
 			grpc_zap.StreamClientInterceptor(logger, []grpc_zap.Option{grpc_zap.WithDurationField(grpc_zap.DurationToDurationField)}...),
 			grpc_tracing.StreamClientInterceptor(logger),
 		)),
