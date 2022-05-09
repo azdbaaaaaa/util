@@ -13,6 +13,8 @@ type Error interface {
 	GetMessage() string
 	GetReason() string
 	WithReason(reason string) Error
+	WithMessage(message string) Error
+	WithSubCode(subCode int32) Error
 }
 
 type err struct {
