@@ -20,6 +20,13 @@ type InParam struct {
 
 // InParamFromContext 只有在app网关层才会注入，如果直接内部调用会返回：ErrNoInParamError
 func InParamFromContext(ctx context.Context) (i InParam, err error) {
+	i = InParam{
+		AppId:    common.AppIdType_APP_ID_LIGHTHOUSE,
+		UserIp:   "",
+		UserId:   0,
+		ClientIp: "",
+		Token:    "",
+	}
 	if v := ctx.Value(ContextKeyInParam); v != nil {
 		if i, ok := v.(InParam); ok {
 			return i, nil
@@ -27,3 +34,4 @@ func InParamFromContext(ctx context.Context) (i InParam, err error) {
 	}
 	return i, xerror.ErrNoInParamError
 }
+
