@@ -78,6 +78,8 @@ enum LanguageType {
   LAN_ZH = 0; // Not Set
   LAN_EN = 1; // 英文 English
   LAN_SW = 2; // 斯瓦希里语 Swahili
+  LAN_AR = 3; // 阿语
+  LAN_FR = 4; // 法语
 };
 
 enum ClientType {
