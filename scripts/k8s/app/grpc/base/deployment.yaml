@@ -14,7 +14,7 @@ spec:
         app: $DEPLOYMENT
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "$PORT"
+        prometheus.io/port: \"$PORT\"
         prometheus.io/path: /metrics
     spec:
       containers:
