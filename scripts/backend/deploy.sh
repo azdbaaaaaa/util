@@ -76,7 +76,7 @@ deploy_k8s() {
     ## k8s configmap
     if [[ $INIT == "" ]];then
       kubectl create configmap "${DEPLOYMENT}" --from-file=${DEPLOYMENT}.yaml="config/${PROJECT}-${ENV}.yaml" -n "${NAMESPACE}" -o yaml --dry-run=client | kubectl replace -f -
-       echo "configmap updated"
+       echo "configmap updated config/${PROJECT}-${ENV}.yaml"
       kubectl set image "deployment/${DEPLOYMENT}" ${DEPLOYMENT}="$IMAGE_REPO/$PROJECT:$VERSION" -n "${NAMESPACE}"
       echo "deployment updated"
     else
