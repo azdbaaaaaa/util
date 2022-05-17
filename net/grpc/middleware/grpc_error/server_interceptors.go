@@ -5,6 +5,7 @@ import (
 	"github.com/azdbaaaaaa/util/proto/common"
 	"github.com/azdbaaaaaa/util/xutil/xerror"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	"github.com/qiniu/qmgo"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -25,6 +26,9 @@ func UnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		resp, err := handler(ctx, req)
 		if err != nil {
+			if err == gorm.ErrRecordNotFound || err == qmgo.ErrNoSuchDocuments {
+				err = xerror.ErrNotFound
+			}
 			if xerr, ok := err.(xerror.Error); ok {
 				if res, ok := resp.(*common.CommonResponse); ok {
 					res.Code = xerr.GetCode()
