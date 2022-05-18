@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-config
+  namespace: kube-ops
+data:
+  config.yml: |
+    global:
+      resolve_timeout: 5m #处理超时时间，默认为5min
+      smtp_smarthost: 'smtp.163.com:465' # 邮箱smtp服务器代理
+      smtp_from: 'azdbaaaaaa@163.com' # 发送邮箱名称
+      smtp_auth_username: 'azdbaaaaaa@163.com' # 邮箱名称
+      smtp_auth_password: '19880213' #邮箱密码
+      smtp_require_tls: false
+      smtp_hello: '163.com'
+      wechat_api_corp_id: 'wwa676576f10b9fd51'
+
+    # 定义路由树信息
+    route:
+      group_by: ['alertname'] # 报警分组名称
+      group_wait: 30s # 最初即第一次等待多久时间发送一组警报的通知
+      group_interval: 30s # 在发送新警报前的等待时间
+      repeat_interval: 5m # 发送重复警报的周期
+      receiver: 'email' # 发送警报的接收者的名称，以下receivers name的名称
+
+    # 定义警报接收者信息
+    receivers:
+    - name: 'wechat'
+      wechat_configs:
+      - send_resolved: true
+        #to_party: '1'
+        to_tag: 'alert'
+        agent_id: '1000002'
+        api_secret: 'H8ps5u4e9t4VNnecJ_tfcFyB_b_8yps9FImM5wEwLcI'
+    - name: 'email' # 警报
+      email_configs: # 邮箱配置
+      - to: 'zhoudongbin@ficool.com,yuhuibin@ficool.com,lihongyu@ficool.com'  # 接收警报的email配置
