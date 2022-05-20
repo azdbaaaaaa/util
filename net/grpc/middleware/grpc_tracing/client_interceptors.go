@@ -71,14 +71,14 @@ func UnaryClientInterceptor(logger *zap.Logger) grpc.UnaryClientInterceptor {
 // StreamClientInterceptor returns a new streaming client interceptor that optionally logs the execution of external gRPC calls.
 func StreamClientInterceptor(logger *zap.Logger) grpc.StreamClientInterceptor {
 	return func(ctx context.Context, desc *grpc.StreamDesc, cc *grpc.ClientConn, method string, streamer grpc.Streamer, opts ...grpc.CallOption) (grpc.ClientStream, error) {
-		md, ok := metadata.FromIncomingContext(ctx)
-		if !ok {
-			md = metadata.New(nil)
-		} else {
-			//如果对metadata进行修改，那么需要用拷贝的副本进行修改。（FromIncomingContext的注释）
-			md = md.Copy()
-		}
-		ctx = metadata.NewOutgoingContext(ctx, md)
+		//md, ok := metadata.FromIncomingContext(ctx)
+		//if !ok {
+		//	md = metadata.New(nil)
+		//} else {
+		//	//如果对metadata进行修改，那么需要用拷贝的副本进行修改。（FromIncomingContext的注释）
+		//	md = md.Copy()
+		//}
+		//ctx = metadata.NewOutgoingContext(ctx, md)
 		clientStream, err := streamer(ctx, desc, cc, method, opts...)
 		return clientStream, err
 	}
