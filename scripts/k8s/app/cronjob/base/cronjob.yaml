@@ -5,7 +5,7 @@ metadata:
   labels:
     app: $CRONJOB
 spec:
-  schedule: $SCHEDULE
+  schedule: "$SCHEDULE"
   jobTemplate:
     spec:
       template:
