@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: $CRONJOB
+  labels:
+    app: $CRONJOB
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: $CRONJOB
+              image: $IMAGE_REPO/$PROJECT:$VERSION
+              imagePullPolicy: Always
+              command: [ "/app/$PROJECT", "$CMD", "--config=/etc/config/$DEPLOYMENT.yaml" ]
+          restartPolicy: OnFailure

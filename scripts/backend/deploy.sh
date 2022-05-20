@@ -65,11 +65,13 @@ deploy_k8s() {
     then
       export DEPLOYMENT="${PROJECT}"
       export SERVICE="${PROJECT}"
+      export CRONJOB="${PROJECT}"
     else
       export DEPLOYMENT="${PROJECT}-${CMD}"
       export SERVICE="${PROJECT}-${CMD}"
+      export CRONJOB="${PROJECT}-${CMD}"
     fi
-    echo "DEPLOYMENT",$DEPLOYMENT,"SERVICE",$SERVICE
+    echo "DEPLOYMENT",$DEPLOYMENT,"SERVICE",$SERVICE,"CRONJOB",$CRONJOB
 
 
 
