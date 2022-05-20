@@ -106,19 +106,19 @@ deploy_k8s() {
         ;;
       cronjob)
         SCHEDULE=`kubectl get configmap ${CRONJOB} -n "${NAMESPACE}" -o json | jq -r ".data.\"$CRONJOB.yaml\"" | yq e ".cronjob.${CMD}.schedule" -`
-        echo "SCHEDULE",$SCHEDULE
-        if [[ ${SCHEDULE} -eq "" ]];then
+        echo "SCHEDULE","$SCHEDULE"
+        if [[ "${SCHEDULE}" -eq "" ]];then
           exit 1
         fi
-        export SCHEDULE=$SCHEDULE
+        export SCHEDULE="$SCHEDULE"
         ;;
       job)
         SCHEDULE=`kubectl get configmap ${JOB} -n "${NAMESPACE}" -o json | jq -r ".data.\"$JOB.yaml\"" | yq e ".job.${CMD}.schedule" -`
-        echo "SCHEDULE",$SCHEDULE
-        if [[ ${SCHEDULE} -eq "" ]];then
+        echo "SCHEDULE","$SCHEDULE"
+        if [[ "${SCHEDULE}" -eq "" ]];then
           exit 1
         fi
-        export SCHEDULE=$SCHEDULE
+        export SCHEDULE="$SCHEDULE"
         ;;
       *)
         echo "${TYPE} not supported"
