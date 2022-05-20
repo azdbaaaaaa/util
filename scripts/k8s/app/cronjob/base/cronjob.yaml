@@ -14,5 +14,5 @@ spec:
             - name: $CRONJOB
               image: $IMAGE_REPO/$PROJECT:$VERSION
               imagePullPolicy: Always
-              command: [ "/app/$PROJECT", "$CMD", "--config=/etc/config/$PROJECT.yaml" ]
+              command: [ "/app/$PROJECT", "$CMD" ]
           restartPolicy: OnFailure
