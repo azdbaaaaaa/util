@@ -16,5 +16,5 @@ spec:
       containers:
         - name: $DEPLOYMENT
           image: $IMAGE_REPO/$PROJECT:$VERSION
-          command: [ "/app/$PROJECT", "$CMD" ]
+          command: [ "/app/$PROJECT", "$CMD", "--config=/etc/config/$DEPLOYMENT.yaml" ]
           imagePullPolicy: Always
