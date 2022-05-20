@@ -133,8 +133,10 @@ deploy_k8s() {
       echo "kustomize build finished"
       file=`cat all.yaml`
       export -p
+      echo "export -p"
       printf "`export -p`\ncat << EOF\n$file\nEOF" | bash > all.yaml
       cat all.yaml
+      echo "cat all.yaml"
       kubectl apply -f all.yaml
     fi
 
