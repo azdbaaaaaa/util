@@ -71,7 +71,7 @@ deploy_k8s() {
       export SERVICE="${PROJECT}-${CMD}"
       export CRONJOB="${PROJECT}-${CMD}"
     fi
-    echo "DEPLOYMENT",$DEPLOYMENT,"SERVICE",$SERVICE,"CRONJOB",$CRONJOB
+    echo "DEPLOYMENT",$DEPLOYMENT,"SERVICE",$SERVICE,"CRONJOB",$CRONJOB,"SCHEDULE",$SCHEDULE
 
 
 
@@ -105,8 +105,10 @@ deploy_k8s() {
       consumer)
         ;;
       cronjob)
+        export SCHEDULE=$SCHEDULE
         ;;
       job)
+        export SCHEDULE=$SCHEDULE
         ;;
       *)
         echo "${TYPE} not supported"
