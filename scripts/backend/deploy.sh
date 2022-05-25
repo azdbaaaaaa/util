@@ -84,6 +84,7 @@ deploy_k8s() {
         exit 1
         ;;
       cronjob)
+        # TODO
         exit 1
         ;;
       *)
@@ -160,10 +161,20 @@ case ${CI_COMMIT_REF_NAME} in
       echo "FICOOL_PROD not set"
       exit 1
     fi
-    for HOST in ${FICOOL_PROD}
-    do
-      deploy ${ENV} "${HOST}"
-    done
+
+    case "${TYPE}" in
+      cronjob|job|consumer)
+        echo "开始部署k8s"
+        NAMESPACE="prod-ficool"
+        deploy_k8s ${ENV} ${NAMESPACE}
+      ;;
+      *)
+        for HOST in ${FICOOL_PROD}
+        do
+          deploy ${ENV} "${HOST}"
+        done
+      ;;
+    esac
     ;;
   pre)
     ENV="pre"
@@ -172,13 +183,20 @@ case ${CI_COMMIT_REF_NAME} in
       echo "FICOOL_PRE not set"
       exit 1
     fi
-    for HOST in ${FICOOL_PRE}
-    do
-      deployPre ${ENV} "${HOST}"
-    done
-    echo "开始部署k8s"
-    NAMESPACE="pre-ficool"
-    deploy_k8s ${ENV} ${NAMESPACE}
+
+    case "${TYPE}" in
+      cronjob|job|consumer)
+        echo "开始部署k8s"
+        NAMESPACE="pre-ficool"
+        deploy_k8s ${ENV} ${NAMESPACE}
+      ;;
+      *)
+        for HOST in ${FICOOL_PRE}
+        do
+          deployPre ${ENV} "${HOST}"
+        done
+      ;;
+    esac
     ;;
   master)
     echo "please set tags to publish!"
