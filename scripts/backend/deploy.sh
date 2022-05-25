@@ -186,9 +186,7 @@ case ${CI_COMMIT_REF_NAME} in
 
     case "${TYPE}" in
       cronjob|job|consumer)
-        echo "开始部署k8s"
-        NAMESPACE="pre-ficool"
-        deploy_k8s ${ENV} ${NAMESPACE}
+        echo "cronjob|job|consumer do not need to deploy on host"
       ;;
       *)
         for HOST in ${FICOOL_PRE}
@@ -197,6 +195,9 @@ case ${CI_COMMIT_REF_NAME} in
         done
       ;;
     esac
+    echo "开始部署k8s"
+    NAMESPACE="pre-ficool"
+    deploy_k8s ${ENV} ${NAMESPACE}
     ;;
   master)
     echo "please set tags to publish!"
