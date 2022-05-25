@@ -4,11 +4,15 @@ metadata:
   name: $CRONJOB
   labels:
     app: $CRONJOB
+  annotations:
+    sidecar.istio.io/inject: "false"
 spec:
   schedule: "$SCHEDULE"
   jobTemplate:
     spec:
       template:
+        annotations:
+          sidecar.istio.io/inject: "false"
         spec:
           containers:
             - name: $CRONJOB
