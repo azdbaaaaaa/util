@@ -1,0 +1,9 @@
+namespace: "pre-ficool"
+
+commonLabels:
+  env: "pre"
+
+bases:
+  - ../../base
+patchesStrategicMerge:
+  - volume.yaml

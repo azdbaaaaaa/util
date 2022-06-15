@@ -66,12 +66,14 @@ deploy_k8s() {
       export DEPLOYMENT="${PROJECT}"
       export SERVICE="${PROJECT}"
       export CRONJOB="${PROJECT}"
+      export JOB="${PROJECT}"
     else
       export DEPLOYMENT="${PROJECT}-${CMD}"
       export SERVICE="${PROJECT}-${CMD}"
       export CRONJOB="${PROJECT}-${CMD}"
+      export JOB="${PROJECT}-${CMD}"
     fi
-    echo "DEPLOYMENT",$DEPLOYMENT,"SERVICE",$SERVICE,"CRONJOB",$CRONJOB,"SCHEDULE",$SCHEDULE
+    echo "DEPLOYMENT",$DEPLOYMENT,"SERVICE",$SERVICE,"CRONJOB",$CRONJOB,"SCHEDULE",$SCHEDULE,"JOB",$JOB
 
 
 
@@ -124,12 +126,6 @@ deploy_k8s() {
         export SCHEDULE="$SCHEDULE"
         ;;
       job)
-        SCHEDULE=`kubectl get configmap ${JOB} -n "${NAMESPACE}" -o json | jq -r ".data.\"$JOB.yaml\"" | yq e ".job.${CMD}.schedule" -`
-        echo "SCHEDULE,$SCHEDULE,end"
-        if [[ "$SCHEDULE" == "" ]];then
-          exit 1
-        fi
-        export SCHEDULE="$SCHEDULE"
         ;;
       *)
         echo "${TYPE} not supported"

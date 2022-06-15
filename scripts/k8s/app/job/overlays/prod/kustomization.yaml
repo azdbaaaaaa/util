@@ -1,0 +1,9 @@
+namespace: "prod-ficool"
+
+commonLabels:
+  env: "prod"
+
+bases:
+  - ../../base
+patchesStrategicMerge:
+  - volume.yaml
