@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: "${PROJECT}-${CMD}"
+  name: "${PROJECT}"
   annotations:
   labels:
-    app: "${PROJECT}-${CMD}"
+    app: "${PROJECT}"
 spec:
   ports:
     - name: http
