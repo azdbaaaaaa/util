@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: $DEPLOYMENT
+  name: "${PROJECT}-${CMD}"
   labels:
-    app: $DEPLOYMENT
+    app: "${PROJECT}-${CMD}"
 spec:
   selector:
     matchLabels:
-      app: $DEPLOYMENT
+      app: "${PROJECT}-${CMD}"
   template:
     metadata:
       labels:
-        app: $DEPLOYMENT
+        app: "${PROJECT}-${CMD}"
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: \"$PORT\"
+        prometheus.io/port: \"$HTTP_PORT\"
         prometheus.io/path: /metrics
     spec:
       containers:
-        - name: $DEPLOYMENT
+        - name: "${PROJECT}-${CMD}"
           image: $IMAGE_REPO/$PROJECT:$VERSION
-          command: [ "/app/$PROJECT", "$CMD" ]
+          command: [ "/app/$PROJECT", "$CMD", "--config=/etc/config/${PROJECT}-${CMD}.yaml"  ]
           imagePullPolicy: Always
           ports:
             - name: service
-              containerPort: $PORT
+              containerPort: $GRPC_PORT

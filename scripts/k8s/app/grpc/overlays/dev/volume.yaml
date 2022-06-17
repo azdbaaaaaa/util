@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: $DEPLOYMENT
+  name: "${PROJECT}-${CMD}"
 spec:
   template:
     spec:
       containers:
-        - name: $DEPLOYMENT
+        - name: "${PROJECT}-${CMD}"
           volumeMounts:
             - name: config
               mountPath: /etc/config
@@ -15,7 +15,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: $DEPLOYMENT
+            name: "${PROJECT}-${CMD}"
         - name: log
           persistentVolumeClaim:
             claimName: efs-claim

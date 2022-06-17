@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: $DEPLOYMENT
+  name: "${PROJECT}-${CMD}"
 spec:
   template:
     spec:
       containers:
-        - name: $DEPLOYMENT
+        - name: "${PROJECT}-${CMD}"
           livenessProbe:
             tcpSocket:
-              port: $PORT
+              port: $HTTP_PORT
             initialDelaySeconds: 10
             periodSeconds: 5
             timeoutSeconds: 3
@@ -17,7 +17,7 @@ spec:
             failureThreshold: 3
           readinessProbe:
             tcpSocket:
-              port: $PORT
+              port: $HTTP_PORT
             initialDelaySeconds: 5
             periodSeconds: 5
             timeoutSeconds: 3

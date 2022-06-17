@@ -1,14 +1,14 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: $CRONJOB
+  name: "${PROJECT}-${CMD}"
 spec:
   jobTemplate:
     spec:
       template:
         spec:
           containers:
-            - name: $CRONJOB
+            - name: "${PROJECT}-${CMD}"
               volumeMounts:
                 - name: config
                   mountPath: /etc/config
@@ -17,7 +17,7 @@ spec:
           volumes:
             - name: config
               configMap:
-                name: $CRONJOB
+                name: "${PROJECT}-${CMD}"
             - name: log
               persistentVolumeClaim:
                 claimName: efs-claim

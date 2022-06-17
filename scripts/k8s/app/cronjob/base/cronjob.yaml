@@ -1,9 +1,9 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: $CRONJOB
+  name: "${PROJECT}-${CMD}"
   labels:
-    app: $CRONJOB
+    app: "${PROJECT}-${CMD}"
 spec:
   schedule: "$SCHEDULE"
   jobTemplate:
@@ -14,8 +14,8 @@ spec:
             sidecar.istio.io/inject: "false"
         spec:
           containers:
-            - name: $CRONJOB
+            - name: "${PROJECT}-${CMD}"
               image: $IMAGE_REPO/$PROJECT:$VERSION
               imagePullPolicy: Always
-              command: [ "/app/$PROJECT", "$CMD", "--config=/etc/config/$CRONJOB.yaml" ]
+              command: [ "/app/$PROJECT", "$CMD", "--config=/etc/config/${PROJECT}-${CMD}.yaml" ]
           restartPolicy: OnFailure
