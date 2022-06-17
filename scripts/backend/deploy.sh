@@ -78,6 +78,9 @@ deploy_k8s() {
         exit 0
         echo "already return"
         ;;
+      job)
+        kubectl delete job "${PROJECT}-${CMD}" || echo "job not found"
+        echo "job deleted"
       esac
     fi
 
