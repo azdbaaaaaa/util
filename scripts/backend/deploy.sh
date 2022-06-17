@@ -73,7 +73,7 @@ deploy_k8s() {
     if [[ $INIT == "" ]];then
       case "${TYPE}" in
       consumer|http|grpc)
-        kubectl set image "deployment/${DEPLOYMENT}" ${DEPLOYMENT}="$IMAGE_REPO/$PROJECT:$VERSION" -n "${NAMESPACE}"
+        kubectl set image "deployment/${PROJECT}-${CMD}" "${PROJECT}-${CMD}"="$IMAGE_REPO/$PROJECT:$VERSION" -n "${NAMESPACE}"
         echo "deployment updated"
         exit 0
         echo "already return"
