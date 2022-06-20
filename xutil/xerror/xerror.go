@@ -104,3 +104,10 @@ func (e *err) GetMessage() string {
 func (e *err) GetReason() string {
 	return e.Reason
 }
+
+func Is(err1, err2 Error) bool {
+	if err1.GetCode() == err2.GetCode() {
+		return true
+	}
+	return false
+}
