@@ -20,7 +20,7 @@ spec:
       containers:
         - name: "${PROJECT}-${CMD}"
           image: $IMAGE_REPO/$PROJECT:$VERSION
-          command: [ "/app/$PROJECT", "$CMD", "--config=/etc/config/${PROJECT}-${CMD}.yaml"  ]
+          command: [ "/app/$PROJECT", "$CMD", "--config=/etc/config/${PROJECT}-${CMD}.yaml" ]
           imagePullPolicy: Always
           ports:
             - name: service
