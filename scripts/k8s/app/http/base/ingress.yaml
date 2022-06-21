@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: "${PROJECT}"
+  namespace: ficool
+  labels:
+    app: "${PROJECT}"
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /metrics
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-west-1:991619025488:certificate/ed8fc667-3a4e-4557-b256-ee1a2c0e4cab
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+
+#    alb.ingress.kubernetes.io/subnets: "subnet-04ba1efba31cd200a"
+#    alb.ingress.kubernetes.io/security-groups: "sg-0c60f592dd71afeba"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: "${PROJECT}"
+                port:
+                  number: 80
