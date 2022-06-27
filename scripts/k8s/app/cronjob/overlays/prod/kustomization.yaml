@@ -7,3 +7,4 @@ bases:
   - ../../base
 patchesStrategicMerge:
   - volume.yaml
+  - limits.yaml

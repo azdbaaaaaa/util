@@ -108,7 +108,7 @@ case ${CI_COMMIT_REF_NAME} in
     fi
 
     case "${TYPE}" in
-      consumer)
+      consumer|http)
         echo "开始部署k8s"
         NAMESPACE="prod-ficool"
         deploy_k8s ${ENV} ${NAMESPACE}

@@ -1,0 +1,14 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: "${PROJECT}-${CMD}"
+spec:
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: "${PROJECT}-${CMD}"
+              limits:
+                cpu: 1
+                memory: 2048Mi

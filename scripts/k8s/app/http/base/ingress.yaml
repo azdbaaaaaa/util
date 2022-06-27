@@ -25,4 +25,4 @@ spec:
               service:
                 name: "${PROJECT}"
                 port:
-                  number: 80
+                  number: 8089

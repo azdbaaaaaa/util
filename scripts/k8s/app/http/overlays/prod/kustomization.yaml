@@ -9,3 +9,4 @@ patchesStrategicMerge:
   - replicas.yaml
   - probe.yaml
   - volume.yaml
+  - limits.yaml

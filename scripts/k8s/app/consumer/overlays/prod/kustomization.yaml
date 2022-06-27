@@ -8,3 +8,4 @@ bases:
 patchesStrategicMerge:
   - replicas.yaml
   - volume.yaml
+  - limits.yaml

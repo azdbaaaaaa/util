@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "${PROJECT}-${CMD}"
+spec:
+  template:
+    spec:
+      containers:
+        - name: "${PROJECT}-${CMD}"
+          resources: # CPU内存限制
+            limits:
+              cpu: 1
+              memory: 2048Mi
