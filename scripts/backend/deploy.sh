@@ -113,15 +113,6 @@ case ${CI_COMMIT_REF_NAME} in
         NAMESPACE="prod-ficool"
         deploy_k8s ${ENV} ${NAMESPACE}
       ;;
-      http)
-        echo "开始部署k8s"
-        NAMESPACE="prod-ficool"
-        deploy_k8s ${ENV} ${NAMESPACE}
-        for HOST in ${FICOOL_PROD}
-        do
-          deploy ${ENV} "${HOST}"
-        done
-      ;;
       *)
         for HOST in ${FICOOL_PROD}
         do
