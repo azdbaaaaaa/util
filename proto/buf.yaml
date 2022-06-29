@@ -6,6 +6,8 @@ breaking:
 lint:
   use:
     - DEFAULT
-#deps:
+deps:
 #  - buf.build/envoyproxy/protoc-gen-validate
 #  - buf.build/gogo/protobuf
+  - buf.build/googleapis/googleapis
+

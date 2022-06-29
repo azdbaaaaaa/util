@@ -7,7 +7,7 @@ syntax = "proto3";
 //指定包名
 package common.v1;
 
-import "gogo/any.proto";
+import "google/protobuf/any.proto";
 
 option go_package = "github.com/azdbaaaaaa/util/proto/gen/go/common/v1;common_v1";
 
