@@ -16,6 +16,32 @@ import (
 	"time"
 )
 
+func DefaultDailOptions(logger *zap.Logger) []grpc.DialOption {
+	return []grpc.DialOption{grpc.WithInsecure(),
+		grpc.WithBlock(),
+		grpc.WithUnaryInterceptor(grpc_middleware.ChainUnaryClient(
+			// 这里tracing里面会NewOutgoingContext，所以必须放在最前面
+			grpc_tracing.UnaryClientInterceptor(logger),
+			grpc_prometheus.UnaryClientInterceptor,
+			grpc_request_id.UnaryClientInterceptor(logger),
+			grpc_device.UnaryClientInterceptor(logger),
+			grpc_in_param.UnaryClientInterceptor(logger),
+			grpc_error.UnaryClientInterceptor(logger),
+			grpc_log.UnaryClientInterceptor(logger),
+			grpc_zap.UnaryClientInterceptor(logger, []grpc_zap.Option{grpc_zap.WithDurationField(grpc_zap.DurationToDurationField)}...),
+		)),
+		grpc.WithStreamInterceptor(grpc_middleware.ChainStreamClient(
+			grpc_tracing.StreamClientInterceptor(logger),
+			grpc_prometheus.StreamClientInterceptor,
+			grpc_request_id.StreamClientInterceptor(logger),
+			grpc_device.StreamClientInterceptor(logger),
+			grpc_in_param.StreamClientInterceptor(logger),
+			grpc_error.StreamClientInterceptor(logger),
+			grpc_log.StreamClientInterceptor(logger),
+			grpc_zap.StreamClientInterceptor(logger, []grpc_zap.Option{grpc_zap.WithDurationField(grpc_zap.DurationToDurationField)}...),
+		)),
+	}
+}
 func NewClientConn(conf ClientConfig, logger *zap.Logger) (conn *grpc.ClientConn, err error) {
 	if conf.DialTimeout == 0 {
 		conf.DialTimeout = DefaultClientDialTimeoutInSec
