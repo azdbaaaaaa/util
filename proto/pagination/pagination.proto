@@ -7,7 +7,7 @@ package pagination;
 import "validate/validate.proto";
 import "gogo/gogo.proto";
 
-option go_package = "github.com/azdbaaaaaa/util/proto/pagination;pagination";
+option go_package = "github.com/azdbaaaaaa/util/proto/gen/go/pagination;pagination";
 
 enum SortOrder {
     SortDefault = 0;
