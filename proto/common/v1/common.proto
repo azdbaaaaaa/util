@@ -3,45 +3,48 @@ syntax = "proto3";
 
 //import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 //import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
-import "google/protobuf/any.proto";
 
 //指定包名
-package common.v1;
-option go_package = "github.com/azdbaaaaaa/util/proto/gen/proto/go/v1;common_v1";
+package common.v2;
+
+import "google/protobuf/any.proto";
+
+option go_package = "github.com/azdbaaaaaa/util/proto/gen/proto/go/v2;common_v2";
 
 enum ErrCode {
-  success = 0;
-  unknown_error = 999999; // 未知错误
-  server_fail = -100001; // 不重要的失败，建议重试
-  server_param_invalid = -100002; // 请求参数不合法
-  server_exception = -100003; // 服务本身异常
-  server_reject = -100004; // 服务忙，请求队列已满
-  server_busy = -100005; // 服务忙，被调限流
+  ERR_CODE_UNSPECIFIED = 0;
+  ERR_CODE_SERVER_UNKNOWN = 999999; // 未知错误
+  ERR_CODE_SERVER_FAILED = -100001; // 不重要的失败，建议重试
+  ERR_CODE_SERVER_PARAM_INVALID = -100002; // 请求参数不合法
+  ERR_CODE_SERVER_EXCEPTION = -100003; // 服务本身异常
+  ERR_CODE_SERVER_REJECTED = -100004; // 服务忙，请求队列已满
+  ERR_CODE_SERVER_BUSY = -100005; // 服务忙，被调限流
 
-  client_timeout = -100006; // 服务调用超时
-  client_exception = -100007; // 服务调用异常
-  client_broken = -100008; // 服务熔断
+  ERR_CODE_CLIENT_TIMEOUT = -100006; // 服务调用超时
+  ERR_CODE_CLIENT_EXCEPTION = -100007; // 服务调用异常
+  ERR_CODE_CLIENT_BROKEN = -100008; // 服务熔断
 
-  no_device_error = -200000; // context 中没有device
-  no_in_param_error = -200001; // context 中没有in_param
-  not_found = -200002; // not found
-  device_invalid = -200003; // device invalid
-  no_user_error = -200004; // context 中没有user
+  ERR_CODE_CONTEXT_NO_DEVICE = -200000; // context 中没有device
+  ERR_CODE_CONTEXT_NO_INPARAM = -200001; // context 中没有in_param
+  ERR_CODE_RECORD_NOT_FOUND = -200002; // not found
+  ERR_CODE_CONTEXT_DEVICE_INVALID = -200003; // device invalid
+  ERR_CODE_CONTEXT_NO_USER = -200004; // context 中没有user
 }
 
 enum ErrSubCode {
-  err_sub_code_unknown = 0;
-  err_sub_code_book_service = 101; // 内容库服务
-  err_sub_code_go_book_service = 200; // golang版本内容库服务
-  err_sub_code_agreement_service = 201; // agreement service
-  err_sub_code_book_store_service = 202; // golang 书城服务
-  err_sub_code_go_device_service = 203; // golang 设备服务
-  err_sub_code_task_service = 204; // 任务服务
-  err_sub_code_account_service = 205; // 账户金额服务
-  err_sub_code_writing_contest_service = 206;
-  err_sub_code_go_user_service = 207;  // 用户服务
-  err_sub_code_balance_service = 208;  // 流水管理服务
-  err_sub_code_track_service = 209;  // 埋点上报服务
+  ERR_SUB_CODE_UNSPECIFIED = 0;
+  ERR_SUB_CODE_BOOK_SERVICE = 101; // 内容库服务
+
+//  ERR_SUB_CODE_go_book_service = 200; // golang版本内容库服务
+//  ERR_SUB_CODE_agreement_service = 201; // agreement service
+//  ERR_SUB_CODE_book_store_service = 202; // golang 书城服务
+//  ERR_SUB_CODE_go_device_service = 203; // golang 设备服务
+//  ERR_SUB_CODE_task_service = 204; // 任务服务
+//  ERR_SUB_CODE_account_service = 205; // 账户金额服务
+//  ERR_SUB_CODE_writing_contest_service = 206;
+//  ERR_SUB_CODE_go_user_service = 207;  // 用户服务
+//  ERR_SUB_CODE_balance_service = 208;  // 流水管理服务
+//  ERR_SUB_CODE_track_service = 209;  // 埋点上报服务
 }
 
 message OutParam {
@@ -62,28 +65,28 @@ message CommonResponse {
 }
 
 enum AppIdType {
-  APP_ID_UNKNOWN = 0;
-  APP_ID_LIGHTHOUSE = 100;
+  APP_ID_TYPE_UNSPECIFIED = 0;
+  APP_ID_TYPE_LIGHTHOUSE = 100;
 }
 
 enum AreaIdType {
-  AREA_ID_UNKNOWN = 0;
-  AREA_ID_ANDROID = 30;
-  AREA_ID_IOS = 40;
-  AREA_ID_WEB = 99;
-  AREA_ID_H5 = 98;
+  AREA_ID_TYPE_UNSPECIFIED = 0;
+  AREA_ID_TYPE_ANDROID = 30;
+  AREA_ID_TYPE_IOS = 40;
+  AREA_ID_TYPE_WEB = 99;
+  AREA_ID_TYPE_H5 = 98;
 }
 
 enum LanguageType {
-  LAN_ZH = 0; // Not Set
-  LAN_EN = 1; // 英文 English
-  LAN_SW = 2; // 斯瓦希里语 Swahili
-  LAN_AR = 3; // 阿语
-  LAN_FR = 4; // 法语
-};
+  LANGUAGE_TYPE_UNSPECIFIED = 0; // Not Set
+  LANGUAGE_TYPE_EN = 1; // 英文 English
+  LANGUAGE_TYPE_SW = 2; // 斯瓦希里语 Swahili
+  LANGUAGE_TYPE_AR = 3; // 阿语
+  LANGUAGE_TYPE_FR = 4; // 法语
+}
 
 enum ClientType {
-  CLIENT_TYPE_UNKNOWN = 0;
+  CLIENT_TYPE_UNSPECIFIED = 0;
   CLIENT_TYPE_ANDROID = 1;
   CLIENT_TYPE_IOS = 5;
 }
