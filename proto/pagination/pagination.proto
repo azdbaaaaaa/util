@@ -4,8 +4,8 @@ syntax = "proto3";
 //指定包名
 package pagination;
 
-import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
-import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "validate.proto";
+import "gogo.proto";
 
 option go_package = "github.com/azdbaaaaaa/util/proto/pagination;pagination";
 

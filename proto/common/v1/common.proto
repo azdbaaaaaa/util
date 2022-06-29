@@ -6,8 +6,8 @@ syntax = "proto3";
 import "google/protobuf/any.proto";
 
 //指定包名
-package common;
-option go_package = "github.com/azdbaaaaaa/util/proto/gen/proto/go;common";
+package common.v1;
+option go_package = "github.com/azdbaaaaaa/util/proto/gen/proto/go/v1;common_v1";
 
 enum ErrCode {
   success = 0;

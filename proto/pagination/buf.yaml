@@ -1,0 +1,17 @@
+version: v1beta1
+breaking:
+  use:
+    - FILE
+lint:
+  use:
+    - DEFAULT
+deps:
+#  - buf.build/envoyproxy/protoc-gen-validate
+#  - buf.build/gogo/protobuf
+  - buf.build/ficool/util
+build:
+  roots:
+    - pagination
+    - common
+    - validate
+    - gogo
