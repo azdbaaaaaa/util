@@ -15,10 +15,10 @@ proto_path=${proto_path}:${GOPATH}/src/github.com/azdbaaaaaa/util/
 
 cd "${home}"/proto/common
 protoc --gofast_out=plugins=grpc:. --proto_path=${proto_path} --validate_out="lang=go:." common.proto
-mv "${home}"/proto/common/github.com/azdbaaaaaa/util/proto/common/* "${home}"/proto/common
-rm -r "${home}"/proto/common/github.com/
+#mv "${home}"/proto/common/github.com/azdbaaaaaa/util/proto/common/* "${home}"/proto/common
+#rm -r "${home}"/proto/common/github.com/
 
 cd "${home}"/proto/pagination
 protoc --gofast_out=plugins=grpc:. --proto_path=${proto_path} --validate_out="lang=go:." pagination.proto
-mv "${home}"/proto/pagination/github.com/azdbaaaaaa/util/proto/pagination/* "${home}"/proto/pagination
-rm -r "${home}"/proto/pagination/github.com/
+#mv "${home}"/proto/pagination/github.com/azdbaaaaaa/util/proto/pagination/* "${home}"/proto/pagination
+#rm -r "${home}"/proto/pagination/github.com/

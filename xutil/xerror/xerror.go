@@ -2,7 +2,7 @@ package xerror
 
 import (
 	"fmt"
-	proto_common "github.com/azdbaaaaaa/util/proto/common"
+	common2 "github.com/azdbaaaaaa/util/proto/common"
 	"reflect"
 )
 
@@ -47,8 +47,8 @@ type ErrorCodeMessage interface {
 
 func NewProtoError(code ErrorCodeMessage) (e Error) {
 	e = &err{
-		Code:    int32(proto_common.ErrCode_unknown_error),
-		Message: proto_common.ErrCode_unknown_error.String(),
+		Code:    int32(common2.ErrCode_unknown_error),
+		Message: common2.ErrCode_unknown_error.String(),
 	}
 	defer func() {
 		if err := recover(); err != nil {
