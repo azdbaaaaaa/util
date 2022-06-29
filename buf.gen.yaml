@@ -6,12 +6,12 @@ version: v1
 #    except:
 #      - buf.build/googleapis/googleapis
 plugins:
-  - name: gogofast
+  - name: go
     out: proto/gen/go
-    opt: paths=source_relative,plugins=grpc
-#  - name: go-grpc
-#    out: proto/gen/go
-#    opt: paths=source_relative,require_unimplemented_servers=false
+    opt: paths=source_relative
+  - name: go-grpc
+    out: proto/gen/go
+    opt: paths=source_relative,require_unimplemented_servers=false
     strategy: directory
   - name: grpc-gateway
     out: proto/gen/go
