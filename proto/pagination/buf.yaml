@@ -8,10 +8,10 @@ lint:
 deps:
 #  - buf.build/envoyproxy/protoc-gen-validate
 #  - buf.build/gogo/protobuf
-  - buf.build/ficool/util
-build:
-  roots:
-    - pagination
-    - common
-    - validate
-    - gogo
+  - buf.build/ficool/proto
+#build:
+#  roots:
+#    - pagination
+#    - common
+#    - validate
+#    - gogo

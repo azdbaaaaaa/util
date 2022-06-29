@@ -2,17 +2,17 @@
 syntax = "proto3";
 
 //指定包名
-package pagination;
+package pagination.v1;
 
-import "validate/validate.proto";
 import "gogo/gogo.proto";
+import "validate/validate.proto";
 
-option go_package = "github.com/azdbaaaaaa/util/proto/pagination;pagination";
+option go_package = "github.com/azdbaaaaaa/util/proto/gen/go/pagination/v1;pagination_v1";
 
 enum SortOrder {
-    SortDefault = 0;
-    SortDesc = 1;
-    SortAsc = 2;
+    SORT_ORDER_UNSPECIFIED = 0;
+    SORT_ORDER_DESC = 1;
+    SORT_ORDER_ASC = 2;
 }
 
 message PaginationReq {

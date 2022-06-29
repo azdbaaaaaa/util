@@ -5,11 +5,11 @@ syntax = "proto3";
 //import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
 
 //指定包名
-package common.v2;
+package common.v1;
 
 import "google/protobuf/any.proto";
 
-option go_package = "github.com/azdbaaaaaa/util/proto/gen/proto/go/v2;common_v2";
+option go_package = "github.com/azdbaaaaaa/util/proto/gen/go/common/v1;common_v1";
 
 enum ErrCode {
   ERR_CODE_UNSPECIFIED = 0;

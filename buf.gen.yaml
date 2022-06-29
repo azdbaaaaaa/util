@@ -7,15 +7,15 @@ version: v1
 #      - buf.build/googleapis/googleapis
 plugins:
   - name: go
-    out: gen/proto/go
+    out: proto/gen/go
     opt: paths=source_relative
   - name: go-grpc
-    out: gen/proto/go
+    out: proto/gen/go
     opt: paths=source_relative,require_unimplemented_servers=false
     strategy: directory
   - name: grpc-gateway
-    out: gen/proto/go
+    out: proto/gen/go
     opt: paths=source_relative
   - name: validate
-    out: gen/proto/go
+    out: proto/gen/go
     opt: paths=source_relative,lang=go

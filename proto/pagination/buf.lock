@@ -3,5 +3,5 @@ version: v1
 deps:
   - remote: buf.build
     owner: ficool
-    repository: util
-    commit: aa86f4d0077e4b0dba56b2efaa9ae08a
+    repository: common
+    commit: 9c7eebf9dfd641d39f3224208d532b21
