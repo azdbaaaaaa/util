@@ -1,21 +1,14 @@
 version: v1
-#managed:
-#  enabled: true
-#  go_package_prefix:
-#    default: github.com/bufbuild/buf-tour/petstore/gen/proto/go
-#    except:
-#      - buf.build/googleapis/googleapis
 plugins:
   - name: go
     out: protobuf/gen/go
-    opt: paths=source_relative
   - name: go-grpc
     out: protobuf/gen/go
     opt: paths=source_relative,require_unimplemented_servers=false
     strategy: directory
-  - name: grpc-gateway
-    out: protobuf/gen/go
-    opt: paths=source_relative
-  - name: validate
-    out: protobuf/gen/go
-    opt: paths=source_relative,lang=go
+#  - name: grpc-gateway
+#    out: protobuf/gen/go
+#    opt: paths=source_relative
+#  - name: validate
+#    out: protobuf/gen/go
+#    opt: paths=source_relative,lang=go

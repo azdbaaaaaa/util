@@ -52,15 +52,6 @@ message OutParam {
   map<string, string> metadata = 5;
 }
 
-message CommonResponse {
-  int32 code = 1;
-  int32 sub_code = 2;
-  string message = 3;
-  string reason = 4;
-  map<string, string> metadata = 5;
-  google.protobuf.Any data = 6;
-}
-
 enum AppIdType {
   APP_ID_UNKNOWN = 0;
   APP_ID_LIGHTHOUSE = 100;

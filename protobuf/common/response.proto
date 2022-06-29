@@ -1,0 +1,92 @@
+//版本号
+syntax = "proto3";
+
+//import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+//import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
+
+//指定包名
+package response;
+
+import "google/protobuf/any.proto";
+
+option go_package = "github.com/azdbaaaaaa/util/proto/common;common";
+
+//enum ErrCode {
+//  ERR_CODE_UNSPECIFIED = 0;
+//  ERR_CODE_SERVER_UNKNOWN = 999999; // 未知错误
+//  ERR_CODE_SERVER_FAILED = -100001; // 不重要的失败，建议重试
+//  ERR_CODE_SERVER_PARAM_INVALID = -100002; // 请求参数不合法
+//  ERR_CODE_SERVER_EXCEPTION = -100003; // 服务本身异常
+//  ERR_CODE_SERVER_REJECTED = -100004; // 服务忙，请求队列已满
+//  ERR_CODE_SERVER_BUSY = -100005; // 服务忙，被调限流
+//
+//  ERR_CODE_CLIENT_TIMEOUT = -100006; // 服务调用超时
+//  ERR_CODE_CLIENT_EXCEPTION = -100007; // 服务调用异常
+//  ERR_CODE_CLIENT_BROKEN = -100008; // 服务熔断
+//
+//  ERR_CODE_CONTEXT_NO_DEVICE = -200000; // context 中没有device
+//  ERR_CODE_CONTEXT_NO_INPARAM = -200001; // context 中没有in_param
+//  ERR_CODE_RECORD_NOT_FOUND = -200002; // not found
+//  ERR_CODE_CONTEXT_DEVICE_INVALID = -200003; // device invalid
+//  ERR_CODE_CONTEXT_NO_USER = -200004; // context 中没有user
+//}
+//
+//enum ErrSubCode {
+//  ERR_SUB_CODE_UNSPECIFIED = 0;
+//  ERR_SUB_CODE_BOOK_SERVICE = 101; // 内容库服务
+//
+////  ERR_SUB_CODE_go_book_service = 200; // golang版本内容库服务
+////  ERR_SUB_CODE_agreement_service = 201; // agreement service
+////  ERR_SUB_CODE_book_store_service = 202; // golang 书城服务
+////  ERR_SUB_CODE_go_device_service = 203; // golang 设备服务
+////  ERR_SUB_CODE_task_service = 204; // 任务服务
+////  ERR_SUB_CODE_account_service = 205; // 账户金额服务
+////  ERR_SUB_CODE_writing_contest_service = 206;
+////  ERR_SUB_CODE_go_user_service = 207;  // 用户服务
+////  ERR_SUB_CODE_balance_service = 208;  // 流水管理服务
+////  ERR_SUB_CODE_track_service = 209;  // 埋点上报服务
+//}
+//
+//message OutParam {
+//  int32 code = 1;
+//  int32 sub_code = 2;
+//  string message = 3;
+//  string reason = 4;
+//  map<string, string> metadata = 5;
+//}
+
+message CommonResponse {
+  int32 code = 1;
+  int32 sub_code = 2;
+  string message = 3;
+  string reason = 4;
+  map<string, string> metadata = 5;
+  google.protobuf.Any data = 6;
+}
+
+//enum AppIdType {
+//  APP_ID_TYPE_UNSPECIFIED = 0;
+//  APP_ID_TYPE_LIGHTHOUSE = 100;
+//}
+//
+//enum AreaIdType {
+//  AREA_ID_TYPE_UNSPECIFIED = 0;
+//  AREA_ID_TYPE_ANDROID = 30;
+//  AREA_ID_TYPE_IOS = 40;
+//  AREA_ID_TYPE_WEB = 99;
+//  AREA_ID_TYPE_H5 = 98;
+//}
+//
+//enum LanguageType {
+//  LANGUAGE_TYPE_UNSPECIFIED = 0; // Not Set
+//  LANGUAGE_TYPE_EN = 1; // 英文 English
+//  LANGUAGE_TYPE_SW = 2; // 斯瓦希里语 Swahili
+//  LANGUAGE_TYPE_AR = 3; // 阿语
+//  LANGUAGE_TYPE_FR = 4; // 法语
+//}
+//
+//enum ClientType {
+//  CLIENT_TYPE_UNSPECIFIED = 0;
+//  CLIENT_TYPE_ANDROID = 1;
+//  CLIENT_TYPE_IOS = 5;
+//}
