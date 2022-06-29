@@ -1,4 +1,4 @@
-package v1
+package pagination
 
 func (s SortOrder) Asc() bool {
 	switch s {

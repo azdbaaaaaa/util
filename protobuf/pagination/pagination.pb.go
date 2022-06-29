@@ -3,7 +3,7 @@
 
 //指定包名
 
-package v1
+package pagination
 
 import (
 	fmt "fmt"
