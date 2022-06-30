@@ -1,8 +1,6 @@
 //版本号
 syntax = "proto3";
 
-//import "github.com/gogo/protobuf/gogoproto/gogo.proto";
-//import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
 import "google/protobuf/any.proto";
 
 //指定包名

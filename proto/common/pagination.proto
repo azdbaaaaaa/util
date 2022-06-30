@@ -6,7 +6,6 @@ package response;
 
 import "validate/validate.proto";
 import "gogoproto/gogo.proto";
-//import "protobuf/gogo/gogo.proto";
 
 option go_package = "github.com/azdbaaaaaa/util/proto/common;common";
 option (gogoproto.marshaler_all) = true;
