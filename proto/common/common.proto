@@ -43,14 +43,6 @@ enum ErrSubCode {
   err_sub_code_track_service = 209; // 埋点上报服务
 }
 
-message OutParam {
-  int32 code = 1;
-  int32 sub_code = 2;
-  string message = 3;
-  string reason = 4;
-  map<string, string> metadata = 5;
-}
-
 enum AppIdType {
   APP_ID_UNKNOWN = 0;
   APP_ID_LIGHTHOUSE = 100;

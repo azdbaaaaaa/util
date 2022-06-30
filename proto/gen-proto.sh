@@ -15,7 +15,8 @@ proto_path=${proto_path}:${GOPATH}/src/github.com/azdbaaaaaa/util/
 
 
 cd "${home}"/proto/common
-protoc --go_out=. --proto_path=${proto_path} *.proto
+protoc --go_out=. --proto_path=${proto_path} common.proto
+protoc --gofast_out=plugins=grpc:. --proto_path=${proto_path} out_param.proto
 mv "${home}"/proto/common/github.com/azdbaaaaaa/util/proto/common/* "${home}"/proto/common
 sed -i.bak "s/google.golang.org\/protobuf\/types\/known\/anypb/github.com\/gogo\/protobuf\/types/g" common.pb.go && rm common.pb.go.bak
 rm -r "${home}"/proto/common/github.com/

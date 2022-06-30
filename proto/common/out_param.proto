@@ -1,0 +1,15 @@
+//版本号
+syntax = "proto3";
+
+//指定包名
+package common;
+
+option go_package = "github.com/azdbaaaaaa/util/proto/common;common";
+
+message OutParam {
+  int32 code = 1;
+  int32 sub_code = 2;
+  string message = 3;
+  string reason = 4;
+  map<string, string> metadata = 5;
+}
