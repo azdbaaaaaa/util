@@ -2,7 +2,7 @@
 syntax = "proto3";
 
 //指定包名
-package response;
+package pagination;
 
 import "validate/validate.proto";
 import "gogoproto/gogo.proto";
