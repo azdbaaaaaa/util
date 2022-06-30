@@ -7,22 +7,21 @@ package types.v1;
 import "gogoproto/gogo.proto";
 
 option go_package = "github.com/azdbaaaaaa/util/proto/types/v1;types_v1";
-// Enable custom Marshal method.
-option (gogoproto.marshaler_all) = true;
-// Enable custom Unmarshal method.
-option (gogoproto.unmarshaler_all) = true;
-// Enable custom Size method (Required by Marshal and Unmarshal).
-option (gogoproto.sizer_all) = true;
-// Enable registration with golang/protobuf for the grpc-gateway.
-option (gogoproto.goproto_registration) = true;
-// Enable generation of XXX_MessageName methods for grpc-go/status.
-option (gogoproto.messagename_all) = true;
 // Disable Enum Prefix
 option (gogoproto.goproto_enum_prefix_all) = false;
-
+// Enable registration with golang/protobuf for the grpc-gateway.
+option (gogoproto.goproto_registration) = true;
+// Enable custom Marshal method.
+option (gogoproto.marshaler_all) = true;
+// Enable generation of XXX_MessageName methods for grpc-go/status.
+option (gogoproto.messagename_all) = true;
+// Enable custom Size method (Required by Marshal and Unmarshal).
+option (gogoproto.sizer_all) = true;
+// Enable custom Unmarshal method.
+option (gogoproto.unmarshaler_all) = true;
 
 enum ClientType {
-    CLIENT_TYPE_UNSPECIFIED = 0;
-    CLIENT_TYPE_ANDROID = 1;
-    CLIENT_TYPE_IOS = 5;
+  CLIENT_TYPE_UNSPECIFIED = 0;
+  CLIENT_TYPE_ANDROID = 1;
+  CLIENT_TYPE_IOS = 5;
 }
