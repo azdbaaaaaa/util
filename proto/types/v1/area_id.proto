@@ -2,12 +2,12 @@
 syntax = "proto3";
 
 //指定包名
-package pagination;
+package types.v1;
 
-import "validate/validate.proto";
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/azdbaaaaaa/util/proto/common;common";
+option go_package = "github.com/azdbaaaaaa/util/proto/types/v1;types_v1";
+// Enable custom Marshal method.
 option (gogoproto.marshaler_all) = true;
 // Enable custom Unmarshal method.
 option (gogoproto.unmarshaler_all) = true;
@@ -20,20 +20,10 @@ option (gogoproto.messagename_all) = true;
 // Disable Enum Prefix
 option (gogoproto.goproto_enum_prefix_all) = false;
 
-
-enum SortOrder {
-    SORT_ORDER_UNSPECIFIED = 0;
-    SORT_ORDER_DESC = 1;
-    SORT_ORDER_ASC = 2;
-}
-
-message PaginationReq {
-    int32 page = 1 [(validate.rules).int32.gt = 0];
-    int32 page_size = 2 [(validate.rules).int32 = {gt: 0, lte: 5000}];
-    map<string, SortOrder> sort = 3 [(gogoproto.nullable) = false];
-}
-
-message TimeRange {
-    int64 start = 1 [(validate.rules).int64.gt = 0];
-    int64 end = 2 [(validate.rules).int64.gt = 0];
+enum AreaIdType {
+    AREA_ID_TYPE_UNSPECIFIED = 0;
+    AREA_ID_TYPE_ANDROID = 30;
+    AREA_ID_TYPE_IOS = 40;
+    AREA_ID_TYPE_WEB = 99;
+    AREA_ID_TYPE_H5 = 98;
 }

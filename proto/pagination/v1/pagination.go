@@ -1,4 +1,4 @@
-package common
+package pagination_v1
 
 import (
 	"errors"

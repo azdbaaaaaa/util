@@ -1,1 +1,1 @@
-this folder is deprecated, to use common instead!!
+this pagination root folder is to be deprecated, to use v1 instead!!

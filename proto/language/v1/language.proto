@@ -1,0 +1,29 @@
+//版本号
+syntax = "proto3";
+
+//指定包名
+package language.v1;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/azdbaaaaaa/util/proto/language/v1;language_v1";
+// Enable custom Marshal method.
+option (gogoproto.marshaler_all) = true;
+// Enable custom Unmarshal method.
+option (gogoproto.unmarshaler_all) = true;
+// Enable custom Size method (Required by Marshal and Unmarshal).
+option (gogoproto.sizer_all) = true;
+// Enable registration with golang/protobuf for the grpc-gateway.
+option (gogoproto.goproto_registration) = true;
+// Enable generation of XXX_MessageName methods for grpc-go/status.
+option (gogoproto.messagename_all) = true;
+// Disable Enum Prefix
+option (gogoproto.goproto_enum_prefix_all) = false;
+
+enum LanguageType {
+    LANGUAGE_TYPE_UNSPECIFIED = 0; // Not Set
+    LANGUAGE_TYPE_EN = 1; // 英文 English
+    LANGUAGE_TYPE_SW = 2; // 斯瓦希里语 Swahili
+    LANGUAGE_TYPE_AR = 3; // 阿语
+    LANGUAGE_TYPE_FR = 4; // 法语
+};
