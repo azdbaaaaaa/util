@@ -4,6 +4,8 @@ syntax = "proto3";
 //指定包名
 package common;
 
+import "google/protobuf/any.proto";
+
 option go_package = "github.com/azdbaaaaaa/util/proto/common;common";
 
 enum ErrCode {
@@ -74,4 +76,13 @@ enum ClientType {
   CLIENT_TYPE_UNKNOWN = 0;
   CLIENT_TYPE_ANDROID = 1;
   CLIENT_TYPE_IOS = 5;
+}
+
+message CommonResponse {
+  int32 code = 1;
+  int32 sub_code = 2;
+  string message = 3;
+  string reason = 4;
+  map<string, string> metadata = 5;
+  google.protobuf.Any data = 6;
 }
