@@ -4,7 +4,30 @@ syntax = "proto3";
 //指定包名
 package common;
 
+import "gogoproto/gogo.proto";
+import "google/protobuf/any.proto";
+
 option go_package = "github.com/azdbaaaaaa/util/proto/common;common";
+// Disable Enum Prefix
+option (gogoproto.goproto_enum_prefix_all) = false;
+// Enable registration with golang/protobuf for the grpc-gateway.
+option (gogoproto.goproto_registration) = true;
+option (gogoproto.marshaler_all) = true;
+// Enable generation of XXX_MessageName methods for grpc-go/status.
+option (gogoproto.messagename_all) = true;
+// Enable custom Size method (Required by Marshal and Unmarshal).
+option (gogoproto.sizer_all) = true;
+// Enable custom Unmarshal method.
+option (gogoproto.unmarshaler_all) = true;
+
+message CommonResponse {
+  int32 code = 1;
+  int32 sub_code = 2;
+  string message = 3;
+  string reason = 4;
+  map<string, string> metadata = 5;
+  google.protobuf.Any data = 6;
+}
 
 enum ErrCode {
   success = 0;
