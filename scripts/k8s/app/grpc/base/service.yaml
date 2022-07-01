@@ -11,5 +11,9 @@ spec:
       protocol: TCP
       port: 8088
       targetPort: $GRPC_PORT
+    - name: http
+      protocol: TCP
+      port: 8089
+      targetPort: $HTTP_PORT
   selector:
     app: "${PROJECT}-${CMD}"

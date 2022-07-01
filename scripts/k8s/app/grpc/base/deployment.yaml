@@ -23,5 +23,7 @@ spec:
           command: [ "/app/$PROJECT", "$CMD", "--config=/etc/config/${PROJECT}-${CMD}.yaml" ]
           imagePullPolicy: Always
           ports:
-            - name: service
+            - name: http
               containerPort: $GRPC_PORT
+            - name: grpc
+              containerPort: $HTTP_PORT
