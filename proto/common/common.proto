@@ -8,8 +8,8 @@ import "gogoproto/gogo.proto";
 import "google/protobuf/any.proto";
 
 option go_package = "github.com/azdbaaaaaa/util/proto/common;common";
-// Disable Enum Prefix
-option (gogoproto.goproto_enum_prefix_all) = false;
+//// Disable Enum Prefix
+//option (gogoproto.goproto_enum_prefix_all) = false;
 // Enable registration with golang/protobuf for the grpc-gateway.
 option (gogoproto.goproto_registration) = true;
 option (gogoproto.marshaler_all) = true;
