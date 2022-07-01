@@ -14,7 +14,7 @@ breaking:format
 generate:breaking
 	cd proto && buf mod update && cd ..
 	buf generate
-	sed -i.bak "s/google.golang.org\/protobuf\/types\/known\/anypb/github.com\/gogo\/protobuf\/types/g" proto/common/response.pb.go && rm proto/common/response.pb.go.bak
+	sed -i.bak "s/google.golang.org\/protobuf\/types\/known\/anypb/github.com\/gogo\/protobuf\/types/g" proto/common/common.pb.go && rm proto/common/common.pb.go.bak
 
 push:generate
 	cd proto && buf push && cd ..
