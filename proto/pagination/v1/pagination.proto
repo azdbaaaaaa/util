@@ -37,6 +37,6 @@ message PaginationReq {
 }
 
 message TimeRange {
-  int64 start = 1 [(validate.rules).int64.gt = 0];
-  int64 end = 2 [(validate.rules).int64.gt = 0];
+  int64 start = 1;
+  int64 end = 2;
 }
