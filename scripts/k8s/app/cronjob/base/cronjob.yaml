@@ -5,7 +5,7 @@ metadata:
   labels:
     app: "${PROJECT}-${CMD}"
 spec:
-  schedule: "$SCHEDULE"
+  schedule: \"$SCHEDULE\"
   jobTemplate:
     spec:
       template:
