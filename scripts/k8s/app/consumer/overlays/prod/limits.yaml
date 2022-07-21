@@ -8,6 +8,9 @@ spec:
       containers:
         - name: "${PROJECT}-${CMD}"
           resources: # CPU内存限制
+            requests:
+              cpu: 0.1
+              memory: 256Mi
             limits:
               cpu: 1
               memory: 2048Mi
