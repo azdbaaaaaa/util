@@ -2,7 +2,9 @@ package pagination_v1
 
 import (
 	"errors"
+	"github.com/azdbaaaaaa/util/log"
 	"math"
+	"reflect"
 )
 
 const (
@@ -92,4 +94,36 @@ func (m *PaginationReq) GetIndex(totalNum int32) (from, to int32, err error) {
 		to = totalNum
 	}
 	return from, to, nil
+}
+
+// 完整数据自动分页
+func (m *PaginationReq) Split(arr interface{}) (page, pageSize int32, total int64, ret []interface{}, err error) {
+
+	v := reflect.ValueOf(arr)
+	if v.Kind() != reflect.Slice {
+		err = errors.New("src is not a slice")
+		return
+	}
+	l := v.Len()
+	ret = make([]interface{}, 0, m.PageSize)
+	if l == 0 {
+		return m.Page, m.PageSize, 0, ret, nil
+
+	}
+
+	from, to, err := m.Index(int32(l))
+	if err != nil {
+		log.Errorw("Index", "err", err)
+		return
+	}
+	//dst = src[from:to]
+
+	for i := 0; i < l; i++ {
+		if i >= int(from) && i < int(to) {
+			ret = append(ret, v.Index(i).Interface())
+		}
+	}
+	//return ret
+
+	return m.Page, m.PageSize, int64(l), ret, nil
 }
