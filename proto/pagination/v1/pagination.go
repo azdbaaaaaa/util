@@ -22,6 +22,17 @@ func New(page, pageSize int32) *PaginationReq {
 	return pag
 }
 
+func NewPagination(pag *PaginationReq) *PaginationReq {
+	if pag == nil {
+		pag = &PaginationReq{
+			Page:     DefaultPage,
+			PageSize: DefaultPageSize,
+		}
+	}
+	pag.checkValid()
+	return pag
+}
+
 func (m *PaginationReq) checkValid() {
 	if m.PageSize < 0 || m.PageSize > MaxPageSize {
 		m.PageSize = MaxPageSize
