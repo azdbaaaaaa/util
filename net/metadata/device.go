@@ -16,11 +16,13 @@ type AppType string
 
 const (
 	AppType_LightReader AppType = "light_reader"
-	AppType_SDK         AppType = "sdk"
+	AppType_SDK_Phoenix AppType = "sdk_phoenix"
+	AppType_SDK_Hios    AppType = "sdk_hios"
 )
 
 const (
 	Channel_SDK_Phoenix = "sdk_phoenix"
+	Channel_SDK_Hios    = "sdk_hios"
 )
 
 type Device struct {
@@ -114,7 +116,9 @@ func (d *Device) ValueFromIdx(i int, v string) (err error) {
 		d.Channel = v
 		switch v {
 		case Channel_SDK_Phoenix:
-			d.AppType = AppType_SDK
+			d.AppType = AppType_SDK_Phoenix
+		case Channel_SDK_Hios:
+			d.AppType = AppType_SDK_Hios
 		default:
 			d.AppType = AppType_LightReader
 		}
