@@ -41,8 +41,8 @@ require (
 	google.golang.org/protobuf v1.28.0
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gorm.io/driver/mysql v1.0.4
-	gorm.io/gorm v1.21.8
+	gorm.io/driver/mysql v1.3.6
+	gorm.io/gorm v1.23.9
 	gorm.io/plugin/prometheus v0.0.0-20210422053049-00843b57fc2f
 	honnef.co/go/tools v0.0.1-2020.1.4 // indirect
 )
