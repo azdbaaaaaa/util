@@ -1,0 +1,1 @@
+./kafka-console-consumer.sh --bootstrap-server "b-2.dev-ficool.oei4cx.c6.kafka.eu-west-1.amazonaws.com:9092,b-3.dev-ficool.oei4cx.c6.kafka.eu-west-1.amazonaws.com:9092,b-1.dev-ficool.oei4cx.c6.kafka.eu-west-1.amazonaws.com:9092" --topic prod-ficool-balance --from-beginning
