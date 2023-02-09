@@ -37,7 +37,9 @@ mongodump -h dbhost -d dbname -o dbdirectory
 # 需要备份的数据库实例，例如：test
 # -o：
 # 备份的数据存放位置，例如：c:\data\dump，当然该目录需要提前建立，在备份完成后，系统自动在dump目录下建立一个test目录，这个目录里面存放该数据库实例的备份数据。
+# example: mongodump -h 34.142.70.144 -d writing_contest_service -o ./dump
 mongorestore -h 127.0.0.1:27017 -d test <path>
 # 在dump目录的上级目录执行
 # 如果将文档恢复到现有数据库，并且集合和现有文档与要恢复的文档具有相同的 _id 字段值，则 mongorestore 不会覆盖这些文档。
+# example: mongorestore -d device_service dump/device_service
 

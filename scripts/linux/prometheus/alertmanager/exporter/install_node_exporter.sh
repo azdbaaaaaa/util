@@ -12,7 +12,7 @@ docker run -d -p 9100:9100 \
   -v "/proc:/host/proc:ro" \
   -v "/sys:/host/sys:ro" \
   -v "/:/rootfs:ro" \
-  --net="host" \
+  --network="host" \
   quay.io/prometheus/node-exporter \
     -collector.procfs /host/proc \
     -collector.sysfs /host/sys \

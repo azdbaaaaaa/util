@@ -1,5 +1,5 @@
 groups:
-- name: redis_health
+- name: mongo_health
   rules:
   - alert: MongodbReplicationLag
     expr: avg(mongodb_replset_member_optime_date{state="PRIMARY"}) - avg(mongodb_replset_member_optime_date{state="SECONDARY"}) > 10

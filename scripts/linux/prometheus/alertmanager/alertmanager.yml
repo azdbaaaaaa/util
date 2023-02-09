@@ -1,0 +1,37 @@
+global:
+  # The smarthost and SMTP sender used for mail notifications.
+  #smtp_smarthost: 'localhost:25'
+  #smtp_from: 'alertmanager@example.org'
+  #smtp_auth_username: 'alertmanager'
+  #smtp_auth_password: 'password'
+  smtp_from: '17721221433@163.com'
+  smtp_smarthost: 'smtp.163.com:465'
+  smtp_auth_username: '17721221433@163.com'
+  smtp_auth_password: 'sk#1380165'
+  smtp_require_tls: false
+  wechat_api_url: 'https://qyapi.weixin.qq.com/cgi-bin/'
+# The directory from which notification templates are read.
+templates:
+  - '/opt/alertmanager/template/*.tmpl'
+
+# The root route on which each incoming alert enters.
+route:
+  group_by: [ 'alertname' ]
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 5m
+  receiver: 'wechat'
+receivers:
+  - name: 'wechat'
+    wechat_configs:
+      - send_resolved: true
+        agent_id: '1000002'
+        to_party: '1'
+        api_secret: 'H8ps5u4e9t4VNnecJ_tfcFyB_b_8yps9FImM5wEwLcI'
+        corp_id: 'wwa676576f10b9fd51'
+        message: '{{ template "wechat.tmpl" . }}'
+  - name: 'email'                            # 告警接收者的名称
+    email_configs: # 配置邮箱告警
+      - to: '17721221433@163.com'                     # 告警接收者的邮箱
+        html: '{{ template "email.tmpl" . }}'  # 邮箱内容的模板
+        headers: { Subject: "[WARN] 报警邮件" }  # 接收邮件的标题
