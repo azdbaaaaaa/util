@@ -10,8 +10,8 @@ sudo docker run -d -p 3306:3306 \
 -v /opt/mysql/log:/var/log/mysql \
 -v /opt/mysql/data:/var/lib/mysql \
 -e MYSQL_ROOT_PASSWORD=123456 \
---cpus="2.0" \
---memory="2g" \
+--cpus="1.0" \
+--memory="1g" \
 mysql:5.6
 
 docker update --cpus="2.0" --memory="2g" mysql

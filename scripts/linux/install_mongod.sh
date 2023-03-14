@@ -16,7 +16,7 @@ yum -y install mongodb-org
 # -e MONGO_INITDB_ROOT_PASSWORD=123456 \
 # --auth \
 docker run -d -p 27017:27017  \
---name mongo \
+--name mongo-test \
 --restart=always \
 -v /opt/mongo/data/db:/data/db \
 --cpus="1.0" \

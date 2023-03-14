@@ -9,15 +9,12 @@ docker run -d --restart=always --name yapi -p 3100:3000 --link yapi-mongo crper/
 
 {
   "port": "3000",
-  "adminAccount": "server@ficool.com",
+  "adminAccount": "zhoudongbin@searchnovels.com",
   "timeout":120000,
   "db": {
-    "servername": "ficool-test1.cluster-ceslrotvh0cw.eu-west-1.rds.amazonaws.com",
+    "servername": "127.0.0.1",
     "DATABASE": "yapi",
-    "port": 27017,
-    "user": "admin",
-    "pass": "SUKfzYx8DZkGjY7bLKJv",
-    "authSource": "admin"
+    "port": 27017
   }
 }
 
