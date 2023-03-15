@@ -2,12 +2,7 @@ package auth
 
 import (
 	"context"
-	metadata2 "github.com/azdbaaaaaa/util/net/metadata"
 	"github.com/gin-gonic/gin"
-	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
-	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"strings"
 )
 
@@ -21,21 +16,22 @@ func userClaimFromToken(struct{}) string {
 
 // AuthFunc is used by a middleware to authenticate requests
 func AuthFunc(ctx context.Context) (context.Context, error) {
-	token, err := grpc_auth.AuthFromMD(ctx, "bearer")
-	if err != nil {
-		return nil, err
-	}
-	tokenInfo, err := parseToken(token)
-	if err != nil {
-		return nil, status.Errorf(codes.Unauthenticated, "invalid auth token: %v", err)
-	}
-
-	grpc_ctxtags.Extract(ctx).Set("auth.sub", userClaimFromToken(tokenInfo))
-
-	// WARNING: in production define your own type to avoid context collisions
-	newCtx := context.WithValue(ctx, metadata2.ContextKeyUserID, tokenInfo)
-
-	return newCtx, nil
+	return ctx, nil
+	//token, err := grpc_auth.AuthFromMD(ctx, "bearer")
+	//if err != nil {
+	//	return nil, err
+	//}
+	//tokenInfo, err := parseToken(token)
+	//if err != nil {
+	//	return nil, status.Errorf(codes.Unauthenticated, "invalid auth token: %v", err)
+	//}
+	//
+	//grpc_ctxtags.Extract(ctx).Set("auth.sub", userClaimFromToken(tokenInfo))
+	//
+	//// WARNING: in production define your own type to avoid context collisions
+	//newCtx := context.WithValue(ctx, metadata2.ContextKeyUserID, tokenInfo)
+	//
+	//return newCtx, nil
 }
 
 //func AuthRequired(svc UserService) gin.HandlerFunc {

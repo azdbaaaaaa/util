@@ -1,6 +1,7 @@
 package grpc
 
 import (
+	"github.com/azdbaaaaaa/util/net/grpc/middleware/auth"
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_device"
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_error"
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_in_param"
@@ -38,7 +39,7 @@ func NewServer(conf ServerConfig, logger *zap.Logger) (s *grpc.Server) {
 			grpc_device.StreamServerInterceptor(logger),
 			grpc_in_param.StreamServerInterceptor(logger),
 			grpc_error.StreamServerInterceptor(logger),
-			grpc_auth.StreamServerInterceptor(nil),
+			grpc_auth.StreamServerInterceptor(auth.AuthFunc),
 		)),
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
 			grpc_recovery.UnaryServerInterceptor([]grpc_recovery.Option{
@@ -55,7 +56,7 @@ func NewServer(conf ServerConfig, logger *zap.Logger) (s *grpc.Server) {
 			grpc_device.UnaryServerInterceptor(logger),
 			grpc_in_param.UnaryServerInterceptor(logger),
 			grpc_error.UnaryServerInterceptor(logger),
-			grpc_auth.UnaryServerInterceptor(nil),
+			grpc_auth.UnaryServerInterceptor(auth.AuthFunc),
 		)),
 	)
 	grpc_health_v1.RegisterHealthServer(s, health.NewServer())
