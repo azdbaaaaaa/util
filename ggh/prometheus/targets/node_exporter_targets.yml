@@ -1,0 +1,51 @@
+- targets:
+    - 172.30.21.226:9100
+  labels:
+    project: monitor
+    env: test
+
+- targets:
+    - 8.216.92.102:9100
+    - 8.216.66.127:9100
+  labels:
+    project: overseas-short-video
+    env: prod
+
+- targets:
+    - 8.216.81.43:9100
+  labels:
+    project: overseas-short-video
+    env: test
+
+- targets:
+    - 172.30.21.219:9100
+    - 172.30.21.230:9100
+  labels:
+    project: short-video
+    env: prod
+
+- targets:
+    - 172.16.23.251:9100
+    - 172.30.21.216:9100
+  labels:
+    project: short-story
+    env: prod
+
+- targets:
+    - 172.30.21.221:9100
+  labels:
+    project: center-service
+    env: prod
+
+- targets:
+    - 172.23.157.14:9100
+  labels:
+    project: logs
+    env: prod
+
+- targets:
+    - 172.30.21.237:9100
+    - 172.30.21.236:9100
+  labels:
+    project: sbook
+    env: prod

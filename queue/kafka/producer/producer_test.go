@@ -7,18 +7,20 @@ import (
 )
 
 func TestNewProducer(t *testing.T) {
+	//broker := "b-2.nsmspdev.04141j.c3.kafka.us-west-2.amazonaws.com:9096,b-1.nsmspdev.04141j.c3.kafka.us-west-2.amazonaws.com:9096"
 	cfg := &Config{
-		Broker: "b-2.dev-ficool.oei4cx.c6.kafka.eu-west-1.amazonaws.com:9092,b-3.dev-ficool.oei4cx.c6.kafka.eu-west-1.amazonaws.com:9092,b-1.dev-ficool.oei4cx.c6.kafka.eu-west-1.amazonaws.com:9092",
-		Topic:  "ficool-balance",
+		Broker: "127.0.0.1:9092",
+		Topic:  "dev_test_01",
 	}
 	producer, err := NewProducer(cfg)
 	if err != nil {
 		log.Errorw("NewProducer", "error", err)
 		return
 	}
+	defer producer.Close()
 	_, _, err = producer.SendMessage(&sarama.ProducerMessage{
-		Topic:     cfg.Topic,
-		Value:     sarama.StringEncoder("test producer"),
+		Topic: cfg.Topic,
+		Value: sarama.StringEncoder("test producer"),
 	})
 	if err != nil {
 		log.Errorf("SendMessage", "error", err)

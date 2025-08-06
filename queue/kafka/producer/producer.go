@@ -18,6 +18,9 @@ func NewProducer(conf *Config) (producer sarama.SyncProducer, err error) {
 	if conf.RequiredAcks != 0 {
 		config.Producer.RequiredAcks = conf.RequiredAcks
 	}
+	config.Net.SASL.Enable = true
+	config.Net.SASL.User = "nsm-dev"
+	config.Net.SASL.Password = "nsm-dev-secret"
 	producer, err = sarama.NewSyncProducer(strings.Split(conf.Broker, ","), config)
 	if err != nil {
 		log.Errorf("error to create sync producer: %v", err)

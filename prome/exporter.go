@@ -1,8 +1,10 @@
 package prome
 
 import (
+	"fmt"
 	"github.com/azdbaaaaaa/util/log"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/zap"
 	"net/http"
 )
@@ -27,6 +29,7 @@ type PromeExporter struct {
 var labels = []string{"status", "name"}
 
 func NewExporter(ns string) *PromeExporter {
+	prometheus.NewCounterVec()
 	return &PromeExporter{
 		up: prometheus.NewGauge(prometheus.GaugeOpts{
 			Namespace: ns,
@@ -39,6 +42,17 @@ func NewExporter(ns string) *PromeExporter {
 		maxCost:    NewGaugeVec(ns, "max_cost", "最大耗时"),
 		counter:    NewGaugeVec(ns, "counter", "计数"),
 		avgCounter: NewGaugeVec(ns, "avg_counter", "平均计数"),
+		costSummery: prometheus.NewSummaryVec(prometheus.SummaryOpts{
+			Namespace:   "",
+			Subsystem:   "",
+			Name:        "",
+			Help:        "",
+			ConstLabels: nil,
+			Objectives:  nil,
+			MaxAge:      0,
+			AgeBuckets:  0,
+			BufCap:      0,
+		}),
 	}
 }
 
@@ -109,16 +123,17 @@ func (pe *PromeExporter) Collect(ch chan<- prometheus.Metric) {
 	log.Infow("prometheus", zap.Bool("success", true))
 }
 
-//func (pe *PromeExporter) ServerStart(port int) error {
-//	err := prometheus.Register(pe)
-//	if err != nil {
-//		return err
-//	}
-//	addr := fmt.Sprintf(":%d", port)
-//	log.Infow("prometheus", zap.String("addr", addr))
-//	pe.srv = &http.Server{Addr: addr, Handler: promhttp.Handler()}
-//	return pe.srv.ListenAndServe()
-//}
+func (pe *PromeExporter) ServerStart(port int) error {
+	err := prometheus.Register(pe)
+	if err != nil {
+		return err
+	}
+	addr := fmt.Sprintf(":%d", port)
+	log.Infow("prometheus", zap.String("addr", addr))
+	pe.srv = &http.Server{Addr: addr, Handler: promhttp.Handler()}
+	return pe.srv.ListenAndServe()
+}
+
 //
 //func (pe *PromeExporter) ServerClose() error {
 //	log.Infow("prometheus", zap.Bool("server_close", true))

@@ -1,0 +1,232 @@
+global:
+  scrape_interval: 2m
+  scrape_timeout: 10s
+  evaluation_interval: 2m
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['172.30.21.226:8182','172.30.21.226:9093']
+
+rule_files:
+  - rules/*.yaml
+
+scrape_configs:
+  - job_name: prometheus
+    honor_timestamps: true
+    metrics_path: /metrics
+    follow_redirects: true
+    static_configs:
+      - targets:
+          - localhost:9090
+
+  - job_name: zhongtai
+    honor_timestamps: true
+    metrics_path: /metrics
+    follow_redirects: true
+    static_configs:
+      - targets:
+          - 172.30.21.221:8090
+        labels:
+          instance: 172.30.21.221
+          env: prod
+
+  - job_name: adp_service
+    honor_timestamps: true
+    metrics_path: /metrics
+    follow_redirects: true
+    static_configs:
+      - targets:
+          - 172.30.21.221:3000
+          - 172.30.21.221:3001
+        labels:
+          instance: 172.30.21.221
+          env: prod
+
+  - job_name: cost_revenue_exporter
+    honor_timestamps: true
+    metrics_path: /metrics
+    follow_redirects: true
+    static_configs:
+      - targets:
+          - 172.30.21.221:7008
+        labels:
+          instance: 172.30.21.221
+          env: prod
+
+  - job_name: zhongtai_opt
+    honor_timestamps: true
+    scrape_interval: 5m
+    metrics_path: /api/metrics
+    follow_redirects: true
+    static_configs:
+      - targets:
+          - optapi.gghys.com:80
+        labels:
+          instance: 172.30.21.221
+          env: prod
+
+  - job_name: duanju
+    honor_timestamps: true
+    metrics_path: /metrics
+    follow_redirects: true
+    static_configs:
+      - targets:
+          - 172.30.21.226:8182
+        labels:
+          instance: 172.30.21.226
+          env: prod
+
+  - job_name: hwdj
+    honor_timestamps: true
+    metrics_path: /metrics
+    follow_redirects: true
+    static_configs:
+      - targets:
+          - 8.216.92.102:8099
+        labels:
+          instance: 8.216.92.102
+          env: prod
+
+  - job_name: node_exporter
+    metrics_path: /metrics
+    scrape_interval: 30s
+    file_sd_configs:
+      - files:
+          - targets/node_exporter_targets.yml
+
+  - job_name: 'mysql_exporter'
+    metrics_path: /metrics
+    scrape_interval: 30s
+    static_configs:
+      - targets:
+          - 172.30.21.226:9104
+          - 172.30.21.226:9105
+          - 172.30.21.226:9106
+          - 172.30.21.226:9107
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: '172.30.21.226:9104'
+        target_label: project
+        replacement: 'china-short-video'
+      - source_labels: [__address__]
+        regex: '172.30.21.226:9105'
+        target_label: project
+        replacement: 'china-short-content'
+      - source_labels: [__address__]
+        regex: '172.30.21.226:9106'
+        target_label: project
+        replacement: 'overseas-short-video'
+      - source_labels: [__address__]
+        regex: '172.30.21.226:9107'
+        target_label: project
+        replacement: 'center-service'
+
+      - target_label: env
+        replacement: prod
+
+  - job_name: 'redis_exporter'
+    metrics_path: /metrics
+    scrape_interval: 1m
+    static_configs:
+      - targets:
+          - 172.30.21.226:9121
+          - 172.30.21.226:9122
+          - 172.30.21.226:9123
+          - 172.30.21.226:9124
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: '172.30.21.226:9121'
+        target_label: project
+        replacement: 'china-short-video'
+      - source_labels: [__address__]
+        regex: '172.30.21.226:9122'
+        target_label: project
+        replacement: 'china-short-content'
+      - source_labels: [__address__]
+        regex: '172.30.21.226:9123'
+        target_label: project
+        replacement: 'overseas-short'
+      - source_labels: [__address__]
+        regex: '172.30.21.226:9124'
+        target_label: project
+        replacement: 'order_test_runtime'
+
+      - target_label: env
+        replacement: prod
+
+  - job_name: 'blackbox-tcp'
+    metrics_path: /probe
+    scrape_interval: 1m
+    params:
+      module: [tcp_connect]
+    static_configs:
+      - targets:
+          - 8.216.92.102:8099
+          - 8.216.92.102:80
+          - 8.216.92.102:9100
+        labels:
+          type: tcp
+          env: prod
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 172.30.21.226:9115
+
+  - job_name: 'blackbox-icmp'
+    metrics_path: /probe
+    scrape_interval: 1m
+    params:
+      module: [icmp]
+    static_configs:
+      - targets:
+          - 8.216.92.102
+          - 172.30.21.216
+          - 172.16.23.251
+          - 172.30.21.230
+          - 172.30.21.221
+          - 172.30.21.219
+          - 121.41.10.136
+        labels:
+          type: icmp
+          env: prod
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 172.30.21.226:9115
+
+  - job_name: 'blackbox-https-cert'
+    metrics_path: /probe
+    scrape_interval: 1m
+    params:
+      module: [https_cert]
+    static_configs:
+      - targets:
+          - https://opt.gghys.com
+          - https://bwadmin.jiumibook.com
+          - https://api.jiumibook.com
+          - https://shortvideo.gghys.com
+          - https://api.dorareel.com/health/api
+          - https://api.dorareel.com/health/mysql
+          - https://api.dorareel.com/health/redis
+        labels:
+          type: https_cert
+          env: prod
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 172.30.21.226:9115
+
+
+
+
+
