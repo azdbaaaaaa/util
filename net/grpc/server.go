@@ -1,13 +1,13 @@
 package grpc
 
 import (
-	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_device"
+	"github.com/azdbaaaaaa/util/net/grpc/middleware/auth"
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_error"
-	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_in_param"
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_log"
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_request_id"
 	"github.com/azdbaaaaaa/util/net/grpc/middleware/grpc_tracing"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	grpc_validator "github.com/grpc-ecosystem/go-grpc-middleware/validator"
@@ -34,8 +34,9 @@ func NewServer(conf ServerConfig, logger *zap.Logger) (s *grpc.Server) {
 			grpc_log.StreamServerInterceptor(logger),
 			grpc_validator.StreamServerInterceptor(),
 			grpc_request_id.StreamServerInterceptor(logger),
-			grpc_device.StreamServerInterceptor(logger),
-			grpc_in_param.StreamServerInterceptor(logger),
+			//grpc_device.StreamServerInterceptor(logger),
+			//grpc_in_param.StreamServerInterceptor(logger),
+			grpc_auth.StreamServerInterceptor(auth.AuthFunc),
 			grpc_error.StreamServerInterceptor(logger),
 		)),
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
@@ -50,8 +51,9 @@ func NewServer(conf ServerConfig, logger *zap.Logger) (s *grpc.Server) {
 			grpc_log.UnaryServerInterceptor(logger),
 			grpc_validator.UnaryServerInterceptor(),
 			grpc_request_id.UnaryServerInterceptor(logger),
-			grpc_device.UnaryServerInterceptor(logger),
-			grpc_in_param.UnaryServerInterceptor(logger),
+			//grpc_device.UnaryServerInterceptor(logger),
+			//grpc_in_param.UnaryServerInterceptor(logger),
+			grpc_auth.UnaryServerInterceptor(auth.AuthFunc),
 			grpc_error.UnaryServerInterceptor(logger),
 		)),
 	)

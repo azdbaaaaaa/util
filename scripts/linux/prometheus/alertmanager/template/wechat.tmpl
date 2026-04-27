@@ -1,0 +1,8 @@
+{{ define "wechat.tmpl" }}
+  {{ range $i, $alert := .Alerts.Firing }}
+    [报警名称]：{{ index $alert.Labels "alertname" }}
+    [实例名称]：{{ index $alert.Labels "instance" }}
+    [报警阀值]：{{ index $alert.Annotations "value" }}
+    [开始时间]：{{ $alert.StartsAt }}
+  {{ end }}
+{{ end }}

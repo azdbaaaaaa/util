@@ -1,0 +1,18 @@
+curl 'https://cms.ficool.com/qdoversea/ajax/content/import/save' \
+  -H 'authority: cms.ficool.com' \
+  -H 'sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="96", "Google Chrome";v="96"' \
+  -H 'accept: application/json' \
+  -H 'content-type: application/json' \
+  -H 'x-requested-with: XMLHttpRequest' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36' \
+  -H 'sec-ch-ua-platform: "macOS"' \
+  -H 'origin: https://cms.ficool.com' \
+  -H 'sec-fetch-site: same-origin' \
+  -H 'sec-fetch-mode: cors' \
+  -H 'sec-fetch-dest: empty' \
+  -H 'referer: https://cms.ficool.com/qdoversea/content-import/add' \
+  -H 'accept-language: zh-CN,zh;q=0.9,en;q=0.8' \
+  -H 'cookie: _csrfToken=CV81GYDgNRHE52ifpQpUK3NTYi1evvjpBQPdkfzh; experimentation_subject_id=IjFjNmIyOTg3LTc1OGEtNGE2OS04M2E3LTg2ZTk1MjE5MzM3NiI%3D--290d2faf07c736c54a11fa8c9465c140ce8983a8; Authorization=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MzIsImFjY291bnQiOiJ5dWh1aWJpbiIsIm5hbWUiOiLkuo7mhaflvawiLCJzdGF0dXMiOjEsImxhc3RfbG9naW5fdGltZSI6MTYzNDYzNzcxMSwibGFzdF9sb2dpbl9pcCI6IjE5Mi4xNjguMS43OCIsInVzZXJfdHlwZSI6Mn0.cX5343Q7U6eiSPKySMzVkTujPcc-np6PXEfLf-K8LwU; boss_session=eyJpdiI6IlhObmtCeGNCaThFWkFHcWtFR3luWXc9PSIsInZhbHVlIjoia3ZhUkxISVlIanFrSlc4cTlubndLM1RuTnFIQTU2Wnh1OGpJbXRiUmZUMkZCeHY2UXBcLzZQb2JsdkQxeWpEdVk2UW1NOHg1NnBNTW1VblFRVmJTSHFRPT0iLCJtYWMiOiI1MjVhNGI2ODQwNWZmOWJiODIwMmZiNDU1YjNmNzI5YzdjZjI4Zjg5OGExZDk3Y2E1ZGM4MTM4MzQzNjJkNTNmIn0%3D' \
+  --data-raw '{"CBID":"12002803405740105","chapters":"[{\"startIndex\":1,\"endIndex\":214,\"volumeIndex\":1}]","_csrfToken":"CV81GYDgNRHE52ifpQpUK3NTYi1evvjpBQPdkfzh"}' \
+  --compressed

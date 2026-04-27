@@ -1,0 +1,33 @@
+modules:
+  http_2xx:
+    prober: http
+    timeout: 5s
+    http:
+      method: GET
+#      fail_if_not_ssl: true
+#      tls_config:
+#        insecure_skip_verify: false
+#      preferred_ip_protocol: "ip4" # defaults to "ip6"
+#      ip_protocol_fallback: false  # no fallback to "ip6"
+#  http_post_2xx:
+#    prober: http
+#    timeout: 5s
+#    http:
+#      method: POST
+#      headers:
+#        Content-Type: application/json
+#      body: '{}'
+#  tls_connect:
+#    prober: tcp
+#    timeout: 5s
+#    tcp:
+#      tls: true
+#  tcp_connect_example:
+#    prober: tcp
+#    timeout: 5s
+#  dns_tcp_example:
+#    prober: dns
+#    dns:
+#      transport_protocol: "tcp" # defaults to "udp"
+#      preferred_ip_protocol: "ip4" # defaults to "ip6"
+#      query_name: "www.prometheus.io"

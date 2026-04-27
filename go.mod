@@ -13,7 +13,12 @@ require (
 	github.com/gin-gonic/contrib v0.0.0-20201101042839-6a891bf89f19
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-playground/assert/v2 v2.0.1
+<<<<<<< HEAD
 	github.com/go-redis/redis/v8 v8.11.5
+=======
+	github.com/go-redis/redis/v8 v8.11.0
+	github.com/go-sql-driver/mysql v1.7.0 // indirect
+>>>>>>> c224c932ed09652e0bcef86e3eb4832399aba4a7
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/protobuf v1.5.2
 	github.com/gorilla/websocket v0.0.0-20170926233335-4201258b820c

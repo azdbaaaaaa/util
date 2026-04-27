@@ -1,0 +1,16 @@
+#!/bin/bash
+
+
+curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
+sudo yum -y install nodejs
+
+npm i n -g
+n v12.16.3
+
+
+wget https://storage.googleapis.com/golang/go1.16.3.linux-amd64.tar.gz
+tar -C /usr/local -xzf go1.16.3.linux-amd64.tar.gz
+export PATH=$PATH:/usr/local/go/bin
+
+
+rm -rf /usr/local/go
